@@ -12,30 +12,26 @@ import android.widget.TextView;
 
 import com.activitymanager.BaseActivity;
 import com.example.onlinemaintenance.R;
+import com.user.User;
 
 public class UserManagerActivity extends BaseActivity implements OnClickListener{
 
 	public static final int BACK = 1;
 	public static final int END = 2;
 	public static final int UPDATE_USER = 1;
-	public static final int DELIVER = 1;
-	public static final int ENGINEER = 2;
-	public static final int SALER = 3;
-	public static final int ADMIN = 4;
 	
-	private String user;
-	private int mode;
-	private TextView usertype, username;
+	private User user;
+	private TextView usertype, nickname;
 	private Button revisepasswd, ret, logout;
 	private String utype;
 	private Handler handler = new Handler(){
 		public void handleMessage(Message msg){
 			switch(msg.what){
 			case UPDATE_USER:
-				CharSequence stra = user;
-				CharSequence strb = utype;
-				username.setText(stra);
-				usertype.setText(strb);
+				CharSequence stra = utype;
+				CharSequence strb = user.nickname;
+				usertype.setText(stra);
+				nickname.setText(strb);
 				break;
 			default: break;
 			}
@@ -46,8 +42,8 @@ public class UserManagerActivity extends BaseActivity implements OnClickListener
 	protected void getView() {
 		// TODO Auto-generated method stub
 		super.getView();
-		username = (TextView) findViewById(R.id.usernameT);
 		usertype = (TextView) findViewById(R.id.usertypeT);
+		nickname = (TextView) findViewById(R.id.nicknameT);
 		revisepasswd = (Button) findViewById(R.id.revisepasswdBT);
 		ret = (Button) findViewById(R.id.retBT);
 		logout = (Button) findViewById(R.id.logoutBT);
@@ -69,26 +65,11 @@ public class UserManagerActivity extends BaseActivity implements OnClickListener
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		Log.d("1","0");
 		Intent intent = getIntent();
-		user = intent.getStringExtra("user");
-		mode = intent.getIntExtra("mode", 0);
-		Log.d("1","1");
+		user = (User) intent.getSerializableExtra("user");
 		setContentView(R.layout.user_manage_layout);
-		switch(mode){
-		case DELIVER:
-			utype="派单员";break;
-		case ENGINEER:
-			utype="工程师";break;
-		case SALER:
-			utype="销售员";break;
-		case ADMIN:
-			utype="管理员";break;
-		default: break;
-		}
-		Log.d("1","2");
+		utype = user.type();
 		getView();
-		Log.d("1","3");
 	}
 
 	@Override

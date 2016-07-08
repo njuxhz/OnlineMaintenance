@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.activitymanager.BaseActivity;
 import com.example.onlinemaintenance.R;
+import com.user.User;
 
 public class UserInfoActivity extends BaseActivity implements OnClickListener{
 
@@ -22,8 +23,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 	public static final int SALER = 3;
 	public static final int ADMIN = 4;
 	
-	private String user, passwd;
-	private int mode;
+	private User user;
 	private Button usermanager, check1, check2;
 	
 	@Override
@@ -32,7 +32,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 		super.getView();
 		usermanager = (Button) findViewById(R.id.usermanagerBT);
 		usermanager.setOnClickListener(this);
-		switch(mode){
+		switch(user.mode){
 		case DELIVER: case ENGINEER: case SALER:
 			check1 = (Button) findViewById(R.id.check1BT);
 			check2 = (Button) findViewById(R.id.check2BT);
@@ -48,10 +48,8 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		Intent intent = getIntent();
-		user = intent.getStringExtra("user");
-		passwd = intent.getStringExtra("passwd");
-		mode = intent.getIntExtra("mode", 0);
-		switch(mode){
+		user = (User)intent.getSerializableExtra("user");
+		switch(user.mode){
 		case DELIVER:
 			setContentView(R.layout.deliver_page_layout);
 			break;
@@ -78,16 +76,19 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
+		Intent intent;
 		switch(v.getId()){
 		case R.id.usermanagerBT:
-			Intent intent = new Intent(UserInfoActivity.this, UserManagerActivity.class);
+			intent = new Intent(UserInfoActivity.this, UserManagerActivity.class);
 			intent.putExtra("user", user);
-			intent.putExtra("mode", mode);
 			startActivityForResult(intent, 1);
 			break;
 		case R.id.check1BT:
 			break;
 		case R.id.check2BT:
+			intent = new Intent(UserInfoActivity.this, OrderActivity.class);
+			intent.putExtra("user", user);
+			startActivityForResult(intent, 2);
 			break;
 		default: break;
 		}

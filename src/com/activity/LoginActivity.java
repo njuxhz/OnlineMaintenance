@@ -2,6 +2,7 @@ package com.activity;
 
 import com.activitymanager.BaseActivity;
 import com.example.onlinemaintenance.R;
+import com.user.User;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -45,10 +46,13 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 		getView();
 	}
 
-	private int isAuthen(String user, EditText passwdET) {
+	private User isAuthen() {
 		// TODO Auto-generated method stub
-		return Integer.parseInt(user);
-		//return 0;
+		if(Integer.parseInt(user) <= 4){//**********
+			User authuser = new User(Integer.parseInt(user), Integer.parseInt(user) % 4, user, passwd);
+			return authuser;
+		}
+		return null;
 	}
 
 	@Override
@@ -63,12 +67,10 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 		switch(v.getId()){
 		case R.id.loginBT:
 			getContent();
-			int mode = isAuthen(user, passwdET);
-			if(mode >= 1){
+			User authuser = isAuthen();
+			if(authuser != null){
 				Intent intent = new Intent(LoginActivity.this, UserInfoActivity.class);
-				intent.putExtra("user", user);
-				intent.putExtra("passwd", passwd);
-				intent.putExtra("mode", mode);
+				intent.putExtra("user", authuser);
 				startActivity(intent);
 			}
 			break;
