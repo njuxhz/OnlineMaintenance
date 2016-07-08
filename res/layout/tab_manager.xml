@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <Button   
+            android:id="@+id/orderretBT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="返回" />
+    <Button   
+            android:id="@+id/orderallBT"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="所有" />
+    
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    	<Button   
+            android:id="@+id/order1BT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="未接" />
+    	<Button   
+            android:id="@+id/order2BT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="已接" />
+    	<Button   
+            android:id="@+id/order3BT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="已完成" />
+    	<Button   
+            android:id="@+id/order4BT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="已审核" />
+	</LinearLayout>
+	<FrameLayout 
+	    android:id="@+id/frag"
+	    android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" >
+    	
+	    <fragment
+	    android:id="@+id/tab_layout"
+	    android:name="com.order.OrderFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+	</FrameLayout>
+</LinearLayout>
