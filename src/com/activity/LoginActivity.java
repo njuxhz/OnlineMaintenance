@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class LoginActivity extends BaseActivity implements OnClickListener{
 
@@ -24,15 +25,15 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 		userET = (EditText) findViewById(R.id.userET);
 		passwdET = (EditText) findViewById(R.id.passwdET);
 		login = (Button) findViewById(R.id.loginBT);
+		login.setOnClickListener(this);
+	}
+	
+	@Override
+	protected void getContent() {
+		// TODO Auto-generated method stub
+		super.getContent();
 		user = userET.getText().toString();
 		passwd = passwdET.getText().toString();
-	}
-
-	@Override
-	protected void setView() {
-		// TODO Auto-generated method stub
-		super.setView();
-		login.setOnClickListener(this);
 	}
 
 	@Override
@@ -42,12 +43,12 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 		//requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.hello_world_layout);
 		getView();
-		setView();
 	}
 
-	private boolean isAuthen(String user, EditText passwdET) {
+	private int isAuthen(String user, EditText passwdET) {
 		// TODO Auto-generated method stub
-		return true;
+		return Integer.parseInt(user);
+		//return 0;
 	}
 
 	@Override
@@ -61,10 +62,13 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 		// TODO Auto-generated method stub
 		switch(v.getId()){
 		case R.id.loginBT:
-			if(isAuthen(user, passwdET)){
+			getContent();
+			int mode = isAuthen(user, passwdET);
+			if(mode >= 1){
 				Intent intent = new Intent(LoginActivity.this, UserInfoActivity.class);
 				intent.putExtra("user", user);
 				intent.putExtra("passwd", passwd);
+				intent.putExtra("mode", mode);
 				startActivity(intent);
 			}
 			break;

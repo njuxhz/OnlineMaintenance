@@ -5,7 +5,7 @@
     android:orientation="vertical" >
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/usermanagerBT"
         android:paddingLeft="50dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -21,7 +21,7 @@
             android:layout_height="wrap_content" >
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/check1BT"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="新建表单" />
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content" >
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/check2BT"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="查看表单" />

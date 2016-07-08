@@ -55,9 +55,7 @@
         </TableRow>
 
         <TableRow>
-
-            <Button
-                
+            <Button   
                 android:id="@+id/revisepasswdBT"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -66,14 +64,20 @@
 
         </TableRow>
         <TableRow >
-
+            <Button
+                android:id="@+id/retBT"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_span="2"
+                android:text="返回" />            
+        </TableRow>
+        <TableRow >
             <Button
                 android:id="@+id/logoutBT"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_span="2"
-                android:text="注销账户" />
-            
+                android:text="注销账户" />            
         </TableRow>
     </TableLayout>
 

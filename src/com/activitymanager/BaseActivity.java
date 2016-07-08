@@ -24,6 +24,6 @@ public class BaseActivity extends Activity{
 	protected void getView(){
 	}
 	
-	protected void setView(){
+	protected void getContent(){
 	}
 }

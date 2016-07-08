@@ -5,7 +5,7 @@
     android:orientation="vertical" >
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/usermanagerBT"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Button" />
@@ -15,7 +15,7 @@
         android:layout_height="wrap_content" >
 
         <TableRow
-            android:id="@+id/tableRow1"
+            android:id="@+id/check1BT"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
 
@@ -33,7 +33,7 @@
             android:layout_height="wrap_content" >
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/check2BT"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="查看已审核报修单" />
