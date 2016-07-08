@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.helloworld.HelloWorldActivity" >
+    tools:context="com.example.onlinemaintenance.LoginActivity" >
 
     <TableLayout
         android:id="@+id/tableLayout1"
@@ -22,7 +22,7 @@
                 android:text="Account" />
 
             <EditText
-                android:id="@+id/editText1"
+                android:id="@+id/userET"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="Input your account" />
@@ -38,7 +38,7 @@
                 android:text="Password" />
 
             <EditText
-                android:id="@+id/editText2"
+                android:id="@+id/passwdET"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword" />
@@ -50,7 +50,7 @@
             android:layout_height="wrap_content" >
 
             <Button
-                android:id="@+id/button1"
+                android:id="@+id/loginBT"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_span="2"
