@@ -16,31 +16,59 @@ import com.user.User;
 
 public class UserInfoActivity extends BaseActivity implements OnClickListener{
 
-	public static final int BACK = 1;
-	public static final int END = 2;
+	private static final int UPDATE_INFO = 1;
 	public static final int DELIVER = 1;
 	public static final int ENGINEER = 2;
 	public static final int SALER = 3;
 	public static final int ADMIN = 4;
 	
 	private User user;
-	private Button usermanager, check1, check2;
+	private TextView usertype, nickname;
+	private Button revisepasswd, logout, checkorder, checkuser;
+	private String utype;
+	private Handler handler = new Handler(){
+		public void handleMessage(Message msg){
+			switch(msg.what){
+			case UPDATE_INFO:
+				CharSequence stra = utype;
+				CharSequence strb = user.nickname;
+				usertype.setText(stra);
+				nickname.setText(strb);
+				break;
+			default: break;
+			}
+		}
+	};
 	
 	@Override
 	protected void getView() {
 		// TODO Auto-generated method stub
 		super.getView();
-		usermanager = (Button) findViewById(R.id.usermanagerBT);
-		usermanager.setOnClickListener(this);
-		switch(user.mode){
-		case DELIVER: case ENGINEER: case SALER:
-			check1 = (Button) findViewById(R.id.check1BT);
-			check2 = (Button) findViewById(R.id.check2BT);
-			check1.setOnClickListener(this);
-			check2.setOnClickListener(this);
-			break;
-		default: break;
+		usertype = (TextView) findViewById(R.id.usertypeT);
+		nickname = (TextView) findViewById(R.id.nicknameT);
+		revisepasswd = (Button) findViewById(R.id.revisepasswdBT);
+		revisepasswd.setOnClickListener(this);
+		logout = (Button) findViewById(R.id.logoutBT);
+		logout.setOnClickListener(this);
+		checkorder = (Button) findViewById(R.id.checkorderBT);
+		checkorder.setOnClickListener(this);
+		utype = user.type();
+		checkuser = (Button) findViewById(R.id.usermanagerBT);
+		if(user.mode == ADMIN){
+			checkuser.setOnClickListener(this);
+			checkuser.setVisibility(View.VISIBLE);
+		}else{
+			checkuser.setVisibility(View.GONE);
 		}
+		new Thread(new Runnable(){
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				Message message = new Message();
+				message.what = UPDATE_INFO;
+				handler.sendMessage(message);
+			}
+		}).start();
 	}
 
 	@Override
@@ -49,21 +77,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 		super.onCreate(savedInstanceState);
 		Intent intent = getIntent();
 		user = (User)intent.getSerializableExtra("user");
-		switch(user.mode){
-		case DELIVER:
-			setContentView(R.layout.deliver_page_layout);
-			break;
-		case ENGINEER:
-			setContentView(R.layout.engineer_page_layout);
-			break;
-		case SALER:
-			setContentView(R.layout.sale_page_layout);
-			break;
-		case ADMIN:
-			setContentView(R.layout.admin_page_layout);
-			break;
-		default: break;
-		}
+		setContentView(R.layout.user_info_layout);
 		getView();
 	}
 
@@ -78,31 +92,17 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 		// TODO Auto-generated method stub
 		Intent intent;
 		switch(v.getId()){
-		case R.id.usermanagerBT:
-			intent = new Intent(UserInfoActivity.this, UserManagerActivity.class);
-			intent.putExtra("user", user);
-			startActivityForResult(intent, 1);
+		case R.id.revisepasswdBT:
 			break;
-		case R.id.check1BT:
+		case R.id.logoutBT:
+			finish();
 			break;
-		case R.id.check2BT:
+		case R.id.checkorderBT:
 			intent = new Intent(UserInfoActivity.this, OrderActivity.class);
 			intent.putExtra("user", user);
-			startActivityForResult(intent, 2);
+			startActivity(intent);
 			break;
-		default: break;
-		}
-	}
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
-		super.onActivityResult(requestCode, resultCode, data);
-		switch(resultCode){
-		case BACK:
-			break;
-		case END:
-			finish();
+		case R.id.usermanagerBT:
 			break;
 		default: break;
 		}

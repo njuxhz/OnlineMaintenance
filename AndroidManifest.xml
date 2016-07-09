@@ -21,7 +21,6 @@
             </intent-filter>
         </activity>
         <activity android:name="com.activity.UserInfoActivity"></activity>
-        <activity android:name="com.activity.UserManagerActivity"></activity>
         <activity android:name="com.activity.OrderActivity"></activity>
     </application>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>

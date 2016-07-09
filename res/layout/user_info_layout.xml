@@ -63,14 +63,7 @@
                 android:text="修改密码" />
 
         </TableRow>
-        <TableRow >
-            <Button
-                android:id="@+id/retBT"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_span="2"
-                android:text="返回" />            
-        </TableRow>
+
         <TableRow >
             <Button
                 android:id="@+id/logoutBT"
@@ -80,5 +73,14 @@
                 android:text="注销账户" />            
         </TableRow>
     </TableLayout>
-
+    <Button
+    	android:id="@+id/checkorderBT"
+    	android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:text="查看维修单" />
+   	<Button
+    	android:id="@+id/usermanagerBT"
+    	android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:text="管理用户" />           
 </LinearLayout>

@@ -49,7 +49,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 	private User isAuthen() {
 		// TODO Auto-generated method stub
 		if(Integer.parseInt(user) <= 4){//**********
-			User authuser = new User(Integer.parseInt(user), Integer.parseInt(user) % 4, user, passwd);
+			User authuser = new User(Integer.parseInt(user), Integer.parseInt(user), user, passwd);
 			return authuser;
 		}
 		return null;

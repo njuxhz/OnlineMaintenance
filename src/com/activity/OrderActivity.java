@@ -97,8 +97,6 @@ public class OrderActivity extends BaseActivity implements OnClickListener{
 		switch(v.getId()){
 		case R.id.orderretBT:
 			listmode = -1;
-			Intent intent = new Intent();
-			setResult(BACK, intent);
 			finish();
 			break;
 		case R.id.orderallBT: listmode = 0; break;
