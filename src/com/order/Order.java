@@ -7,6 +7,8 @@ public class Order implements Serializable{
 	public int id = 0, salerid = 0, engineerid = 0;
 	public int score = 0;
 	public int status = 0;//1未接		2已接		3已完成	4已审核
+	public String repairtime, series, feedback;
+	public String photourl1, photourl2, photourl3;
 	
 	public Order(int id, String name, String tel, String company, String address){
 		this.id = id;
@@ -36,6 +38,24 @@ public class Order implements Serializable{
 			break;
 		default: ret = ""; break;
 		}
+		return ret;
+	}
+
+	public String getengineer() {
+		// TODO Auto-generated method stub
+		String ret = null;
+		if(engineerid != 0){
+			ret = "工程师" + engineerid;
+		}else ret = "*";
+		return ret;
+	}
+	
+	public String getsaler() {
+		// TODO Auto-generated method stub
+		String ret = null;
+		if(salerid != 0){
+			ret = "销售员" + salerid;
+		}else ret = "*";
 		return ret;
 	}
 }

@@ -1,5 +1,7 @@
 package com.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.activitymanager.BaseActivity;
@@ -93,6 +96,24 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 		Intent intent;
 		switch(v.getId()){
 		case R.id.revisepasswdBT:
+			AlertDialog.Builder dialog = new AlertDialog.Builder(UserInfoActivity.this);
+			final EditText passwd = new EditText(this);
+			dialog.setTitle("Revise Your Password!").setView(passwd);
+			dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+					user.passwd = passwd.getText().toString();
+					user.updatepasswd();
+				}
+			});
+			dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+				}
+			});
+			dialog.show();
 			break;
 		case R.id.logoutBT:
 			finish();
