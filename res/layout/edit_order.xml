@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="#808080"
+        android:gravity="center"
+        android:text="维修单修改"
+        android:textColor="#ffffff"
+        android:textSize="24sp" />
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="1" >
+	    <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+            <TextView
+                android:layout_height="wrap_content"
+                android:paddingLeft="30dp"
+                android:text="客户单位"
+                android:typeface="serif"
+                android:textSize="15sp" />
+            <EditText
+                android:id="@+id/companyET"
+                android:paddingLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </TableRow>
+        
+	    <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+            <TextView
+                android:layout_height="wrap_content"
+                android:paddingLeft="30dp"
+                android:text="客户姓名"
+                android:typeface="serif"
+                android:textSize="15sp" />
+            <EditText
+                android:id="@+id/nameET"
+                android:paddingLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </TableRow>
+        
+	    <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+            <TextView
+                android:layout_height="wrap_content"
+                android:paddingLeft="30dp"
+                android:text="客户地址"
+                android:typeface="serif"
+                android:textSize="15sp" />
+            <EditText
+                android:id="@+id/addressET"
+                android:paddingLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </TableRow>
+        
+	    <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+            <TextView
+                android:layout_height="wrap_content"
+                android:paddingLeft="30dp"
+                android:text="状态"
+                android:typeface="serif"
+                android:textSize="15sp" />
+            <EditText
+                android:id="@+id/stateET"
+                android:paddingLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </TableRow>
+        
+	    <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+            <TextView
+                android:layout_height="wrap_content"
+                android:paddingLeft="30dp"
+                android:text="工程师"
+                android:typeface="serif"
+                android:textSize="15sp" />
+            <Spinner
+                android:id="@+id/engineerSP"
+                android:paddingLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp" />
+        </TableRow>
+        
+	    <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+            <TextView
+                android:layout_height="wrap_content"
+                android:paddingLeft="30dp"
+                android:text="销售员"
+                android:typeface="serif"
+                android:textSize="15sp" />
+            <Spinner
+                android:id="@+id/salerSP"
+                android:paddingLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp" />
+        </TableRow>
+        
+	    <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+            <TextView
+                android:layout_height="wrap_content"
+                android:paddingLeft="30dp"
+                android:text="分值"
+                android:typeface="serif"
+                android:textSize="15sp" />
+            <EditText
+                android:id="@+id/scoreET"
+                android:paddingLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </TableRow>
+    </TableLayout>
+    <LinearLayout 
+        android:layout_width="match_parent"
+    	android:layout_height="match_parent"
+    	android:orientation="horizontal"
+        >
+        <Button
+    	android:id="@+id/editdeleteBT"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:text="删除" />
+    
+    <Button
+    	android:id="@+id/editretBT"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:text="返回" />
+    
+     <Button
+    	android:id="@+id/editconfirmBT"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:text="确认修改" />
+     
+     <Button
+    	android:id="@+id/editcallBT"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:text="呼叫" />
+    </LinearLayout>
+</LinearLayout>

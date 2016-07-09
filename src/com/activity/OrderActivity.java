@@ -12,6 +12,8 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -24,6 +26,7 @@ import com.user.User;
 public class OrderActivity extends BaseActivity implements OnClickListener{
 	
 	public static final int BACK = 1;
+	public static final int OK = 1;
 	public static final int UPDATE_LIST = 1;
 	public static final int DELIVER = 1;
 	public static final int ENGINEER = 2;
@@ -62,6 +65,18 @@ public class OrderActivity extends BaseActivity implements OnClickListener{
 		permission();
 		listView = (ListView) findViewById(R.id.list_view);
 		listView.setAdapter(adapter);
+		listView.setOnItemClickListener(new OnItemClickListener(){
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(OrderActivity.this, EditOrderActivity.class);
+				intent.putExtra("user", user);
+				Order order = (Order) listView.getItemAtPosition(position);
+				intent.putExtra("user", user);
+				intent.putExtra("order", order);
+				startActivityForResult(intent, 1);
+			}});
 	}
 
 	private void permission() {
@@ -112,11 +127,11 @@ public class OrderActivity extends BaseActivity implements OnClickListener{
 		}
 	}
 	
-	private void changeData() {
+	private void changeData() {//************************
 		// TODO Auto-generated method stub
 		orderList.clear();
 		for(int i = (listmode*10); i < (listmode*10+5); i++){
-			Order o = new Order(i, "order" + i, "" + i + "order");
+			Order o = new Order(i, "order" + i, "" + i + "order", "", "");
 			orderList.add(o);
 		}
 		adapter.notifyDataSetChanged();
@@ -131,5 +146,10 @@ public class OrderActivity extends BaseActivity implements OnClickListener{
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
+		if(requestCode == 1){
+			if(resultCode == OK){
+				adapter.notifyDataSetChanged();
+			}
+		}
 	}
 }

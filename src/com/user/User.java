@@ -13,13 +13,18 @@ public class User implements Serializable{
 	public int mode = 0;
 	public String nickname, passwd;
 	
-	public User(int id, int mode, String nickname, String passwd){
+	public User(int id, int mode, String passwd){
 		this.id = id;
 		this.mode = mode;
-		this.nickname = nickname;
 		this.passwd = passwd;
+		getNickname();
 	}
 	
+	private void getNickname() {
+		// TODO Auto-generated method stub
+		nickname = type() + id;
+	}
+
 	public String type(){
 		String ret = null;
 		switch(mode){

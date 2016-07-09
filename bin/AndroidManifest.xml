@@ -22,6 +22,7 @@
         </activity>
         <activity android:name="com.activity.UserInfoActivity"></activity>
         <activity android:name="com.activity.OrderActivity"></activity>
+        <activity android:name="com.activity.EditOrderActivity"></activity>
     </application>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 </manifest>
