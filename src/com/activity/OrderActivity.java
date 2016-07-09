@@ -3,11 +3,12 @@ package com.activity;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,18 +19,23 @@ import com.activitymanager.BaseActivity;
 import com.example.onlinemaintenance.R;
 import com.order.Order;
 import com.order.OrderAdapter;
-import com.order.OrderFragment;
 import com.user.User;
 
 public class OrderActivity extends BaseActivity implements OnClickListener{
 	
 	public static final int BACK = 1;
-	
-	private Button[] orderbt;
-	private Button ret;
+	public static final int UPDATE_LIST = 1;
+	public static final int DELIVER = 1;
+	public static final int ENGINEER = 2;
+	public static final int SALER = 3;
+	public static final int ADMIN = 4;
+			
+	private List<Order> orderList = new ArrayList<Order>();
+	private ListView listView;
+	private OrderAdapter adapter;
+	private Button ret, all, check1, check2, check3, check4;
 	private User user;
 	public int listmode = -1;
-	public int[] permission;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +44,8 @@ public class OrderActivity extends BaseActivity implements OnClickListener{
 		Intent intent = getIntent();
 		user = (User)intent.getSerializableExtra("user");
 		setContentView(R.layout.tab_manager);
+		initOrder();//************
+		adapter = new OrderAdapter(OrderActivity.this, R.layout.single_order, orderList);
 		getView();
 	}
 
@@ -49,36 +57,38 @@ public class OrderActivity extends BaseActivity implements OnClickListener{
 
 	protected void getView() {
 		// TODO Auto-generated method stub
-		orderbt = new Button[5];
 		ret = (Button) findViewById(R.id.orderretBT);
 		ret.setOnClickListener(this);
-		orderbt[0] = (Button) findViewById(R.id.orderallBT);
-		orderbt[1] = (Button) findViewById(R.id.order1BT);
-		orderbt[2] = (Button) findViewById(R.id.order2BT);
-		orderbt[3] = (Button) findViewById(R.id.order3BT);
-		orderbt[4] = (Button) findViewById(R.id.order4BT);
-		for(int i = 0; i < 5; i++) orderbt[i].setOnClickListener(this);
-		permission = new int[5];
-		for(int i = 0; i < 5; i++) permission[i] = -1;
+		permission();
+		listView = (ListView) findViewById(R.id.list_view);
+		listView.setAdapter(adapter);
+	}
+
+	private void permission() {
+		// TODO Auto-generated method stub
+		all = (Button) findViewById(R.id.orderallBT);
+		check1 = (Button) findViewById(R.id.order1BT);
+		check2 = (Button) findViewById(R.id.order2BT);
+		check3 = (Button) findViewById(R.id.order3BT);
+		check4 = (Button) findViewById(R.id.order4BT);
+		Log.d("e", ""+user.mode);
 		switch(user.mode){
-		case 1:
-			permission[0] = permission[1] = permission[2] = permission[3] = permission[4] = 1;
+		case DELIVER: case ADMIN:
+			all.setOnClickListener(this);check1.setOnClickListener(this);
+			check2.setOnClickListener(this);check3.setOnClickListener(this);
+			check4.setOnClickListener(this);
 			break;
-		case 2:
-			permission[1] = permission[2] = 1;
+		case ENGINEER:
+			check1.setOnClickListener(this);check2.setOnClickListener(this);
+			check3.setVisibility(View.GONE);check4.setVisibility(View.GONE);
+			all.setVisibility(View.GONE);
 			break;
-		case 3:
-			permission[3] = permission[4] = 1;
-			break;
-		case 4:
-			permission[0] = permission[1] = permission[2] = permission[3] = permission[4] = 1;
+		case SALER:
+			check3.setOnClickListener(this);check4.setOnClickListener(this);
+			check1.setVisibility(View.GONE);check2.setVisibility(View.GONE);
+			all.setVisibility(View.GONE);
 			break;
 		}
-		for(int i = 0; i < 5; i++){
-			if(permission[i] != -1){
-				orderbt[i].setVisibility(View.VISIBLE);
-			}else orderbt[i].setVisibility(View.GONE);
-		} 
 	}
 
 	@Override
@@ -86,6 +96,7 @@ public class OrderActivity extends BaseActivity implements OnClickListener{
 		// TODO Auto-generated method stub
 		switch(v.getId()){
 		case R.id.orderretBT:
+			listmode = -1;
 			Intent intent = new Intent();
 			setResult(BACK, intent);
 			finish();
@@ -97,18 +108,30 @@ public class OrderActivity extends BaseActivity implements OnClickListener{
 		case R.id.order4BT: listmode = 4; break;
 		default: break;
 		}
-		/*OrderFragment f = new OrderFragment();
-		FragmentManager fragmentManager = getFragmentManager();
-		FragmentTransaction transaction = fragmentManager.beginTransaction();
-		transaction.replace(R.id.frag, f);
-		transaction.commit();*/
-		FragmentManager m_fm_text_entry_activity = getFragmentManager();
-        OrderFragment m_f_text_entry_activity = (OrderFragment) m_fm_text_entry_activity.findFragmentById(R.id.frag);
-        if(m_f_text_entry_activity == null)
-        {
-            m_f_text_entry_activity = new OrderFragment();
-            m_fm_text_entry_activity.beginTransaction().add(R.id.frag, m_f_text_entry_activity).commit();
-            m_fm_text_entry_activity.beginTransaction().show(m_f_text_entry_activity);
-        }
+		Log.d("1", ""+listmode);
+		if(listmode != -1){
+			changeData();
+		}
+	}
+	
+	private void changeData() {
+		// TODO Auto-generated method stub
+		orderList.clear();
+		for(int i = (listmode*10); i < (listmode*10+5); i++){
+			Order o = new Order(i, "order" + i, "" + i + "order");
+			orderList.add(o);
+		}
+		adapter.notifyDataSetChanged();
+	}
+
+	private void initOrder() {//*********************
+		// TODO Auto-generated method stub
+		orderList.clear();
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 }
