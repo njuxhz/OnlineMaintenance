@@ -15,7 +15,7 @@ public final class R {
     }
     public static final class id {
         public static final int addressET=0x7f060002;
-        public static final int checkorderBT=0x7f060030;
+        public static final int checkorderBT=0x7f06002f;
         public static final int companyET=0x7f060000;
         public static final int editauditBT=0x7f06000c;
         public static final int editcallBT=0x7f06000b;
@@ -27,25 +27,24 @@ public final class R {
         public static final int edittakeBT=0x7f06000d;
         public static final int edittakecancelBT=0x7f06000e;
         public static final int engineerET=0x7f060005;
-        public static final int list_view=0x7f06002b;
+        public static final int list_view=0x7f06002a;
         public static final int loginBT=0x7f06001d;
-        public static final int logoutBT=0x7f06002f;
+        public static final int logoutBT=0x7f06002e;
         public static final int nameET=0x7f060001;
-        public static final int nicknameT=0x7f06002d;
-        public static final int order1BT=0x7f060027;
-        public static final int order2BT=0x7f060028;
-        public static final int order3BT=0x7f060029;
-        public static final int order4BT=0x7f06002a;
+        public static final int nicknameT=0x7f06002c;
+        public static final int order1BT=0x7f060026;
+        public static final int order2BT=0x7f060027;
+        public static final int order3BT=0x7f060028;
+        public static final int order4BT=0x7f060029;
         public static final int order_id=0x7f06001e;
         public static final int order_tel=0x7f060020;
         public static final int order_username=0x7f06001f;
-        public static final int orderallBT=0x7f060026;
-        public static final int orderretBT=0x7f060025;
+        public static final int orderallBT=0x7f060025;
+        public static final int orderretBT=0x7f060024;
         public static final int passwdET=0x7f06001b;
-        public static final int revisepasswdBT=0x7f06002e;
+        public static final int revisepasswdBT=0x7f06002d;
         public static final int salerET=0x7f060006;
         public static final int scoreET=0x7f060007;
-        public static final int spinner_text=0x7f060024;
         public static final int stateET=0x7f060004;
         public static final int tableLayout1=0x7f060017;
         public static final int tableRow1=0x7f060018;
@@ -53,7 +52,7 @@ public final class R {
         public static final int tableRow3=0x7f06001c;
         public static final int telET=0x7f060003;
         public static final int userET=0x7f060019;
-        public static final int user_list_view=0x7f060034;
+        public static final int user_list_view=0x7f060033;
         public static final int user_mode=0x7f060022;
         public static final int user_nickname=0x7f060021;
         public static final int user_passwd=0x7f060023;
@@ -63,10 +62,10 @@ public final class R {
         public static final int usereditpasswdET=0x7f060013;
         public static final int usereditretBT=0x7f060015;
         public static final int useredittypeET=0x7f060012;
-        public static final int usermanagerBT=0x7f060031;
-        public static final int usermanageretBT=0x7f060032;
-        public static final int usernewBT=0x7f060033;
-        public static final int usertypeT=0x7f06002c;
+        public static final int usermanagerBT=0x7f060030;
+        public static final int usermanageretBT=0x7f060031;
+        public static final int usernewBT=0x7f060032;
+        public static final int usertypeT=0x7f06002b;
     }
     public static final class layout {
         public static final int edit_order=0x7f030000;
@@ -74,10 +73,9 @@ public final class R {
         public static final int hello_world_layout=0x7f030002;
         public static final int single_order=0x7f030003;
         public static final int single_user=0x7f030004;
-        public static final int spinner=0x7f030005;
-        public static final int tab_manager=0x7f030006;
-        public static final int user_info_layout=0x7f030007;
-        public static final int user_manage=0x7f030008;
+        public static final int tab_manager=0x7f030005;
+        public static final int user_info_layout=0x7f030006;
+        public static final int user_manage=0x7f030007;
     }
     public static final class string {
         public static final int app_name=0x7f040000;
