@@ -1,13 +1,19 @@
 package com.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.activiti.OrderConnect;
 import com.activitymanager.BaseActivity;
 import com.example.onlinemaintenance.R;
 import com.order.Order;
@@ -16,17 +22,23 @@ import com.user.User;
 public class EditOrderActivity extends BaseActivity implements OnClickListener{
 
 	private static final int UPDATE_INFO = 1;
+	
 	public static final int DELIVER = 1;
 	public static final int ENGINEER = 2;
 	public static final int SALER = 3;
 	public static final int ADMIN = 4;
+	
 	private static final int OK = 1;
 	private static final int BACK = 2;
+	private static final int DELETE = 3;
+	private static final int UPDATE = 4;
+	private static final int COMPLETE = 5;
 	
 	private User user;
 	private Order order;
 	private EditText company, name, address, tel, state, score, engineer, saler;
 	private Button delete, ret, confirm, caller, audit, take, takecancel, complete, photo;
+	private String oldscore;
 	private Handler handler = new Handler(){
 		public void handleMessage(Message msg){
 			switch(msg.what){
@@ -37,6 +49,7 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 				straddress = order.address;
 				strtel = order.tel;
 				String bufscore = "" + order.score;
+				oldscore = order.score;
 				strscore = bufscore;
 				company.setText(strcompany);
 				name.setText(strname);
@@ -200,9 +213,100 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
+		OrderConnect ordercnt = new OrderConnect(user);
+		Intent intent = new Intent();
+		String orderid = order.id;
+		AlertDialog.Builder dialog = null;
 		switch(v.getId()){
 		case R.id.editretBT:
+			setResult(BACK, intent);
+			finish();
+			break;
+		case R.id.editdeleteBT:
+			ordercnt.delete(order.id);
+			dialog = new AlertDialog.Builder(EditOrderActivity.this);
+			dialog.setTitle("The order has been deleted!");
+			dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+				}
+			});
+			dialog.show();
+			intent.putExtra("orderid", orderid);
+			setResult(DELETE, intent);
+			finish();
+			break;
+		case R.id.editconfirmBT:
+			order.company = company.getText().toString();
+			order.name = name.getText().toString();
+			order.address = address.getText().toString();
+			order.tel = tel.getText().toString();
+			order.score = score.getText().toString();
+			String isedi = null;
+			if(oldscore.equals(order.score)) isedi = "0";
+			else isedi = "1";
+			ordercnt.update(order.id, 6, "Company", company.getText().toString(), 
+										 "Name", name.getText().toString(), 
+										 "Address", address.getText().toString(), 
+										 "Tel", tel.getText().toString(), 
+										 "Score", score.getText().toString(), 
+										 "Isedit", isedi);
+			dialog = new AlertDialog.Builder(EditOrderActivity.this);
+			dialog.setTitle("The order has been updated!");
+			dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+				}
+			});
+			dialog.show();
+			intent.putExtra("orderid", orderid);
+			intent.putExtra("neworder", order);
+			setResult(UPDATE, intent);
+			finish();
+			break;
+		case R.id.editcallBT:
+			intent = new Intent(Intent.ACTION_DIAL);
+			intent.setData(Uri.parse("tel:" + tel.getText().toString()));
+            startActivity(intent); 
+			break;
+		case R.id.editcompleteBT:
+			final record myrecord = new record();
+			final EditText series_feedback = new EditText(this);
+			dialog = new AlertDialog.Builder(EditOrderActivity.this).setView(series_feedback);
+			dialog.setTitle("Input Series and Comments, seperate them by '&'!");
+			dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+					String total = series_feedback.getText().toString();
+					String[] sourceStrArray = total.split("&");
+					myrecord.myseries = sourceStrArray[0];
+					myrecord.myfeedback = sourceStrArray[1];
+				}
+			});
+			dialog.show();
+			ordercnt.update(orderid, 2, "Series", myrecord.myseries,
+										"Feedback", myrecord.myfeedback);
+		case R.id.editauditBT:
+			ordercnt.completetask(orderid);
+			dialog = new AlertDialog.Builder(EditOrderActivity.this);
+			dialog.setTitle("Your request has been submitted!");
+			dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+				}
+			});
+			dialog.show();
+			setResult(COMPLETE, intent);
+			finish();
 			break;
 		}
+	}
+	
+	class record{
+		String myseries, myfeedback;
 	}
 }
