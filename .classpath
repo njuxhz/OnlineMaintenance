@@ -5,19 +5,5 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry kind="lib" path="libs/gson-2.3.1.jar"/>
-	<classpathentry kind="lib" path="libs/jsonobject/commons-beanutils-1.7.0.jar"/>
-	<classpathentry kind="lib" path="libs/jsonobject/commons-collections-3.1.jar"/>
-	<classpathentry kind="lib" path="libs/jsonobject/commons-lang-2.5.jar"/>
-	<classpathentry kind="lib" path="libs/jsonobject/commons-logging.jar"/>
-	<classpathentry kind="lib" path="libs/jsonobject/ezmorph-1.0.3.jar"/>
-	<classpathentry kind="lib" path="libs/jsonobject/json-lib-2.1-jdk15.jar"/>
-	<classpathentry kind="lib" path="libs/httpclient/commons-codec-1.6.jar"/>
-	<classpathentry kind="lib" path="libs/httpclient/commons-logging-1.1.1.jar"/>
-	<classpathentry kind="lib" path="libs/httpclient/fluent-hc-4.2.1.jar"/>
-	<classpathentry kind="lib" path="libs/httpclient/httpclient-4.2.1.jar"/>
-	<classpathentry kind="lib" path="libs/httpclient/httpclient-cache-4.2.1.jar"/>
-	<classpathentry kind="lib" path="libs/httpclient/httpcore-4.2.1.jar"/>
-	<classpathentry kind="lib" path="libs/httpclient/httpmime-4.2.1.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

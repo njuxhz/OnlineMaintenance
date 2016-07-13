@@ -33,7 +33,7 @@ public class EditUserActivity extends BaseActivity implements OnClickListener{
 					passwd.setText("");
 				}else if (showmode == 2){
 					CharSequence strname, strmode, strpasswd;
-					strname = user.name;
+					strname = user.id;
 					strmode = "" + user.mode;
 					strpasswd = user.passwd;
 					name.setText(strname);

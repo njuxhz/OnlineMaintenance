@@ -1,12 +1,18 @@
 package com.activity;
 
 import android.app.AlertDialog;
+import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
+import android.provider.MediaStore.Images.Media;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,6 +29,8 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 
 	private static final int UPDATE_INFO = 1;
 	
+	private static final int CHOOSE_PHOTO = 1;
+	
 	public static final int DELIVER = 1;
 	public static final int ENGINEER = 2;
 	public static final int SALER = 3;
@@ -38,7 +46,7 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 	private Order order;
 	private EditText company, name, address, tel, state, score, engineer, saler;
 	private Button delete, ret, confirm, caller, audit, take, takecancel, complete, photo;
-	private String oldscore;
+	private String oldscore, imagePath = null;
 	private Handler handler = new Handler(){
 		public void handleMessage(Message msg){
 			switch(msg.what){
@@ -309,7 +317,7 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 					myrecord.myondoor = ondoor.getText().toString();
 				}
 			});
-			ordercnt.update(neworderid2, 2, "Engineerid", user.name,
+			ordercnt.update(neworderid2, 2, "Engineerid", user.id,
 											"Ondoor", myrecord.myondoor);
 			showdialog("Your request has been submitted!", COMPLETE);
 			break;
@@ -321,6 +329,13 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 			showdialog("Your request has been submitted!", COMPLETE);
 			break;
 		case R.id.editphotoBT:
+			Intent photointent = new Intent("androi.intent.action.GET_CONTENT");
+			photointent.setType("image/*");
+			startActivityForResult(photointent, CHOOSE_PHOTO);
+			if(imagePath != null){
+				ordercnt.uploadimage(imagePath, orderid, processid);
+				showdialog("Your request has been submitted!", COMPLETE);
+			}
 			break;
 		}
 	}
@@ -340,7 +355,51 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 		finish();
 	}
 	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		if(requestCode == CHOOSE_PHOTO){
+			if(resultCode == RESULT_OK){
+				if(Build.VERSION.SDK_INT >= 19){
+					handleImageOnKitKat(data);
+				}
+			}
+		}
+	}
+
+	private void handleImageOnKitKat(Intent data) {
+		// TODO Auto-generated method stub
+		Uri uri = data.getData();
+		if(DocumentsContract.isDocumentUri(this, uri)){
+			String docId = DocumentsContract.getDocumentId(uri);
+			if("com.android.providers.media.documents".equals(uri.getAuthority())){
+				String id = docId.split(":")[1];
+				String selection = MediaStore.Images.Media._ID + "=" + id;
+				imagePath = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection);
+			}else if("com.android.providers.downloads.documents".equals(uri.getAuthority())){
+				Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(docId));
+				imagePath = getImagePath(contentUri, null);
+			}else if("content".equalsIgnoreCase(uri.getScheme())){
+				imagePath = getImagePath(uri, null);
+			}
+		}
+	}
+
+	private String getImagePath(Uri uri, String selection) {
+		// TODO Auto-generated method stub
+		String path = null;
+		Cursor cursor = getContentResolver().query(uri, null, selection, null, null);
+		if(cursor != null){
+			if(cursor.moveToFirst()){
+				path = cursor.getString(cursor.getColumnIndex(Media.DATA));
+			}
+			cursor.close();
+		}
+		return path;
+	}
+
 	class record{
 		String myseries, myfeedback, myondoor;
-	}
+	}	
 }

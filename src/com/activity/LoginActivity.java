@@ -1,17 +1,18 @@
 package com.activity;
 
+import com.activiti.UserConnect;
 import com.activitymanager.BaseActivity;
 import com.example.onlinemaintenance.R;
 import com.user.User;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 public class LoginActivity extends BaseActivity implements OnClickListener{
 
@@ -48,11 +49,10 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 
 	private User isAuthen() {
 		// TODO Auto-generated method stub
-		if(Integer.parseInt(user) <= 4){//**********
-			User authuser = new User("" + Integer.parseInt(user), Integer.parseInt(user), passwd);
-			return authuser;
-		}
-		return null;
+		Log.d("1", "1");
+		UserConnect usercnt = new UserConnect();
+		Log.d("1", "2");
+		return usercnt.auth(user, passwd);
 	}
 
 	@Override
@@ -67,14 +67,33 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 		switch(v.getId()){
 		case R.id.loginBT:
 			getContent();
-			User authuser = isAuthen();
-			if(authuser != null){
-				Intent intent = new Intent(LoginActivity.this, UserInfoActivity.class);
-				intent.putExtra("user", authuser);
-				startActivity(intent);
-			}
+			Log.d("1", "1");
+			new mythread().execute();
+			Log.d("1", "2");
 			break;
 		default: break;
+		}
+	}
+	
+	class mythread extends AsyncTask<Void, Void, User>{
+		@Override
+		protected User doInBackground(Void... params) {
+			// TODO Auto-generated method stub
+			User authuser = isAuthen();
+			return authuser;
+		}
+
+		@Override
+		protected void onPostExecute(User result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			if(result != null){
+				Log.d("1", "3");
+				Intent intent = new Intent(LoginActivity.this, UserInfoActivity.class);
+				intent.putExtra("user", result);
+				startActivity(intent);
+			}
+			Log.d("1", "4");
 		}
 	}
 }

@@ -9,12 +9,12 @@ public class User implements Serializable{
 	public static final int SALER = 3;
 	public static final int ADMIN = 4;
 			
-	public String name = null;
+	public String id;
 	public int mode = 0;
 	public String nickname, passwd;
 	
-	public User(String name, int mode, String passwd){
-		this.name = name;
+	public User(String id, int mode, String passwd){
+		this.id = id;
 		this.mode = mode;
 		this.passwd = passwd;
 		getNickname();
@@ -22,7 +22,7 @@ public class User implements Serializable{
 	
 	private void getNickname() {
 		// TODO Auto-generated method stub
-		nickname = type() + name;
+		nickname = type() + id;
 	}
 
 	public String type(){

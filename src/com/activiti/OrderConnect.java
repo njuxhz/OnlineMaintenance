@@ -1,5 +1,6 @@
 package com.activiti;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.apache.http.HttpEntity;
@@ -11,6 +12,9 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
@@ -19,7 +23,6 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
-import com.order.Order;
 import com.user.User;
 
 public class OrderConnect{
@@ -33,7 +36,7 @@ public class OrderConnect{
 	
 	public OrderConnect(User userr){
 		user = userr;
-		REST_URL = "http://" + user.name + ":" + user.passwd + "@121.43.109.179/activiti-rest/service/";
+		REST_URL = "http://" + user.id + ":" + user.passwd + "@121.43.109.179/activiti-rest/service/";
 	}
 	
 	public String gettask() {
@@ -186,7 +189,7 @@ public class OrderConnect{
 		try {
 			JSONObject param = new JSONObject();
 			param.put("action", "complete");
-			param.put("assignee", user.name);
+			param.put("assignee", user.id);
 			StringEntity se = new StringEntity(param.toString());
 			se.setContentEncoding("UTF-8");
 			se.setContentType("application/json");
@@ -252,7 +255,7 @@ public class OrderConnect{
 		try {
 			JSONObject param = new JSONObject();
 			param.put("action", "claim");
-			if(mode == 1) param.put("assignee", user.name);
+			if(mode == 1) param.put("assignee", user.id);
 			else param.put("assignee", null);
 			StringEntity se = new StringEntity(param.toString());
 			se.setContentEncoding("UTF-8");
@@ -271,6 +274,31 @@ public class OrderConnect{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void uploadimage(String imagePath, String id, String processid) {
+		// TODO Auto-generated method stub
+		FileBody fileBody = new FileBody(new File(imagePath));
+		HttpPost post = new HttpPost(REST_URL + "runtime/tasks/" + id + "/attachments");
+		HttpClient httpclient = new DefaultHttpClient();
+		MultipartEntity reqentity = new MultipartEntity();    
+		try {
+			reqentity.addPart("file", fileBody);
+	        reqentity.addPart("name", new StringBody(processid + imagePath));
+	        post.setEntity(reqentity);
+			HttpResponse httpResponse = httpclient.execute(post);
+			HttpEntity entity = httpResponse.getEntity();
+			String response = EntityUtils.toString(entity, "utf-8");
+			if(httpResponse.getStatusLine().getStatusCode() != 201){
+				Log.d("imageuploaderror", response);
+			}
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
