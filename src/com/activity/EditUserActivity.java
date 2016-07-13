@@ -9,6 +9,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.activiti.UserConnect;
 import com.activitymanager.BaseActivity;
 import com.example.onlinemaintenance.R;
 import com.user.User;
@@ -16,6 +17,7 @@ import com.user.User;
 public class EditUserActivity extends BaseActivity implements OnClickListener{
 	
 	private static final int UPDATE_INFO = 1;
+	
 	private static final int OK = 1;
 	private static final int BACK = 2;
 	
@@ -78,6 +80,7 @@ public class EditUserActivity extends BaseActivity implements OnClickListener{
 		confirm.setOnClickListener(this);
 		delete = (Button) findViewById(R.id.usereditdeleteBT);
 		delete.setOnClickListener(this);
+		if(showmode == 2) delete.setVisibility(View.GONE);
 		new Thread(new Runnable(){
 			@Override
 			public void run() {
@@ -92,9 +95,20 @@ public class EditUserActivity extends BaseActivity implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
+		Intent intent = new Intent();
+		UserConnect usercnt = new UserConnect();
 		switch(v.getId()){
 		case R.id.usereditretBT:
+			setResult(BACK, intent);
+			break;
+		case R.id.usereditconfirmBT:
+			setResult(OK, intent);
+			//usercnt.createuser();
+			break;
+		case R.id.usereditdeleteBT:
+			setResult(OK, intent);
 			break;
 		}
+		finish();
 	}
 }

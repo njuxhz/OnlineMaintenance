@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:background="#808080"
         android:gravity="center"
-        android:text="用户修改"
+        android:text="用户"
         android:textColor="#ffffff"
         android:textSize="20sp" />
 
@@ -81,5 +81,5 @@
     	android:id="@+id/usereditconfirmBT"
     	android:layout_width="match_parent"
     	android:layout_height="wrap_content"
-    	android:text="修改" />
+    	android:text="确认" />
 </LinearLayout>

@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:background="#808080"
         android:gravity="center"
-        android:text="维修单修改"
+        android:text="维修单"
         android:textColor="#ffffff"
         android:textSize="20sp" />
 

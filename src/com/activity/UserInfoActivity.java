@@ -3,6 +3,7 @@ package com.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -12,7 +13,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.activiti.UserConnect;
+import com.activity.LoginActivity.mythread;
 import com.activitymanager.BaseActivity;
 import com.example.onlinemaintenance.R;
 import com.user.User;
@@ -27,7 +31,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 	
 	private User user;
 	private TextView usertype, nickname;
-	private Button revisepasswd, logout, checkorder, checkuser;
+	private Button revisepasswd, logout, checkorder, checkuser, create;
 	private String utype;
 	private Handler handler = new Handler(){
 		public void handleMessage(Message msg){
@@ -55,12 +59,18 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 		logout.setOnClickListener(this);
 		checkorder = (Button) findViewById(R.id.checkorderBT);
 		checkorder.setOnClickListener(this);
+		create = (Button) findViewById(R.id.usercreateBT);
+		create.setOnClickListener(this);
 		utype = user.type();
 		checkuser = (Button) findViewById(R.id.usermanagerBT);
 		if(user.mode == ADMIN){
 			checkuser.setOnClickListener(this);
 			checkuser.setVisibility(View.VISIBLE);
+			create.setVisibility(View.GONE);
+		}else if(user.mode == DELIVER){
+			checkuser.setVisibility(View.GONE);
 		}else{
+			create.setVisibility(View.GONE);
 			checkuser.setVisibility(View.GONE);
 		}
 		new Thread(new Runnable(){
@@ -103,8 +113,16 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					// TODO Auto-generated method stub
-					user.passwd = passwd.getText().toString();
-					user.updatepasswd();
+					new AsyncTask <String, Void, Void>(){
+						@Override
+						protected Void doInBackground(String... arg0) {
+							// TODO Auto-generated method stub
+							user.passwd = arg0[0];
+							UserConnect usercnt = new UserConnect();
+							usercnt.modifier(user.id, user.passwd);
+							return null;
+						}
+					}.execute(passwd.getText().toString());
 				}
 			});
 			dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -114,6 +132,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 				}
 			});
 			dialog.show();
+			Toast.makeText(this, "Revise Password Successfully!", Toast.LENGTH_SHORT);
 			break;
 		case R.id.logoutBT:
 			finish();
@@ -124,6 +143,14 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 			startActivity(intent);
 			break;
 		case R.id.usermanagerBT:
+			intent = new Intent(UserInfoActivity.this, UserManageActivity.class);
+			intent.putExtra("user", user);
+			startActivity(intent);
+			break;
+		case R.id.usercreateBT:
+			intent = new Intent(UserInfoActivity.this, CreateOrderActivity.class);
+			intent.putExtra("user", user);
+			startActivity(intent);
 			break;
 		default: break;
 		}

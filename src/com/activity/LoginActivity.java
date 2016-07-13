@@ -49,9 +49,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 
 	private User isAuthen() {
 		// TODO Auto-generated method stub
-		Log.d("1", "1");
 		UserConnect usercnt = new UserConnect();
-		Log.d("1", "2");
 		return usercnt.auth(user, passwd);
 	}
 
@@ -67,9 +65,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 		switch(v.getId()){
 		case R.id.loginBT:
 			getContent();
-			Log.d("1", "1");
 			new mythread().execute();
-			Log.d("1", "2");
 			break;
 		default: break;
 		}
@@ -88,12 +84,10 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 			if(result != null){
-				Log.d("1", "3");
 				Intent intent = new Intent(LoginActivity.this, UserInfoActivity.class);
 				intent.putExtra("user", result);
 				startActivity(intent);
 			}
-			Log.d("1", "4");
 		}
 	}
 }

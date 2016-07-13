@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
+import com.activiti.GetUser;
 import com.activitymanager.BaseActivity;
 import com.example.onlinemaintenance.R;
 import com.order.Order;
@@ -27,22 +28,27 @@ public class UserManageActivity extends BaseActivity implements OnClickListener{
 	private UserAdapter adapter;
 	private ListView listView;
 	private Button ret, add;
+	private User user;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		Intent intent = getIntent();
+		user = (User)intent.getSerializableExtra("user");
 		setContentView(R.layout.user_manage);
-		initUser();//************
+		initUser();
 		adapter = new UserAdapter(UserManageActivity.this, R.layout.single_user, userList);
 		getView();
 	}
 
-	private void initUser() {//**************
+	private void initUser() {
 		// TODO Auto-generated method stub
 		userList.clear();
-		userList.add(new User("1", 1, "22"));
-		userList.add(new User("5", 4, "44"));
+		GetUser getuser = new GetUser(user.id, user.passwd);
+		for(User usr : getuser.userList){
+			userList.add(usr);
+		}
 	}
 
 	@Override
@@ -94,6 +100,7 @@ public class UserManageActivity extends BaseActivity implements OnClickListener{
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
 		if(resultCode == OK){
+			initUser();
 			adapter.notifyDataSetChanged();
 		}
 	}

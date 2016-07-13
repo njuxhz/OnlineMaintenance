@@ -52,10 +52,11 @@ public final class R {
         public static final int tableRow3=0x7f06001c;
         public static final int telET=0x7f060003;
         public static final int userET=0x7f060019;
-        public static final int user_list_view=0x7f060033;
+        public static final int user_list_view=0x7f060034;
         public static final int user_mode=0x7f060022;
         public static final int user_nickname=0x7f060021;
         public static final int user_passwd=0x7f060023;
+        public static final int usercreateBT=0x7f060031;
         public static final int usereditconfirmBT=0x7f060016;
         public static final int usereditdeleteBT=0x7f060014;
         public static final int usereditnameET=0x7f060011;
@@ -63,8 +64,8 @@ public final class R {
         public static final int usereditretBT=0x7f060015;
         public static final int useredittypeET=0x7f060012;
         public static final int usermanagerBT=0x7f060030;
-        public static final int usermanageretBT=0x7f060031;
-        public static final int usernewBT=0x7f060032;
+        public static final int usermanageretBT=0x7f060032;
+        public static final int usernewBT=0x7f060033;
         public static final int usertypeT=0x7f06002b;
     }
     public static final class layout {

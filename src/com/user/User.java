@@ -40,9 +40,4 @@ public class User implements Serializable{
 		}
 		return ret;
 	}
-
-	public void updatepasswd() {//******************
-		// TODO Auto-generated method stub
-		
-	}
 }

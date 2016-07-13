@@ -30,5 +30,7 @@
         <activity android:name="com.activity.OrderActivity"></activity>
         <activity android:name="com.activity.EditOrderActivity"></activity>
         <activity android:name="com.activity.EditUserActivity"></activity>
+        <activity android:name="com.activity.CreateUserActivity"></activity>
+        <activity android:name="com.activity.CreateOrderActivity"></activity>
     </application>
 </manifest>

@@ -27,7 +27,7 @@ public class UserConnect {
 	public static final int SALER = 3;
 	public static final int ADMIN = 4;
 	
-	public static final String KERMIT_REST_URL = "http://kermit:kermit@121.43.109.179/activiti-rest/service/";
+	public static final String KERMIT_REST_URL = "http://@121.43.109.179/activiti-rest/service/";
 	public String REST_URL;
 	
 	public User auth(String username, String userpasswd) {
@@ -88,6 +88,11 @@ public class UserConnect {
 			}
 		}
 		return null;
+	}
+
+	public void modifier(String id, String passwd) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
