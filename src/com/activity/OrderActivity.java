@@ -142,7 +142,7 @@ public class OrderActivity extends BaseActivity implements OnClickListener{
 		// TODO Auto-generated method stub
 		orderList.clear();
 		for(int i = (listmode*10); i < (listmode*10+5); i++){//************************
-			Order o = new Order("" + i, "" + i, "order" + i, "" + i + "order", "10086", "*", "UnAcceptedOrder", "0", "7.13");
+			Order o = new Order("" + i, "" + i, "order" + i, "" + i + "order", "10086", "*", "UnAcceptedOrder", "0", "7.13", "*", "*");
 			orderList.add(o);
 		}
 		GetOrder getorder = new GetOrder(user);

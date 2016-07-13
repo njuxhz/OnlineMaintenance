@@ -216,7 +216,9 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 		OrderConnect ordercnt = new OrderConnect(user);
 		Intent intent = new Intent();
 		String orderid = order.id;
+		String processid = order.processid;
 		AlertDialog.Builder dialog = null;
+		final record myrecord = new record();
 		switch(v.getId()){
 		case R.id.editretBT:
 			setResult(BACK, intent);
@@ -272,7 +274,6 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
             startActivity(intent); 
 			break;
 		case R.id.editcompleteBT:
-			final record myrecord = new record();
 			final EditText series_feedback = new EditText(this);
 			dialog = new AlertDialog.Builder(EditOrderActivity.this).setView(series_feedback);
 			dialog.setTitle("Input Series and Comments, seperate them by '&'!");
@@ -291,22 +292,55 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 										"Feedback", myrecord.myfeedback);
 		case R.id.editauditBT:
 			ordercnt.completetask(orderid);
-			dialog = new AlertDialog.Builder(EditOrderActivity.this);
-			dialog.setTitle("Your request has been submitted!");
+			showdialog("Your request has been submitted!", COMPLETE);
+			break;
+		case R.id.edittakeBT:
+			ordercnt.completetask(orderid);
+			String neworderid1 = ordercnt.findnewid(processid);
+			ordercnt.claimtask(neworderid1, 1);
+			String neworderid2 = ordercnt.findnewid(processid);
+			final EditText ondoor = new EditText(this);
+			dialog = new AlertDialog.Builder(EditOrderActivity.this).setView(ondoor);
+			dialog.setTitle("Input Series and Comments, seperate them by '&'!");
 			dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					// TODO Auto-generated method stub
+					myrecord.myondoor = ondoor.getText().toString();
 				}
 			});
-			dialog.show();
-			setResult(COMPLETE, intent);
-			finish();
+			ordercnt.update(neworderid2, 2, "Engineerid", user.name,
+											"Ondoor", myrecord.myondoor);
+			showdialog("Your request has been submitted!", COMPLETE);
+			break;
+		case R.id.edittakecancelBT:
+			ordercnt.claimtask(orderid, 0);
+			String neworderid = ordercnt.findnewid(processid);
+			ordercnt.update(neworderid, 2, "Engineerid", "*",
+											"Ondoor", "*");
+			showdialog("Your request has been submitted!", COMPLETE);
+			break;
+		case R.id.editphotoBT:
 			break;
 		}
 	}
 	
+	public void showdialog(String title, int resultcode){
+		AlertDialog.Builder dialog = new AlertDialog.Builder(EditOrderActivity.this);
+		dialog.setTitle(title);
+		dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+			}
+		});
+		Intent intent = new Intent();
+		dialog.show();
+		setResult(resultcode, intent);
+		finish();
+	}
+	
 	class record{
-		String myseries, myfeedback;
+		String myseries, myfeedback, myondoor;
 	}
 }

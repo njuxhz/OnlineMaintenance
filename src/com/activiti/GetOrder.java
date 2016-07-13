@@ -35,11 +35,8 @@ public class GetOrder {
 				if(str.equalsIgnoreCase("ALL") || str.equals(compare)){
 					String processInstanceId = jsonObject.getString("processInstanceId");
 					ordercnt.getattri(processInstanceId);
-					Order order = new Order(jsonObject.getString("id"), processInstanceId, ordercnt.name, ordercnt.tel, ordercnt.company, ordercnt.address, compare, ordercnt.score, ordercnt.timestamp);
-					if(ordercnt.engineerid != null) order.setengineerid(ordercnt.engineerid);
-					else order.setengineerid("*");
-					if(ordercnt.salerid != null) order.setsalerid(ordercnt.salerid);
-					else order.setsalerid("*");
+					Order order = new Order(jsonObject.getString("id"), processInstanceId, ordercnt.name, ordercnt.tel, ordercnt.company, 
+											ordercnt.address, compare, ordercnt.score, ordercnt.timestamp, ordercnt.engineerid, ordercnt.salerid);
 					orderList.add(order);
 				}
 			}

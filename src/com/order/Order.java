@@ -16,13 +16,15 @@ public class Order implements Serializable{
 	public String repairtime, series, feedback;
 	public String photourl1, photourl2, photourl3;
 	
-	public Order(String id, String processid, String name, String tel, String company, String address, String status, String score, String timestamp){
+	public Order(String id, String processid, String name, String tel, String company, String address, String status, String score, String timestamp, String engineerid, String salerid){
 		this.id = id;
 		this.processid = processid;
 		this.name = name;
 		this.tel = tel;
 		this.company = company;
 		this.address = address;
+		this.engineerid = engineerid;
+		this.salerid = salerid;
 		if(status.equalsIgnoreCase("UnAcceptedOrder")) this.status = 1;
 		else if(status.equalsIgnoreCase("AcceptedOrder")) this.status = 2;
 		else if(status.equalsIgnoreCase("CompletedOrder")) this.status = 3;

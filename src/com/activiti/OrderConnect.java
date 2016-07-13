@@ -19,6 +19,7 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
+import com.order.Order;
 import com.user.User;
 
 public class OrderConnect{
@@ -26,13 +27,12 @@ public class OrderConnect{
 	public static final String KERMIT_REST_URL = "http://kermit:kermit@121.43.109.179/activiti-rest/service/";
 	public String REST_URL;
 	
-	public String name, tel, company, address, timestamp, score, isedit;
+	public String name, tel, company, address, timestamp, score, isedit, series, feedback, ondoor;
 	public String engineerid, salerid;
 	public User user;
 	
 	public OrderConnect(User userr){
 		user = userr;
-		engineerid = salerid = null;
 		REST_URL = "http://" + user.name + ":" + user.passwd + "@121.43.109.179/activiti-rest/service/";
 	}
 	
@@ -92,6 +92,16 @@ public class OrderConnect{
 					timestamp = jsonObject.getString("value");
 				}else if(jsonname.equals("Isedit")){
 					isedit = jsonObject.getString("value");
+				}else if(jsonname.equals("Engineerid")){
+					engineerid = jsonObject.getString("value");
+				}else if(jsonname.equals("Salerid")){
+					salerid = jsonObject.getString("value");
+				}else if(jsonname.equals("Series")){
+					series = jsonObject.getString("value");
+				}else if(jsonname.equals("Feedback")){
+					feedback = jsonObject.getString("value");
+				}else if(jsonname.equals("Ondoor")){
+					ondoor = jsonObject.getString("value");
 				}
 			}
 		} catch (ClientProtocolException e) {
@@ -142,6 +152,10 @@ public class OrderConnect{
 				params[i].put("scope", "global"); 
 				parama.put(params[i]);
 			}
+			JSONObject paramtime = new JSONObject();
+			paramtime.put("name", "Timestamp");
+			paramtime.put("value", "" + System.currentTimeMillis());
+			parama.put(paramtime);
 			param.put("variables", parama);
 			StringEntity se = new StringEntity(param.toString());
 			se.setContentEncoding("UTF-8");
@@ -172,7 +186,7 @@ public class OrderConnect{
 		try {
 			JSONObject param = new JSONObject();
 			param.put("action", "complete");
-			param.put("assignee", "kermit");
+			param.put("assignee", user.name);
 			StringEntity se = new StringEntity(param.toString());
 			se.setContentEncoding("UTF-8");
 			se.setContentType("application/json");
@@ -182,6 +196,73 @@ public class OrderConnect{
 			String response = EntityUtils.toString(entity, "utf-8");
 			if(httpResponse.getStatusLine().getStatusCode()  != 200){
 				Log.d("completeerror", response);
+			}
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public String findnewid(String processid) {
+		// TODO Auto-generated method stub
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpGet httpGet = new HttpGet(REST_URL + "runtime/tasks");
+		HttpResponse httpResponse;
+		try {
+			httpResponse = httpClient.execute(httpGet);
+			HttpEntity entity = httpResponse.getEntity();
+			String response = EntityUtils.toString(entity, "utf-8");
+			JSONObject jsonObjectdata = new JSONObject(response);
+			if(httpResponse.getStatusLine().getStatusCode()  == 200){
+				String data =  jsonObjectdata.getString("data");
+				JSONArray jsonArray = new JSONArray(data);
+				for(int i = 0; i < jsonArray.length(); i++){
+					JSONObject jsonObject = jsonArray.getJSONObject(i);
+					String processInstanceId = jsonObject.getString("processInstanceId");
+					if(processInstanceId.equals(processid)){
+						return jsonObject.getString("id");
+					}
+				}
+			}else{
+				Log.d("gettaskerror", response);
+			}
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public void claimtask(String id, int mode) {
+		// TODO Auto-generated method stub
+		HttpPost post = new HttpPost(REST_URL + "runtime/tasks/" + id);
+		HttpClient httpclient = new DefaultHttpClient();
+		try {
+			JSONObject param = new JSONObject();
+			param.put("action", "claim");
+			if(mode == 1) param.put("assignee", user.name);
+			else param.put("assignee", null);
+			StringEntity se = new StringEntity(param.toString());
+			se.setContentEncoding("UTF-8");
+			se.setContentType("application/json");
+			post.setEntity(se);
+			HttpResponse httpResponse = httpclient.execute(post);
+			HttpEntity entity = httpResponse.getEntity();
+			String response = EntityUtils.toString(entity, "utf-8");
+			if(httpResponse.getStatusLine().getStatusCode()  != 200){
+				Log.d("claimerror", response);
 			}
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
