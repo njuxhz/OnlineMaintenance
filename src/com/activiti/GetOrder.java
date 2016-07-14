@@ -7,6 +7,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 import com.order.Order;
 import com.user.User;
 
@@ -26,9 +28,9 @@ public class GetOrder {
 		orderList = new ArrayList<Order>();
 		orderList.clear();
 		OrderConnect ordercnt = new OrderConnect(user);
-		String taskdataarray = ordercnt.gettask();
+		JSONObject jsonObjectdata = ordercnt.gettask();
 		try {
-			JSONArray jsonArray = new JSONArray(taskdataarray);
+			JSONArray jsonArray = jsonObjectdata.getJSONArray("data");
 			for(int i = 0; i < jsonArray.length(); i++){
 				JSONObject jsonObject = jsonArray.getJSONObject(i);
 				String compare = jsonObject.getString("name");

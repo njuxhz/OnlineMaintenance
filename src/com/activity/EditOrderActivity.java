@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,6 +20,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.activiti.GetOrder;
 import com.activiti.OrderConnect;
 import com.activitymanager.BaseActivity;
 import com.example.onlinemaintenance.R;
@@ -221,7 +223,7 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		OrderConnect ordercnt = new OrderConnect(user);
+		//OrderConnect ordercnt = new OrderConnect(user);
 		Intent intent = new Intent();
 		String orderid = order.id;
 		String processid = order.processid;
@@ -233,7 +235,7 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 			finish();
 			break;
 		case R.id.editdeleteBT:
-			ordercnt.delete(order.id);
+			//ordercnt.delete(order.id);
 			dialog = new AlertDialog.Builder(EditOrderActivity.this);
 			dialog.setTitle("The order has been deleted!");
 			dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -256,25 +258,32 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 			String isedi = null;
 			if(oldscore.equals(order.score)) isedi = "0";
 			else isedi = "1";
-			ordercnt.update(order.id, 6, "Company", company.getText().toString(), 
-										 "Name", name.getText().toString(), 
-										 "Address", address.getText().toString(), 
-										 "Tel", tel.getText().toString(), 
-										 "Score", score.getText().toString(), 
-										 "Isedit", isedi);
-			dialog = new AlertDialog.Builder(EditOrderActivity.this);
-			dialog.setTitle("The order has been updated!");
-			dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			new AsyncTask <String, Void, String>(){
 				@Override
-				public void onClick(DialogInterface dialog, int which) {
+				protected String doInBackground(String... params) {
 					// TODO Auto-generated method stub
+					OrderConnect ordercnt = new OrderConnect(user);
+					ordercnt.update(order.id, 7, "Company", params[0], 
+							 					"Name", params[1], 
+							 					"Address", params[2], 
+							 					"Tel", params[3], 
+							 					"Score", params[4], 
+							 					"Isedit", params[5],
+							 					"Timestamp", "" + System.currentTimeMillis());
+					return order.id;
 				}
-			});
-			dialog.show();
-			intent.putExtra("orderid", orderid);
-			intent.putExtra("neworder", order);
-			setResult(UPDATE, intent);
-			finish();
+
+				@Override
+				protected void onPostExecute(String result) {
+					// TODO Auto-generated method stub
+					super.onPostExecute(result);
+					Intent intent = new Intent();
+					intent.putExtra("orderid", result);
+					intent.putExtra("neworder", order);
+					setResult(UPDATE, intent);
+					finish();
+				}
+			}.execute(company.getText().toString(), name.getText().toString(), address.getText().toString(), tel.getText().toString(), score.getText().toString(), isedi);
 			break;
 		case R.id.editcallBT:
 			intent = new Intent(Intent.ACTION_DIAL);
@@ -296,17 +305,17 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 				}
 			});
 			dialog.show();
-			ordercnt.update(orderid, 2, "Series", myrecord.myseries,
-										"Feedback", myrecord.myfeedback);
+			//ordercnt.update(orderid, 2, "Series", myrecord.myseries,
+			//							"Feedback", myrecord.myfeedback);
 		case R.id.editauditBT:
-			ordercnt.completetask(orderid);
+			//ordercnt.completetask(orderid);
 			showdialog("Your request has been submitted!", COMPLETE);
 			break;
 		case R.id.edittakeBT:
-			ordercnt.completetask(orderid);
-			String neworderid1 = ordercnt.findnewid(processid);
-			ordercnt.claimtask(neworderid1, 1);
-			String neworderid2 = ordercnt.findnewid(processid);
+			//ordercnt.completetask(orderid);
+			//String neworderid1 = ordercnt.findnewid(processid);
+			//ordercnt.claimtask(neworderid1, 1);
+			//String neworderid2 = ordercnt.findnewid(processid);
 			final EditText ondoor = new EditText(this);
 			dialog = new AlertDialog.Builder(EditOrderActivity.this).setView(ondoor);
 			dialog.setTitle("Input Series and Comments, seperate them by '&'!");
@@ -317,15 +326,15 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 					myrecord.myondoor = ondoor.getText().toString();
 				}
 			});
-			ordercnt.update(neworderid2, 2, "Engineerid", user.id,
-											"Ondoor", myrecord.myondoor);
+			//ordercnt.update(neworderid2, 2, "Engineerid", user.id,
+			//								"Ondoor", myrecord.myondoor);
 			showdialog("Your request has been submitted!", COMPLETE);
 			break;
 		case R.id.edittakecancelBT:
-			ordercnt.claimtask(orderid, 0);
-			String neworderid = ordercnt.findnewid(processid);
-			ordercnt.update(neworderid, 2, "Engineerid", "*",
-											"Ondoor", "*");
+			//ordercnt.claimtask(orderid, 0);
+			//String neworderid = ordercnt.findnewid(processid);
+			//ordercnt.update(neworderid, 2, "Engineerid", "*",
+			//								"Ondoor", "*");
 			showdialog("Your request has been submitted!", COMPLETE);
 			break;
 		case R.id.editphotoBT:
@@ -333,7 +342,7 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 			photointent.setType("image/*");
 			startActivityForResult(photointent, CHOOSE_PHOTO);
 			if(imagePath != null){
-				ordercnt.uploadimage(imagePath, orderid, processid);
+			//	ordercnt.uploadimage(imagePath, orderid, processid);
 				showdialog("Your request has been submitted!", COMPLETE);
 			}
 			break;

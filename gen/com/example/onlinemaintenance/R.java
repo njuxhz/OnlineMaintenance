@@ -40,6 +40,7 @@ public final class R {
         public static final int order_tel=0x7f060020;
         public static final int order_username=0x7f06001f;
         public static final int orderallBT=0x7f060025;
+        public static final int ordercreateBT=0x7f060031;
         public static final int orderretBT=0x7f060024;
         public static final int passwdET=0x7f06001b;
         public static final int revisepasswdBT=0x7f06002d;
@@ -52,11 +53,10 @@ public final class R {
         public static final int tableRow3=0x7f06001c;
         public static final int telET=0x7f060003;
         public static final int userET=0x7f060019;
+        public static final int user_id=0x7f060021;
         public static final int user_list_view=0x7f060034;
         public static final int user_mode=0x7f060022;
-        public static final int user_nickname=0x7f060021;
         public static final int user_passwd=0x7f060023;
-        public static final int usercreateBT=0x7f060031;
         public static final int usereditconfirmBT=0x7f060016;
         public static final int usereditdeleteBT=0x7f060014;
         public static final int usereditnameET=0x7f060011;

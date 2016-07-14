@@ -2,6 +2,8 @@ package com.order;
 
 import java.io.Serializable;
 
+import android.util.Log;
+
 public class Order implements Serializable{
 	
 	public static final int ALL = 0;
@@ -31,7 +33,6 @@ public class Order implements Serializable{
 		else if(status.equalsIgnoreCase("CheckedOrder")) this.status = 4;
 		this.score = score;
 		this.timestamp = timestamp;
-		this.engineerid = this.salerid = null;
 	}
 
 	public String getstate() {

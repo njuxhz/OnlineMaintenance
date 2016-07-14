@@ -6,6 +6,7 @@ import java.util.List;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,6 +19,7 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.activiti.GetOrder;
+import com.activiti.OrderConnect;
 import com.activitymanager.BaseActivity;
 import com.example.onlinemaintenance.R;
 import com.order.Order;
@@ -85,7 +87,6 @@ public class OrderActivity extends BaseActivity implements OnClickListener{
 				Intent intent = new Intent(OrderActivity.this, EditOrderActivity.class);
 				intent.putExtra("user", user);
 				Order order = (Order) listView.getItemAtPosition(position);
-				intent.putExtra("user", user);
 				intent.putExtra("order", order);
 				startActivityForResult(intent, 1);
 			}});
@@ -141,35 +142,112 @@ public class OrderActivity extends BaseActivity implements OnClickListener{
 	private void changeData() {
 		// TODO Auto-generated method stub
 		orderList.clear();
-		for(int i = (listmode*10); i < (listmode*10+5); i++){//************************
-			Order o = new Order("" + i, "" + i, "order" + i, "" + i + "order", "10086", "*", "UnAcceptedOrder", "0", "7.13", "*", "*");
-			orderList.add(o);
-		}
-		GetOrder getorder = new GetOrder(user);
 		switch(listmode){
 		case ALL:
-			getorder.setmachstate("ALL");
+			new AsyncTask <Void, Void, GetOrder>(){
+				@Override
+				protected GetOrder doInBackground(Void... params) {
+					// TODO Auto-generated method stub
+					GetOrder getorder = new GetOrder(user);
+					getorder.setmachstate("ALL");
+					return getorder;
+				}
+				@Override
+				protected void onPostExecute(GetOrder result) {
+					// TODO Auto-generated method stub
+					super.onPostExecute(result);
+					for(Order o : result.orderList){
+						orderList.add(o);
+					}
+					adapter.notifyDataSetChanged();
+				}
+			}.execute();
 			break;
 		case UNACCEPTED:
-			getorder.setmachstate("UnAcceptedOrder");
+			new AsyncTask <Void, Void, GetOrder>(){
+				@Override
+				protected GetOrder doInBackground(Void... params) {
+					// TODO Auto-generated method stub
+					GetOrder getorder = new GetOrder(user);
+					getorder.setmachstate("UnAcceptedOrder");
+					return getorder;
+				}
+				@Override
+				protected void onPostExecute(GetOrder result) {
+					// TODO Auto-generated method stub
+					super.onPostExecute(result);
+					for(Order o : result.orderList){
+						orderList.add(o);
+					}
+					adapter.notifyDataSetChanged();
+				}
+			}.execute();
 			break;
 		case ACCEPTED:
-			getorder.setmachstate("AcceptedOrder");
+			new AsyncTask <Void, Void, GetOrder>(){
+				@Override
+				protected GetOrder doInBackground(Void... params) {
+					// TODO Auto-generated method stub
+					GetOrder getorder = new GetOrder(user);
+					getorder.setmachstate("AcceptedOrder");
+					return getorder;
+				}
+				@Override
+				protected void onPostExecute(GetOrder result) {
+					// TODO Auto-generated method stub
+					super.onPostExecute(result);
+					for(Order o : result.orderList){
+						orderList.add(o);
+					}
+					adapter.notifyDataSetChanged();
+				}
+			}.execute();
 			break;
 		case COMPLETED:
-			getorder.setmachstate("CompletedOrder");
+			new AsyncTask <Void, Void, GetOrder>(){
+				@Override
+				protected GetOrder doInBackground(Void... params) {
+					// TODO Auto-generated method stub
+					GetOrder getorder = new GetOrder(user);
+					getorder.setmachstate("CompletedOrder");
+					return getorder;
+				}
+				@Override
+				protected void onPostExecute(GetOrder result) {
+					// TODO Auto-generated method stub
+					super.onPostExecute(result);
+					for(Order o : result.orderList){
+						orderList.add(o);
+					}
+					adapter.notifyDataSetChanged();
+				}
+			}.execute();
 			break;
 		case CHECKED:
-			getorder.setmachstate("CheckedOrder");
+			new AsyncTask <Void, Void, GetOrder>(){
+				@Override
+				protected GetOrder doInBackground(Void... params) {
+					// TODO Auto-generated method stub
+					GetOrder getorder = new GetOrder(user);
+					getorder.setmachstate("CheckedOrder");
+					return getorder;
+				}
+				@Override
+				protected void onPostExecute(GetOrder result) {
+					// TODO Auto-generated method stub
+					super.onPostExecute(result);
+					for(Order o : result.orderList){
+						orderList.add(o);
+					}
+					adapter.notifyDataSetChanged();
+				}
+			}.execute();
 			break;
-		}
-		for(Order o : getorder.orderList){
-			orderList.add(o);
 		}
 		adapter.notifyDataSetChanged();
 	}
 
-	private void initOrder() {//*********************
+	private void initOrder() {
 		// TODO Auto-generated method stub
 		orderList.clear();
 	}

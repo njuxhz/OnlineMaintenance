@@ -5,7 +5,10 @@ import java.io.IOException;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
@@ -15,6 +18,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
@@ -27,7 +31,7 @@ import com.user.User;
 
 public class OrderConnect{
 
-	public static final String KERMIT_REST_URL = "http://kermit:kermit@121.43.109.179/activiti-rest/service/";
+	public static final String KERMIT_REST_URL = "http://121.43.109.179/activiti-rest/service/";
 	public String REST_URL;
 	
 	public String name, tel, company, address, timestamp, score, isedit, series, feedback, ondoor;
@@ -36,12 +40,16 @@ public class OrderConnect{
 	
 	public OrderConnect(User userr){
 		user = userr;
-		REST_URL = "http://" + user.id + ":" + user.passwd + "@121.43.109.179/activiti-rest/service/";
 	}
 	
-	public String gettask() {
+	public JSONObject gettask() {
 		// TODO Auto-generated method stub
+		REST_URL = "http://121.43.109.179/activiti-rest/service/";
+		CredentialsProvider provider = new BasicCredentialsProvider();
+		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(user.id, user.passwd);
+		provider.setCredentials(AuthScope.ANY, credentials);
 		HttpClient httpClient = new DefaultHttpClient();
+		((DefaultHttpClient)httpClient).setCredentialsProvider(provider);
 		HttpGet httpGet = new HttpGet(REST_URL + "runtime/tasks");
 		HttpResponse httpResponse;
 		try {
@@ -50,7 +58,7 @@ public class OrderConnect{
 			String response = EntityUtils.toString(entity, "utf-8");
 			JSONObject jsonObject = new JSONObject(response);
 			if(httpResponse.getStatusLine().getStatusCode()  == 200){
-				return jsonObject.getString("data");
+				return jsonObject;
 			}else{
 				Log.d("gettaskerror", response);
 			}
@@ -69,7 +77,12 @@ public class OrderConnect{
 
 	public void getattri(String processInstanceId) {
 		// TODO Auto-generated method stub
+		REST_URL = "http://121.43.109.179/activiti-rest/service/";
+		CredentialsProvider provider = new BasicCredentialsProvider();
+		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(user.id, user.passwd);
+		provider.setCredentials(AuthScope.ANY, credentials);
 		HttpClient httpClient = new DefaultHttpClient();
+		((DefaultHttpClient)httpClient).setCredentialsProvider(provider);
 		HttpGet httpGet = new HttpGet(REST_URL + "runtime/process-instances/" + processInstanceId + "/variables");
 		HttpResponse httpResponse;
 		try {
@@ -77,7 +90,6 @@ public class OrderConnect{
 			HttpEntity entity = httpResponse.getEntity();
 			String response = EntityUtils.toString(entity, "utf-8");
 			JSONArray jsonArray = new JSONArray(response);
-			Log.d("getattri", response);
 			for(int i = 0; i < jsonArray.length(); i++){
 				JSONObject jsonObject = jsonArray.getJSONObject(i);
 				String jsonname = jsonObject.getString("name");
@@ -142,43 +154,44 @@ public class OrderConnect{
 
 	public void update(String id, int num, String ...args) {
 		// TODO Auto-generated method stub
-		HttpClient httpClient = new DefaultHttpClient();
-		HttpPut httpPut = new HttpPut(REST_URL + "runtime/tasks/" + id);
-		JSONObject param = new JSONObject();
-		JSONObject[] params = new JSONObject[num];
-		for(int i = 0; i < num; i++) params[i] = new JSONObject();
-		JSONArray parama = new JSONArray();
-		try {
-			for(int i = 0; i < num; i++){
-				params[i].put("name", args[2 * i]);
-				params[i].put("value", args[2 * i + 1]);
-				params[i].put("scope", "global"); 
-				parama.put(params[i]);
+		CredentialsProvider provider = new BasicCredentialsProvider();
+		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(user.id, user.passwd);
+		provider.setCredentials(AuthScope.ANY, credentials);
+		for(int i = 0; i < num; i++){
+			HttpClient httpClient = new DefaultHttpClient();
+			((DefaultHttpClient)httpClient).setCredentialsProvider(provider);
+			String REST_URL = "http://121.43.109.179/activiti-rest/service/runtime/tasks/" + id + "/variables/" + args[i * 2];
+			Log.d("update1", args[i * 2]);
+			Log.d("update2", args[i * 2 + 1]);
+			Log.d("url", REST_URL);
+			Log.d("name", user.id);
+			HttpPut httpPut = new HttpPut(REST_URL);
+			JSONObject param = new JSONObject();
+			try {
+				param.put("name", args[i * 2]);
+				param.put("type", "string");
+				param.put("value", args[i * 2 + 1]);
+				Log.d("json", param.toString());
+				StringEntity se = new StringEntity(param.toString());
+				se.setContentEncoding("UTF-8");
+				se.setContentType("application/json");
+				httpPut.setEntity(se);
+				HttpResponse httpResponse = httpClient.execute(httpPut);
+				HttpEntity entity = httpResponse.getEntity();
+				String response = EntityUtils.toString(entity, "utf-8");
+				if(httpResponse.getStatusLine().getStatusCode()  != 200){
+					Log.d("updateerror", response);
+				}
+			} catch (ClientProtocolException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			JSONObject paramtime = new JSONObject();
-			paramtime.put("name", "Timestamp");
-			paramtime.put("value", "" + System.currentTimeMillis());
-			parama.put(paramtime);
-			param.put("variables", parama);
-			StringEntity se = new StringEntity(param.toString());
-			se.setContentEncoding("UTF-8");
-			se.setContentType("application/json");
-			httpPut.setEntity(se);
-			HttpResponse httpResponse = httpClient.execute(httpPut);
-			HttpEntity entity = httpResponse.getEntity();
-			String response = EntityUtils.toString(entity, "utf-8");
-			if(httpResponse.getStatusLine().getStatusCode()  != 200){
-				Log.d("updateerror", response);
-			}
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 
@@ -299,6 +312,54 @@ public class OrderConnect{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void createorder(int num, String ...args) {
+		// TODO Auto-generated method stub
+		REST_URL = "http://121.43.109.179/activiti-rest/service/runtime/process-instances";
+		CredentialsProvider provider = new BasicCredentialsProvider();
+		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(user.id, user.passwd);
+		provider.setCredentials(AuthScope.ANY, credentials);
+		HttpClient httpClient = new DefaultHttpClient();
+		((DefaultHttpClient)httpClient).setCredentialsProvider(provider);
+		HttpPost httpPost = new HttpPost(REST_URL);
+		HttpResponse httpResponse;
+		JSONObject param = new JSONObject();
+		JSONObject[] params = new JSONObject[num];
+		for(int i = 0; i < num; i++) params[i] = new JSONObject();
+		JSONArray parama = new JSONArray();
+		try {
+			for(int i = 0; i < num; i++){
+				params[i].put("name", args[2 * i]);
+				params[i].put("value", args[2 * i + 1]);
+				parama.put(params[i]);
+			}
+			JSONObject paramtime = new JSONObject();
+			paramtime.put("name", "Timestamp");
+			paramtime.put("value", "" + System.currentTimeMillis());
+			parama.put(paramtime);
+			param.put("variables", parama);
+			param.put("processDefinitionId", "process:1:3641");
+			StringEntity se = new StringEntity(param.toString());
+			se.setContentEncoding("UTF-8");
+			se.setContentType("application/json");
+			httpPost.setEntity(se);
+			httpResponse = httpClient.execute(httpPost);
+			HttpEntity entity = httpResponse.getEntity();
+			String response = EntityUtils.toString(entity, "utf-8");
+			if(httpResponse.getStatusLine().getStatusCode()  != 200){
+				Log.d("createordererror", response);
+			}
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

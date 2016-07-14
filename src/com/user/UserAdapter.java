@@ -30,7 +30,7 @@ public class UserAdapter extends ArrayAdapter<User>{
 		if(convertView == null){
 			view = LayoutInflater.from(getContext()).inflate(resourceId, null);
 			viewHolder = new ViewHolder();
-			viewHolder.usernickname = (TextView) view.findViewById(R.id.user_nickname);
+			viewHolder.userid = (TextView) view.findViewById(R.id.user_id);
 			viewHolder.usermode = (TextView) view.findViewById(R.id.user_mode);
 			viewHolder.userpasswd = (TextView) view.findViewById(R.id.user_passwd);
 			view.setTag(viewHolder);
@@ -38,13 +38,13 @@ public class UserAdapter extends ArrayAdapter<User>{
 			view = convertView;
 			viewHolder = (ViewHolder) view.getTag();
 		}
-		viewHolder.usernickname.setText(user.nickname);
+		viewHolder.userid.setText(user.id);
 		viewHolder.usermode.setText("" + user.mode);
 		viewHolder.userpasswd.setText(user.passwd);
 		return view;
 	}
 	
 	class ViewHolder{
-		TextView usernickname, usermode, userpasswd;
+		TextView userid, usermode, userpasswd;
 	}
 }

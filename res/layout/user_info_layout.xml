@@ -86,7 +86,7 @@
     	android:layout_height="wrap_content"
     	android:text="管理用户" /> 
     <Button
-    	android:id="@+id/usercreateBT"
+    	android:id="@+id/ordercreateBT"
     	android:layout_width="match_parent"
     	android:layout_height="wrap_content"
     	android:text="创建维修单" />          

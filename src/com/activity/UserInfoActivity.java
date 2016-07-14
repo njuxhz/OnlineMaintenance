@@ -59,7 +59,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 		logout.setOnClickListener(this);
 		checkorder = (Button) findViewById(R.id.checkorderBT);
 		checkorder.setOnClickListener(this);
-		create = (Button) findViewById(R.id.usercreateBT);
+		create = (Button) findViewById(R.id.ordercreateBT);
 		create.setOnClickListener(this);
 		utype = user.type();
 		checkuser = (Button) findViewById(R.id.usermanagerBT);
@@ -147,7 +147,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 			intent.putExtra("user", user);
 			startActivity(intent);
 			break;
-		case R.id.usercreateBT:
+		case R.id.ordercreateBT:
 			intent = new Intent(UserInfoActivity.this, CreateOrderActivity.class);
 			intent.putExtra("user", user);
 			startActivity(intent);

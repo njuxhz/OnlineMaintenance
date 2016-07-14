@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,6 +14,7 @@ import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.activiti.GetUser;
+import com.activiti.UserConnect;
 import com.activitymanager.BaseActivity;
 import com.example.onlinemaintenance.R;
 import com.order.Order;
@@ -45,10 +47,17 @@ public class UserManageActivity extends BaseActivity implements OnClickListener{
 	private void initUser() {
 		// TODO Auto-generated method stub
 		userList.clear();
-		GetUser getuser = new GetUser(user.id, user.passwd);
-		for(User usr : getuser.userList){
-			userList.add(usr);
-		}
+		new AsyncTask <String, Void, Void>(){
+			@Override
+			protected Void doInBackground(String... arg0) {
+				// TODO Auto-generated method stub
+				GetUser getuser = new GetUser(arg0[0], arg0[1]);
+				for(User usr : getuser.userList){
+					userList.add(usr);
+				}
+				return null;
+			}
+		}.execute(user.id, user.passwd);
 	}
 
 	@Override
