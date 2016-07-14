@@ -30,9 +30,6 @@ public class OrderActivity extends BaseActivity implements OnClickListener{
 	
 	public static final int OK = 1;
 	public static final int BACK = 2;
-	private static final int DELETE = 3;
-	private static final int UPDATE = 4;
-	private static final int COMPLETE = 5;
 	
 	public static final int UPDATE_LIST = 1;
 	
@@ -257,34 +254,8 @@ public class OrderActivity extends BaseActivity implements OnClickListener{
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
 		if(requestCode == 1){
-			if(resultCode == OK){
-				adapter.notifyDataSetChanged();
-			}else if(resultCode == DELETE){
-				String orderid = data.getStringExtra("orderid");
-				for(int i = 0; i < orderList.size();i++){
-					Order o = orderList.get(i);
-					if(o.id.equals(orderid)){
-						orderList.remove(i);
-						break;
-					}
-				}
-				adapter.notifyDataSetChanged();
-			}else if(resultCode == UPDATE){
-				String orderid = data.getStringExtra("orderid");
-				Order oo = (Order) data.getSerializableExtra("neworder");
-				for(int i = 0; i < orderList.size();i++){
-					Order o = orderList.get(i);
-					if(o.id.equals(orderid)){
-						orderList.remove(i);
-						break;
-					}
-				}
-				orderList.add(oo);
-				adapter.notifyDataSetChanged();
-			}else if(resultCode == COMPLETE){
-				changeData();
-				adapter.notifyDataSetChanged();
-			}
+			changeData();
+			adapter.notifyDataSetChanged();
 		}
 	}
 }

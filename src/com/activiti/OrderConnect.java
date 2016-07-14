@@ -131,27 +131,6 @@ public class OrderConnect{
 		}
 	}
 
-	public void delete(String id) {
-		// TODO Auto-generated method stub
-		HttpClient httpClient = new DefaultHttpClient();
-		HttpDelete httpDelete = new HttpDelete(REST_URL + "runtime/tasks/" + id + "?cascadeHistory=true");
-		HttpResponse httpResponse;
-		try {
-			httpResponse = httpClient.execute(httpDelete);
-			HttpEntity entity = httpResponse.getEntity();
-			String response = EntityUtils.toString(entity, "utf-8");
-			if(httpResponse.getStatusLine().getStatusCode()  != 204){
-				Log.d("deleteerror", response);
-			}
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
 	public void update(String id, int num, String ...args) {
 		// TODO Auto-generated method stub
 		CredentialsProvider provider = new BasicCredentialsProvider();
@@ -160,18 +139,13 @@ public class OrderConnect{
 		for(int i = 0; i < num; i++){
 			HttpClient httpClient = new DefaultHttpClient();
 			((DefaultHttpClient)httpClient).setCredentialsProvider(provider);
-			String REST_URL = "http://121.43.109.179/activiti-rest/service/runtime/tasks/" + id + "/variables/" + args[i * 2];
-			Log.d("update1", args[i * 2]);
-			Log.d("update2", args[i * 2 + 1]);
-			Log.d("url", REST_URL);
-			Log.d("name", user.id);
+			String REST_URL = "http://121.43.109.179/activiti-rest/service/runtime/process-instances/" + id + "/variables/" + args[i * 2];
 			HttpPut httpPut = new HttpPut(REST_URL);
 			JSONObject param = new JSONObject();
 			try {
 				param.put("name", args[i * 2]);
 				param.put("type", "string");
 				param.put("value", args[i * 2 + 1]);
-				Log.d("json", param.toString());
 				StringEntity se = new StringEntity(param.toString());
 				se.setContentEncoding("UTF-8");
 				se.setContentType("application/json");
@@ -195,24 +169,66 @@ public class OrderConnect{
 		}
 	}
 
-	public void completetask(String id) {
+	public void deletetask(String id){
 		// TODO Auto-generated method stub
-		HttpPost post = new HttpPost(REST_URL + "runtime/tasks/" + id);
-		HttpClient httpclient = new DefaultHttpClient();
+		CredentialsProvider provider = new BasicCredentialsProvider();
+		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(user.id, user.passwd);
+		provider.setCredentials(AuthScope.ANY, credentials);
+		HttpClient httpClient = new DefaultHttpClient();
+		((DefaultHttpClient)httpClient).setCredentialsProvider(provider);
+		JSONObject param = new JSONObject();
+		JSONObject params = new JSONObject();
+		JSONArray parama = new JSONArray();
 		try {
-			JSONObject param = new JSONObject();
 			param.put("action", "complete");
 			param.put("assignee", user.id);
+			params.put("name", "Isdel"); params.put("value", "1"); params.put("scope", "local"); parama.put(params);
+			param.put("variables", parama);
 			StringEntity se = new StringEntity(param.toString());
+			HttpPost post = new HttpPost("http://121.43.109.179/activiti-rest/service/runtime/tasks/" + id);
 			se.setContentEncoding("UTF-8");
 			se.setContentType("application/json");
 			post.setEntity(se);
-			HttpResponse httpResponse = httpclient.execute(post);
+			HttpResponse httpResponse = httpClient.execute(post);
+			System.out.println(httpResponse.getStatusLine().getStatusCode());
 			HttpEntity entity = httpResponse.getEntity();
 			String response = EntityUtils.toString(entity, "utf-8");
-			if(httpResponse.getStatusLine().getStatusCode()  != 200){
-				Log.d("completeerror", response);
-			}
+			//parseJSONWithGSON(response);
+			System.out.println(response);
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void completetask(String id) {
+		// TODO Auto-generated method stub
+		CredentialsProvider provider = new BasicCredentialsProvider();
+		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(user.id, user.passwd);
+		provider.setCredentials(AuthScope.ANY, credentials);
+		HttpClient httpClient = new DefaultHttpClient();
+		((DefaultHttpClient)httpClient).setCredentialsProvider(provider);
+		JSONObject param = new JSONObject();
+		try {
+			param.put("action", "complete");
+			param.put("assignee", user.id);
+			StringEntity se = new StringEntity(param.toString());
+			HttpPost post = new HttpPost("http://121.43.109.179/activiti-rest/service/runtime/tasks/" + id);
+			se.setContentEncoding("UTF-8");
+			se.setContentType("application/json");
+			post.setEntity(se);
+			HttpResponse httpResponse = httpClient.execute(post);
+			System.out.println(httpResponse.getStatusLine().getStatusCode());
+			HttpEntity entity = httpResponse.getEntity();
+			String response = EntityUtils.toString(entity, "utf-8");
+			//parseJSONWithGSON(response);
+			System.out.println(response);
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -342,7 +358,7 @@ public class OrderConnect{
 			paramtime.put("value", "" + System.currentTimeMillis());
 			parama.put(paramtime);
 			param.put("variables", parama);
-			param.put("processDefinitionId", "process:1:3641");
+			param.put("processDefinitionId", "process:3:3657");
 			StringEntity se = new StringEntity(param.toString());
 			se.setContentEncoding("UTF-8");
 			se.setContentType("application/json");

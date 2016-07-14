@@ -40,9 +40,6 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 	
 	private static final int OK = 1;
 	private static final int BACK = 2;
-	private static final int DELETE = 3;
-	private static final int UPDATE = 4;
-	private static final int COMPLETE = 5;
 	
 	private User user;
 	private Order order;
@@ -146,6 +143,7 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 				disableall();
 				score.setEnabled(true);
 				ret.setVisibility(View.VISIBLE);
+				confirm.setVisibility(View.VISIBLE);
 				caller.setVisibility(View.VISIBLE);
 			}else{
 				delete.setVisibility(View.GONE);
@@ -236,18 +234,23 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 			break;
 		case R.id.editdeleteBT:
 			//ordercnt.delete(order.id);
-			dialog = new AlertDialog.Builder(EditOrderActivity.this);
-			dialog.setTitle("The order has been deleted!");
-			dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			new AsyncTask <String, Void, Void>(){
 				@Override
-				public void onClick(DialogInterface dialog, int which) {
+				protected Void doInBackground(String... params) {
 					// TODO Auto-generated method stub
+					OrderConnect ordercnt = new OrderConnect(user);
+					ordercnt.deletetask(order.id);
+					return null;
 				}
-			});
-			dialog.show();
-			intent.putExtra("orderid", orderid);
-			setResult(DELETE, intent);
-			finish();
+				@Override
+				protected void onPostExecute(Void result) {
+					// TODO Auto-generated method stub
+					super.onPostExecute(result);
+					Intent intent = new Intent();
+					setResult(OK, intent);
+					finish();
+				}
+			}.execute();
 			break;
 		case R.id.editconfirmBT:
 			order.company = company.getText().toString();
@@ -278,9 +281,7 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 					// TODO Auto-generated method stub
 					super.onPostExecute(result);
 					Intent intent = new Intent();
-					intent.putExtra("orderid", result);
-					intent.putExtra("neworder", order);
-					setResult(UPDATE, intent);
+					setResult(OK, intent);
 					finish();
 				}
 			}.execute(company.getText().toString(), name.getText().toString(), address.getText().toString(), tel.getText().toString(), score.getText().toString(), isedi);
@@ -309,7 +310,7 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 			//							"Feedback", myrecord.myfeedback);
 		case R.id.editauditBT:
 			//ordercnt.completetask(orderid);
-			showdialog("Your request has been submitted!", COMPLETE);
+			//showdialog("Your request has been submitted!", COMPLETE);
 			break;
 		case R.id.edittakeBT:
 			//ordercnt.completetask(orderid);
@@ -328,14 +329,14 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 			});
 			//ordercnt.update(neworderid2, 2, "Engineerid", user.id,
 			//								"Ondoor", myrecord.myondoor);
-			showdialog("Your request has been submitted!", COMPLETE);
+			//showdialog("Your request has been submitted!", COMPLETE);
 			break;
 		case R.id.edittakecancelBT:
 			//ordercnt.claimtask(orderid, 0);
 			//String neworderid = ordercnt.findnewid(processid);
 			//ordercnt.update(neworderid, 2, "Engineerid", "*",
 			//								"Ondoor", "*");
-			showdialog("Your request has been submitted!", COMPLETE);
+			//showdialog("Your request has been submitted!", COMPLETE);
 			break;
 		case R.id.editphotoBT:
 			Intent photointent = new Intent("androi.intent.action.GET_CONTENT");
@@ -343,7 +344,7 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 			startActivityForResult(photointent, CHOOSE_PHOTO);
 			if(imagePath != null){
 			//	ordercnt.uploadimage(imagePath, orderid, processid);
-				showdialog("Your request has been submitted!", COMPLETE);
+				//showdialog("Your request has been submitted!", COMPLETE);
 			}
 			break;
 		}
