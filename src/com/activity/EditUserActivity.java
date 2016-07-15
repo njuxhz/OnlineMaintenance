@@ -1,6 +1,7 @@
 package com.activity;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -9,9 +10,11 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.activiti.GetOrder;
 import com.activiti.UserConnect;
 import com.activitymanager.BaseActivity;
 import com.example.onlinemaintenance.R;
+import com.order.Order;
 import com.user.User;
 
 public class EditUserActivity extends BaseActivity implements OnClickListener{
@@ -80,7 +83,7 @@ public class EditUserActivity extends BaseActivity implements OnClickListener{
 		confirm.setOnClickListener(this);
 		delete = (Button) findViewById(R.id.usereditdeleteBT);
 		delete.setOnClickListener(this);
-		if(showmode == 2) delete.setVisibility(View.GONE);
+		if(showmode == 1) delete.setVisibility(View.GONE);
 		new Thread(new Runnable(){
 			@Override
 			public void run() {
@@ -95,20 +98,63 @@ public class EditUserActivity extends BaseActivity implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		Intent intent = new Intent();
-		UserConnect usercnt = new UserConnect();
 		switch(v.getId()){
 		case R.id.usereditretBT:
+			Intent intent = new Intent();
 			setResult(BACK, intent);
+			finish();
 			break;
 		case R.id.usereditconfirmBT:
-			setResult(OK, intent);
-			//usercnt.createuser();
+			new AsyncTask <String, Void, Void>(){
+				@Override
+				protected Void doInBackground(String... params) {
+					// TODO Auto-generated method stub
+					UserConnect usercnt = new UserConnect();
+					if(showmode == 1){
+						usercnt.create(params[0], params[1], params[2]);
+					}else{
+						if(user.id.equals(params[0])){
+							if(usercnt.edit(user, params[1], params[2])){
+								user.mode = Integer.parseInt(params[1]);
+								user.passwd = params[2];
+								user.getNickname();
+							}
+						}else{
+							usercnt.delete(user);
+							usercnt.create(params[0], params[1], params[2]);
+						}
+					}
+					return null;
+				}
+				@Override
+				protected void onPostExecute(Void result) {
+					// TODO Auto-generated method stub
+					super.onPostExecute(result);
+					Intent intent = new Intent();
+					setResult(OK, intent);
+					finish();
+				}
+			}.execute(name.getText().toString(), mode.getText().toString(), passwd.getText().toString());
 			break;
 		case R.id.usereditdeleteBT:
-			setResult(OK, intent);
+			new AsyncTask <Void, Void, Void>(){
+				@Override
+				protected Void doInBackground(Void... params) {
+					// TODO Auto-generated method stub
+					UserConnect usercnt = new UserConnect();
+					usercnt.delete(user);
+					return null;
+				}
+				@Override
+				protected void onPostExecute(Void result) {
+					// TODO Auto-generated method stub
+					super.onPostExecute(result);
+					Intent intent = new Intent();
+					setResult(OK, intent);
+					finish();
+				}
+			}.execute();
 			break;
 		}
-		finish();
 	}
 }

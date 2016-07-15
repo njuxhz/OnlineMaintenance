@@ -15,7 +15,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.activiti.OrderConnect;
 import com.activiti.UserConnect;
+import com.activity.EditOrderActivity.myThread;
 import com.activity.LoginActivity.mythread;
 import com.activitymanager.BaseActivity;
 import com.example.onlinemaintenance.R;
@@ -106,33 +108,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 		Intent intent;
 		switch(v.getId()){
 		case R.id.revisepasswdBT:
-			AlertDialog.Builder dialog = new AlertDialog.Builder(UserInfoActivity.this);
-			final EditText passwd = new EditText(this);
-			dialog.setTitle("Revise Your Password!").setView(passwd);
-			dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					// TODO Auto-generated method stub
-					new AsyncTask <String, Void, Void>(){
-						@Override
-						protected Void doInBackground(String... arg0) {
-							// TODO Auto-generated method stub
-							user.passwd = arg0[0];
-							UserConnect usercnt = new UserConnect();
-							usercnt.modifier(user.id, user.passwd);
-							return null;
-						}
-					}.execute(passwd.getText().toString());
-				}
-			});
-			dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					// TODO Auto-generated method stub
-				}
-			});
-			dialog.show();
-			Toast.makeText(this, "Revise Password Successfully!", Toast.LENGTH_SHORT);
+			myThread mythreadtake = new myThread();
 			break;
 		case R.id.logoutBT:
 			finish();
@@ -153,6 +129,45 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 			startActivity(intent);
 			break;
 		default: break;
+		}
+	}
+	
+	class myThread{
+		private String str;
+		public myThread(){
+			AlertDialog.Builder dialog = new AlertDialog.Builder(UserInfoActivity.this);
+			dialog.setTitle("Revise Your Password!");
+			final EditText mytext = new EditText(UserInfoActivity.this);
+			dialog = new AlertDialog.Builder(UserInfoActivity.this).setView(mytext);
+			dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+					str = mytext.getText().toString();
+					new AsyncTask <String, Void, Void>(){
+						@Override
+						protected Void doInBackground(String... arg0) {
+							// TODO Auto-generated method stub
+							UserConnect usercnt = new UserConnect();
+							if(usercnt.modifier(user, arg0[0])) user.passwd = arg0[0];
+							return null;
+						}
+						@Override
+						protected void onPostExecute(Void result) {
+							// TODO Auto-generated method stub
+							super.onPostExecute(result);
+							 Toast.makeText(getBaseContext(), "Revise Successfully!", Toast.LENGTH_LONG).show();
+						}
+					}.execute(mytext.getText().toString());
+				}
+			});
+			dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+				}
+			});
+			dialog.show();
 		}
 	}
 }

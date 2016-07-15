@@ -39,9 +39,10 @@ public class UserManageActivity extends BaseActivity implements OnClickListener{
 		Intent intent = getIntent();
 		user = (User)intent.getSerializableExtra("user");
 		setContentView(R.layout.user_manage);
-		initUser();
+		userList.clear();
 		adapter = new UserAdapter(UserManageActivity.this, R.layout.single_user, userList);
 		getView();
+		initUser();
 	}
 
 	private void initUser() {
@@ -56,6 +57,12 @@ public class UserManageActivity extends BaseActivity implements OnClickListener{
 					userList.add(usr);
 				}
 				return null;
+			}
+			@Override
+			protected void onPostExecute(Void result) {
+				// TODO Auto-generated method stub
+				super.onPostExecute(result);
+				adapter.notifyDataSetChanged();
 			}
 		}.execute(user.id, user.passwd);
 	}

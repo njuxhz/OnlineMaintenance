@@ -20,7 +20,7 @@ public class User implements Serializable{
 		getNickname();
 	}
 	
-	private void getNickname() {
+	public void getNickname() {
 		// TODO Auto-generated method stub
 		nickname = type() + id;
 	}
