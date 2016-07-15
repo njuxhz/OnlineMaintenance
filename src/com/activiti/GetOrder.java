@@ -34,9 +34,21 @@ public class GetOrder {
 			for(int i = 0; i < jsonArray.length(); i++){
 				JSONObject jsonObject = jsonArray.getJSONObject(i);
 				String compare = jsonObject.getString("name");
-				if(str.equalsIgnoreCase("ALL") || str.equals(compare)){
-					String processInstanceId = jsonObject.getString("processInstanceId");
-					ordercnt.getattri(processInstanceId);
+				String processInstanceId = jsonObject.getString("processInstanceId");
+				ordercnt.getattri(processInstanceId);
+				if(str.equalsIgnoreCase("UnAcceptedOrder") && compare.equals("AcceptedOrder")){
+					if(ordercnt.engineerid.equals("*")){
+						Order order = new Order(jsonObject.getString("id"), processInstanceId, ordercnt.name, ordercnt.tel, ordercnt.company, 
+								ordercnt.address, compare, ordercnt.score, ordercnt.timestamp, ordercnt.engineerid, ordercnt.salerid);
+						orderList.add(order);
+					}
+				}else if(str.equalsIgnoreCase("AcceptedOrder") && compare.equals("AcceptedOrder")){
+					if(!ordercnt.engineerid.equals("*")){
+						Order order = new Order(jsonObject.getString("id"), processInstanceId, ordercnt.name, ordercnt.tel, ordercnt.company, 
+								ordercnt.address, compare, ordercnt.score, ordercnt.timestamp, ordercnt.engineerid, ordercnt.salerid);
+						orderList.add(order);
+					}
+				}else if(str.equalsIgnoreCase("ALL") || str.equals(compare)){
 					Order order = new Order(jsonObject.getString("id"), processInstanceId, ordercnt.name, ordercnt.tel, ordercnt.company, 
 											ordercnt.address, compare, ordercnt.score, ordercnt.timestamp, ordercnt.engineerid, ordercnt.salerid);
 					orderList.add(order);

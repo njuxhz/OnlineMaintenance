@@ -160,12 +160,17 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 				caller.setVisibility(View.VISIBLE);
 				take.setVisibility(View.VISIBLE);
 			}else if(order.status == 2){
-				ret.setVisibility(View.VISIBLE);
-				caller.setVisibility(View.VISIBLE);
-				take.setVisibility(View.VISIBLE);
-				takecancel.setVisibility(View.VISIBLE);
-				complete.setVisibility(View.VISIBLE);
-				photo.setVisibility(View.VISIBLE);
+				if(order.engineerid.equals("*")){
+					ret.setVisibility(View.VISIBLE);
+					caller.setVisibility(View.VISIBLE);
+					take.setVisibility(View.VISIBLE);
+				}else{
+					ret.setVisibility(View.VISIBLE);
+					caller.setVisibility(View.VISIBLE);
+					takecancel.setVisibility(View.VISIBLE);
+					complete.setVisibility(View.VISIBLE);
+					photo.setVisibility(View.VISIBLE);
+				}
 			}else{
 				ret.setVisibility(View.VISIBLE);
 				caller.setVisibility(View.VISIBLE);
@@ -221,19 +226,15 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		//OrderConnect ordercnt = new OrderConnect(user);
 		Intent intent = new Intent();
 		String orderid = order.id;
 		String processid = order.processid;
-		AlertDialog.Builder dialog = null;
-		final record myrecord = new record();
 		switch(v.getId()){
 		case R.id.editretBT:
 			setResult(BACK, intent);
 			finish();
 			break;
 		case R.id.editdeleteBT:
-			//ordercnt.delete(order.id);
 			new AsyncTask <String, Void, Void>(){
 				@Override
 				protected Void doInBackground(String... params) {
@@ -266,16 +267,15 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 				protected String doInBackground(String... params) {
 					// TODO Auto-generated method stub
 					OrderConnect ordercnt = new OrderConnect(user);
-					ordercnt.update(order.id, 7, "Company", params[0], 
-							 					"Name", params[1], 
-							 					"Address", params[2], 
-							 					"Tel", params[3], 
-							 					"Score", params[4], 
-							 					"Isedit", params[5],
-							 					"Timestamp", "" + System.currentTimeMillis());
+					ordercnt.update(order.processid, 7, "Company", params[0], 
+							 							"Name", params[1], 
+							 							"Address", params[2], 
+							 							"Tel", params[3], 
+							 							"Score", params[4], 
+							 							"Isedit", params[5],
+							 							"Timestamp", "" + System.currentTimeMillis());
 					return order.id;
 				}
-
 				@Override
 				protected void onPostExecute(String result) {
 					// TODO Auto-generated method stub
@@ -292,51 +292,52 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
             startActivity(intent); 
 			break;
 		case R.id.editcompleteBT:
-			final EditText series_feedback = new EditText(this);
-			dialog = new AlertDialog.Builder(EditOrderActivity.this).setView(series_feedback);
-			dialog.setTitle("Input Series and Comments, seperate them by '&'!");
-			dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					// TODO Auto-generated method stub
-					String total = series_feedback.getText().toString();
-					String[] sourceStrArray = total.split("&");
-					myrecord.myseries = sourceStrArray[0];
-					myrecord.myfeedback = sourceStrArray[1];
-				}
-			});
-			dialog.show();
-			//ordercnt.update(orderid, 2, "Series", myrecord.myseries,
-			//							"Feedback", myrecord.myfeedback);
+			myThread mythreadcomplete = new myThread(2);
+			break;
 		case R.id.editauditBT:
-			//ordercnt.completetask(orderid);
-			//showdialog("Your request has been submitted!", COMPLETE);
+			new AsyncTask <Void, Void, Void>(){
+				@Override
+				protected Void doInBackground(Void... params) {
+					// TODO Auto-generated method stub
+					OrderConnect ordercnt = new OrderConnect(user);
+					ordercnt.update(order.processid, 2, "Salerid", user.id,
+														"Timestamp", "" + System.currentTimeMillis());
+					ordercnt.completetask(order.id);
+					return null;
+				}
+				@Override
+				protected void onPostExecute(Void result) {
+					// TODO Auto-generated method stub
+					super.onPostExecute(result);
+					Intent intent = new Intent();
+					setResult(OK, intent);
+					finish();
+				}
+			}.execute();
 			break;
 		case R.id.edittakeBT:
-			//ordercnt.completetask(orderid);
-			//String neworderid1 = ordercnt.findnewid(processid);
-			//ordercnt.claimtask(neworderid1, 1);
-			//String neworderid2 = ordercnt.findnewid(processid);
-			final EditText ondoor = new EditText(this);
-			dialog = new AlertDialog.Builder(EditOrderActivity.this).setView(ondoor);
-			dialog.setTitle("Input Series and Comments, seperate them by '&'!");
-			dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					// TODO Auto-generated method stub
-					myrecord.myondoor = ondoor.getText().toString();
-				}
-			});
-			//ordercnt.update(neworderid2, 2, "Engineerid", user.id,
-			//								"Ondoor", myrecord.myondoor);
-			//showdialog("Your request has been submitted!", COMPLETE);
+			myThread mythreadtake = new myThread(1);
 			break;
 		case R.id.edittakecancelBT:
-			//ordercnt.claimtask(orderid, 0);
-			//String neworderid = ordercnt.findnewid(processid);
-			//ordercnt.update(neworderid, 2, "Engineerid", "*",
-			//								"Ondoor", "*");
-			//showdialog("Your request has been submitted!", COMPLETE);
+			new AsyncTask <Void, Void, Void>(){
+				@Override
+				protected Void doInBackground(Void... params) {
+					// TODO Auto-generated method stub
+					OrderConnect ordercnt = new OrderConnect(user);
+					ordercnt.claimtask(order.id, 0);
+					ordercnt.update(order.processid, 2, "Engineerid", "*",
+														"Timestamp", "" + System.currentTimeMillis());
+					return null;
+				}
+				@Override
+				protected void onPostExecute(Void result) {
+					// TODO Auto-generated method stub
+					super.onPostExecute(result);
+					Intent intent = new Intent();
+					setResult(OK, intent);
+					finish();
+				}
+			}.execute();
 			break;
 		case R.id.editphotoBT:
 			Intent photointent = new Intent("androi.intent.action.GET_CONTENT");
@@ -348,21 +349,6 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 			}
 			break;
 		}
-	}
-	
-	public void showdialog(String title, int resultcode){
-		AlertDialog.Builder dialog = new AlertDialog.Builder(EditOrderActivity.this);
-		dialog.setTitle(title);
-		dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
-			}
-		});
-		Intent intent = new Intent();
-		dialog.show();
-		setResult(resultcode, intent);
-		finish();
 	}
 	
 	@Override
@@ -408,8 +394,73 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 		}
 		return path;
 	}
-
-	class record{
-		String myseries, myfeedback, myondoor;
-	}	
+	
+	class myThread{
+		private int mode;
+		private String a, b;
+		public myThread(int mod){
+			this.mode = mod;
+			AlertDialog.Builder dialog = new AlertDialog.Builder(EditOrderActivity.this);
+			if(this.mode == 1) dialog.setTitle("Please Input Ondoor Time!");
+			else dialog.setTitle("Input Series and Comments, seperate them by '&'!");
+			final EditText mytext = new EditText(EditOrderActivity.this);
+			dialog = new AlertDialog.Builder(EditOrderActivity.this).setView(mytext);
+			dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+					if(mode == 1){
+						a = mytext.getText().toString();
+					}else{
+						String total = mytext.getText().toString();
+						String[] sourceStrArray = total.split("&");
+						a = sourceStrArray[0];
+						b = sourceStrArray[1];
+					}
+					new AsyncTask <Void, Void, Void>(){
+						@Override
+						protected Void doInBackground(Void... arg0) {
+							// TODO Auto-generated method stub
+							OrderConnect ordercnt = new OrderConnect(user);
+							if(mode == 1){
+								ordercnt.update(order.processid, 3, "Ondoor", a,
+																	"Engineerid", user.id,
+																	"Timestamp", "" + System.currentTimeMillis());
+							}else{
+								ordercnt.update(order.processid, 3, "Series", a,
+																	"Feedback", b,
+																	"Timestamp", "" + System.currentTimeMillis());
+							}
+							if(mode == 1){
+								if(ordercnt.isunaccepted(order.id)){
+									ordercnt.completetask(order.id);
+									String newid = ordercnt.findnewid(order.processid);
+									ordercnt.claimtask(newid, 1);
+								}else{
+									ordercnt.claimtask(order.id, 1);
+								}
+							}else{
+								ordercnt.completetask(order.id);
+							}
+							return null;
+						}
+						@Override
+						protected void onPostExecute(Void result) {
+							// TODO Auto-generated method stub
+							super.onPostExecute(result);
+							Intent intent = new Intent();
+							setResult(OK, intent);
+							finish();
+						}
+						@Override
+						protected void onPreExecute() {
+							// TODO Auto-generated method stub
+							super.onPreExecute();
+						}
+					}.execute();
+				}
+			});
+			dialog.show();
+		}
+	}
 }

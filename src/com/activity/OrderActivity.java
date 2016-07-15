@@ -58,7 +58,7 @@ public class OrderActivity extends BaseActivity implements OnClickListener{
 		Intent intent = getIntent();
 		user = (User)intent.getSerializableExtra("user");
 		setContentView(R.layout.tab_manager);
-		initOrder();//************
+		initOrder();
 		adapter = new OrderAdapter(OrderActivity.this, R.layout.single_order, orderList);
 		getView();
 	}

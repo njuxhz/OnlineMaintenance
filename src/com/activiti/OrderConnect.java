@@ -27,6 +27,7 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
+import com.order.Order;
 import com.user.User;
 
 public class OrderConnect{
@@ -243,7 +244,12 @@ public class OrderConnect{
 
 	public String findnewid(String processid) {
 		// TODO Auto-generated method stub
+		REST_URL = "http://121.43.109.179/activiti-rest/service/";
+		CredentialsProvider provider = new BasicCredentialsProvider();
+		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(user.id, user.passwd);
+		provider.setCredentials(AuthScope.ANY, credentials);
 		HttpClient httpClient = new DefaultHttpClient();
+		((DefaultHttpClient)httpClient).setCredentialsProvider(provider);
 		HttpGet httpGet = new HttpGet(REST_URL + "runtime/tasks");
 		HttpResponse httpResponse;
 		try {
@@ -252,17 +258,16 @@ public class OrderConnect{
 			String response = EntityUtils.toString(entity, "utf-8");
 			JSONObject jsonObjectdata = new JSONObject(response);
 			if(httpResponse.getStatusLine().getStatusCode()  == 200){
-				String data =  jsonObjectdata.getString("data");
-				JSONArray jsonArray = new JSONArray(data);
+				JSONArray jsonArray = jsonObjectdata.getJSONArray("data");
 				for(int i = 0; i < jsonArray.length(); i++){
 					JSONObject jsonObject = jsonArray.getJSONObject(i);
-					String processInstanceId = jsonObject.getString("processInstanceId");
-					if(processInstanceId.equals(processid)){
+					String compare = jsonObject.getString("processInstanceId");
+					if(compare.equals(processid)){
 						return jsonObject.getString("id");
 					}
 				}
 			}else{
-				Log.d("gettaskerror", response);
+				Log.d("findnewiderror", response);
 			}
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
@@ -279,23 +284,27 @@ public class OrderConnect{
 
 	public void claimtask(String id, int mode) {
 		// TODO Auto-generated method stub
-		HttpPost post = new HttpPost(REST_URL + "runtime/tasks/" + id);
-		HttpClient httpclient = new DefaultHttpClient();
+		CredentialsProvider provider = new BasicCredentialsProvider();
+		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(user.id, user.passwd);
+		provider.setCredentials(AuthScope.ANY, credentials);
+		HttpClient httpClient = new DefaultHttpClient();
+		((DefaultHttpClient)httpClient).setCredentialsProvider(provider);
+		JSONObject param = new JSONObject();
 		try {
-			JSONObject param = new JSONObject();
 			param.put("action", "claim");
 			if(mode == 1) param.put("assignee", user.id);
 			else param.put("assignee", null);
 			StringEntity se = new StringEntity(param.toString());
+			HttpPost post = new HttpPost("http://121.43.109.179/activiti-rest/service/runtime/tasks/" + id);
 			se.setContentEncoding("UTF-8");
 			se.setContentType("application/json");
 			post.setEntity(se);
-			HttpResponse httpResponse = httpclient.execute(post);
+			HttpResponse httpResponse = httpClient.execute(post);
+			System.out.println(httpResponse.getStatusLine().getStatusCode());
 			HttpEntity entity = httpResponse.getEntity();
 			String response = EntityUtils.toString(entity, "utf-8");
-			if(httpResponse.getStatusLine().getStatusCode()  != 200){
-				Log.d("claimerror", response);
-			}
+			//parseJSONWithGSON(response);
+			System.out.println(response);
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -379,5 +388,40 @@ public class OrderConnect{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public boolean isunaccepted(String id) {
+		// TODO Auto-generated method stub
+		REST_URL = "http://121.43.109.179/activiti-rest/service/";
+		CredentialsProvider provider = new BasicCredentialsProvider();
+		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(user.id, user.passwd);
+		provider.setCredentials(AuthScope.ANY, credentials);
+		HttpClient httpClient = new DefaultHttpClient();
+		((DefaultHttpClient)httpClient).setCredentialsProvider(provider);
+		HttpGet httpGet = new HttpGet(REST_URL + "runtime/tasks/" + id);
+		HttpResponse httpResponse;
+		try {
+			httpResponse = httpClient.execute(httpGet);
+			HttpEntity entity = httpResponse.getEntity();
+			String response = EntityUtils.toString(entity, "utf-8");
+			JSONObject jsonObjectdata = new JSONObject(response);
+			if(httpResponse.getStatusLine().getStatusCode()  == 200){
+				if(jsonObjectdata.get("name").equals("UnAcceptedOrder")){
+					return true;
+				}else return false;
+			}else{
+				Log.d("isunacceptederror", response);
+			}
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
 	}
 }
