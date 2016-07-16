@@ -18,7 +18,8 @@ public class Order implements Serializable{
 	
 	public Order(String id, String processid, String name, String tel, String company, 
 				String address, String status, String score, String timestamp, String engineerid, 
-				String salerid, String photourl1, String photourl2, String photourl3, String picindex){
+				String salerid, String photourl1, String photourl2, String photourl3, String picindex,
+				String repairtime, String series, String feedback){
 		this.id = id;
 		this.processid = processid;
 		this.name = name;
@@ -37,6 +38,9 @@ public class Order implements Serializable{
 		this.photourl2 = photourl2;
 		this.photourl3 = photourl3;
 		this.picindex = picindex;
+		this.repairtime = repairtime;
+		this.series = series;
+		this.feedback = feedback;
 	}
 
 	public String getstate() {

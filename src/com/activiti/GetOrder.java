@@ -38,20 +38,23 @@ public class GetOrder {
 					if(ordercnt.engineerid.equals("*")){
 						Order order = new Order(jsonObject.getString("id"), processInstanceId, ordercnt.name, ordercnt.tel, ordercnt.company, 
 												ordercnt.address, compare, ordercnt.score, ordercnt.timestamp, ordercnt.engineerid, 
-												ordercnt.salerid, ordercnt.photourl1, ordercnt.photourl2, ordercnt.photourl3, ordercnt.picindex);
+												ordercnt.salerid, ordercnt.photourl1, ordercnt.photourl2, ordercnt.photourl3, ordercnt.picindex,
+												ordercnt.ondoor, ordercnt.series, ordercnt.feedback);
 						orderList.add(order);
 					}
 				}else if(str.equalsIgnoreCase("AcceptedOrder") && compare.equals("AcceptedOrder")){
 					if(!ordercnt.engineerid.equals("*")){
 						Order order = new Order(jsonObject.getString("id"), processInstanceId, ordercnt.name, ordercnt.tel, ordercnt.company, 
 								ordercnt.address, compare, ordercnt.score, ordercnt.timestamp, ordercnt.engineerid, 
-								ordercnt.salerid, ordercnt.photourl1, ordercnt.photourl2, ordercnt.photourl3, ordercnt.picindex);
+								ordercnt.salerid, ordercnt.photourl1, ordercnt.photourl2, ordercnt.photourl3, ordercnt.picindex,
+								ordercnt.ondoor, ordercnt.series, ordercnt.feedback);
 						orderList.add(order);
 					}
 				}else if(str.equalsIgnoreCase("ALL") || str.equals(compare)){
 					Order order = new Order(jsonObject.getString("id"), processInstanceId, ordercnt.name, ordercnt.tel, ordercnt.company, 
 							ordercnt.address, compare, ordercnt.score, ordercnt.timestamp, ordercnt.engineerid, 
-							ordercnt.salerid, ordercnt.photourl1, ordercnt.photourl2, ordercnt.photourl3, ordercnt.picindex);
+							ordercnt.salerid, ordercnt.photourl1, ordercnt.photourl2, ordercnt.photourl3, ordercnt.picindex,
+							ordercnt.ondoor, ordercnt.series, ordercnt.feedback);
 					orderList.add(order);
 				}
 			}

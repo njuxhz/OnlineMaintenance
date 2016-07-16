@@ -14,6 +14,7 @@ import android.os.Message;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images.Media;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -241,10 +242,10 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		Intent intent = new Intent();
 		switch(v.getId()){
 		case R.id.editretBT:
-			setResult(BACK, intent);
+			Intent intentback = new Intent();
+			setResult(BACK, intentback);
 			finish();
 			break;
 		case R.id.editdeleteBT:
@@ -302,9 +303,10 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 			}.execute(company.getText().toString(), name.getText().toString(), address.getText().toString(), tel.getText().toString(), score.getText().toString(), isedi);
 			break;
 		case R.id.editcallBT:
-			intent = new Intent(Intent.ACTION_DIAL);
-			intent.setData(Uri.parse("tel:" + tel.getText().toString()));
-            startActivity(intent); 
+			Intent intentcall = new Intent();
+			intentcall = new Intent(Intent.ACTION_DIAL);
+			intentcall.setData(Uri.parse("tel:" + tel.getText().toString()));
+            startActivity(intentcall); 
 			break;
 		case R.id.editcompleteBT:
 			myThread mythreadcomplete = new myThread(2);
@@ -458,8 +460,14 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 		public myThread(int mod){
 			this.mode = mod;
 			AlertDialog.Builder dialog = new AlertDialog.Builder(EditOrderActivity.this);
-			if(this.mode == 1) dialog.setTitle("Please Input Ondoor Time!");
-			else dialog.setTitle("Input Series and Comments, seperate them by '&'!");
+			if(this.mode == 1){
+				Toast.makeText(getBaseContext(), "Please Input Ondoor Time!", Toast.LENGTH_SHORT).show();
+				dialog.setTitle("Please Input Ondoor Time!");
+			}
+			else{
+				Toast.makeText(getBaseContext(), "Input Series and Comments, seperate them by '&'!", Toast.LENGTH_SHORT).show();
+				dialog.setTitle("Input Series and Comments, seperate them by '&'!");
+			}
 			final EditText mytext = new EditText(EditOrderActivity.this);
 			dialog = new AlertDialog.Builder(EditOrderActivity.this).setView(mytext);
 			dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {

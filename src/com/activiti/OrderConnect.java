@@ -2,6 +2,7 @@ package com.activiti;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -24,6 +25,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.user.User;
@@ -41,6 +44,10 @@ public class OrderConnect{
 		user = userr;
 	}
 	
+	public OrderConnect() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public JSONObject gettask() {
 		// TODO Auto-generated method stub
 		REST_URL = "http://121.43.109.179/activiti-rest/service/";
@@ -442,5 +449,38 @@ public class OrderConnect{
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	public Bitmap getfile(String url) {
+		// TODO Auto-generated method stub
+		CredentialsProvider provider = new BasicCredentialsProvider();
+		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials("kermit", "kermit");
+		provider.setCredentials(AuthScope.ANY, credentials);
+		HttpClient httpClient = new DefaultHttpClient();
+		((DefaultHttpClient)httpClient).setCredentialsProvider(provider);
+		HttpGet httpGet = new HttpGet(url);
+		HttpResponse httpResponse;
+		try {
+			httpResponse = httpClient.execute(httpGet);
+			if(httpResponse.getStatusLine().getStatusCode()  == 200){
+				HttpEntity entity = httpResponse.getEntity();
+				Bitmap bitmap = null;
+				InputStream is = entity.getContent();
+		        bitmap = BitmapFactory.decodeStream(is);
+		        is.close();
+				return bitmap;
+			}else{
+				HttpEntity entity = httpResponse.getEntity();
+				String response = EntityUtils.toString(entity, "utf-8");
+				Log.d("getfileerror", response);
+			}
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 }
