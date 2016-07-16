@@ -29,7 +29,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 	
 	private User user;
 	private TextView usertype, nickname;
-	private Button revisepasswd, logout, checkorder, checkuser, create;
+	private Button revisepasswd, logout, checkorder, checkuser, create, adminmessage;
 	private String utype;
 	private Handler handler = new Handler(){
 		public void handleMessage(Message msg){
@@ -59,6 +59,8 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 		checkorder.setOnClickListener(this);
 		create = (Button) findViewById(R.id.ordercreateBT);
 		create.setOnClickListener(this);
+		adminmessage = (Button) findViewById(R.id.ordermessageBT);
+		adminmessage.setOnClickListener(this);
 		utype = user.type();
 		checkuser = (Button) findViewById(R.id.usermanagerBT);
 		if(user.mode == ADMIN){
@@ -67,9 +69,11 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 			create.setVisibility(View.GONE);
 		}else if(user.mode == DELIVER){
 			checkuser.setVisibility(View.GONE);
+			adminmessage.setVisibility(View.GONE);
 		}else{
 			create.setVisibility(View.GONE);
 			checkuser.setVisibility(View.GONE);
+			adminmessage.setVisibility(View.GONE);
 		}
 		new Thread(new Runnable(){
 			@Override
@@ -121,6 +125,11 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 			break;
 		case R.id.ordercreateBT:
 			intent = new Intent(UserInfoActivity.this, CreateOrderActivity.class);
+			intent.putExtra("user", user);
+			startActivity(intent);
+			break;
+		case R.id.ordermessageBT:
+			intent = new Intent(UserInfoActivity.this, MessageActivity.class);
 			intent.putExtra("user", user);
 			startActivity(intent);
 			break;

@@ -20,7 +20,6 @@
         
         android:stretchColumns="1" >
 	    <TableRow
-	        android:paddingTop="50sp"
             android:id="@+id/tableRow1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
@@ -55,26 +54,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </TableRow>
-
-        <TableRow>
+    </TableLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+    		android:layout_height="wrap_content"
+    		android:orientation="horizontal" 
+    		android:gravity="center">
             <Button   
                 android:id="@+id/revisepasswdBT"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_span="2"
                 android:text="修改密码" />
-
-        </TableRow>
-
-        <TableRow >
             <Button
                 android:id="@+id/logoutBT"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_span="2"
-                android:text="注销账户" />            
-        </TableRow>
-    </TableLayout>
+                android:text="注销账户" /> 
+        </LinearLayout>
     <Button
     	android:id="@+id/checkorderBT"
     	android:layout_width="match_parent"
@@ -89,5 +85,10 @@
     	android:id="@+id/ordercreateBT"
     	android:layout_width="match_parent"
     	android:layout_height="wrap_content"
-    	android:text="创建维修单" />          
+    	android:text="创建维修单" />
+    <Button
+    	android:id="@+id/ordermessageBT"
+    	android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:text="管理员消息" />       
 </LinearLayout>

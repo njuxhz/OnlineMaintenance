@@ -63,4 +63,32 @@ public class GetOrder {
 			e.printStackTrace();
 		}
 	}
+	
+	public void setmachstatemessage(String str){
+		matchstate = str;
+		orderList = new ArrayList<Order>();
+		orderList.clear();
+		OrderConnect ordercnt = new OrderConnect(user);
+		JSONObject jsonObjectdata = ordercnt.gettask();
+		try {
+			JSONArray jsonArray = jsonObjectdata.getJSONArray("data");
+			for(int i = 0; i < jsonArray.length(); i++){
+				JSONObject jsonObject = jsonArray.getJSONObject(i);
+				String compare = jsonObject.getString("name");
+				String processInstanceId = jsonObject.getString("processInstanceId");
+				ordercnt.getattri(processInstanceId);
+				String ismessage = ordercnt.isedit;
+				if(str.equalsIgnoreCase("ALL") && ismessage.equals("1")){
+					Order order = new Order(jsonObject.getString("id"), processInstanceId, ordercnt.name, ordercnt.tel, ordercnt.company, 
+							ordercnt.address, compare, ordercnt.score, ordercnt.timestamp, ordercnt.engineerid, 
+							ordercnt.salerid, ordercnt.photourl1, ordercnt.photourl2, ordercnt.photourl3, ordercnt.picindex,
+							ordercnt.ondoor, ordercnt.series, ordercnt.feedback);
+					orderList.add(order);
+				}
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

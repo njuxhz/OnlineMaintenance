@@ -3,13 +3,9 @@ package com.activity;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,7 +15,6 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.activiti.GetOrder;
-import com.activiti.OrderConnect;
 import com.activitymanager.BaseActivity;
 import com.example.onlinemaintenance.R;
 import com.order.Order;
