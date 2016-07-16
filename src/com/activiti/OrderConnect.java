@@ -33,6 +33,11 @@ import com.user.User;
 
 public class OrderConnect{
 
+	public static final int DELIVER = 1;
+	public static final int ENGINEER = 2;
+	public static final int SALER = 3;
+	public static final int ADMIN = 4;
+	
 	public static final String KERMIT_REST_URL = "http://121.43.109.179/activiti-rest/service/";
 	public String REST_URL;
 	
@@ -482,5 +487,59 @@ public class OrderConnect{
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public int calscore(int monthmode) {
+		// TODO Auto-generated method stub
+		String cmpmonth = null;
+		int totalscore = 0;
+		if(monthmode < 10) cmpmonth = "0" + monthmode;
+		else cmpmonth = "" + monthmode;
+		REST_URL = "http://121.43.109.179/activiti-rest/service/";
+		CredentialsProvider provider = new BasicCredentialsProvider();
+		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(user.id, user.passwd);
+		provider.setCredentials(AuthScope.ANY, credentials);
+		HttpClient httpClient = new DefaultHttpClient();
+		((DefaultHttpClient)httpClient).setCredentialsProvider(provider);
+		HttpGet httpGet = new HttpGet(REST_URL + "runtime/tasks?sort=createTime&order=asc");
+		HttpResponse httpResponse;
+		try {
+			httpResponse = httpClient.execute(httpGet);
+			HttpEntity entity = httpResponse.getEntity();
+			String response = EntityUtils.toString(entity, "utf-8");
+			if(httpResponse.getStatusLine().getStatusCode()  == 200){
+				JSONObject jsonObjectdata = new JSONObject(response);
+				JSONArray jsonArray = jsonObjectdata.getJSONArray("data");
+				for(int i = 0; i < jsonArray.length(); i++){
+					JSONObject jsonObject = jsonArray.getJSONObject(i);
+					String cmpname = jsonObject.getString("name");
+					if(cmpname.equalsIgnoreCase("CheckedOrder")){
+						String ordertime = jsonObject.getString("createTime");
+						String[] sourceStrArray = ordertime.split("-");
+						if(cmpmonth.equals(sourceStrArray[1])){
+							String processInstanceId = jsonObject.getString("processInstanceId");
+							OrderConnect ordercnt = new OrderConnect(user);
+							ordercnt.getattri(processInstanceId);
+							if((ordercnt.engineerid.equals(user.id)) || (ordercnt.salerid.equals(user.id))){
+								totalscore = totalscore + Integer.parseInt(ordercnt.score);
+							}
+						}
+					}
+				}
+				return totalscore;
+			}else{
+				Log.d("calscoreerror", response);
+			}
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
 	}
 }

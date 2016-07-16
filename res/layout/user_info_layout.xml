@@ -90,5 +90,10 @@
     	android:id="@+id/ordermessageBT"
     	android:layout_width="match_parent"
     	android:layout_height="wrap_content"
-    	android:text="管理员消息" />       
+    	android:text="管理员消息" /> 
+    <Button
+    	android:id="@+id/userscoreBT"
+    	android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:text="分值计算" />	     
 </LinearLayout>

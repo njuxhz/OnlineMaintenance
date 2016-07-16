@@ -29,7 +29,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 	
 	private User user;
 	private TextView usertype, nickname;
-	private Button revisepasswd, logout, checkorder, checkuser, create, adminmessage;
+	private Button revisepasswd, logout, checkorder, checkuser, create, adminmessage, userscore;
 	private String utype;
 	private Handler handler = new Handler(){
 		public void handleMessage(Message msg){
@@ -61,6 +61,8 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 		create.setOnClickListener(this);
 		adminmessage = (Button) findViewById(R.id.ordermessageBT);
 		adminmessage.setOnClickListener(this);
+		userscore = (Button) findViewById(R.id.userscoreBT);
+		userscore.setOnClickListener(this);
 		utype = user.type();
 		checkuser = (Button) findViewById(R.id.usermanagerBT);
 		if(user.mode == ADMIN){
@@ -130,6 +132,11 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 			break;
 		case R.id.ordermessageBT:
 			intent = new Intent(UserInfoActivity.this, MessageActivity.class);
+			intent.putExtra("user", user);
+			startActivity(intent);
+			break;
+		case R.id.userscoreBT:
+			intent = new Intent(UserInfoActivity.this, ScoreActivity.class);
 			intent.putExtra("user", user);
 			startActivity(intent);
 			break;

@@ -33,5 +33,6 @@
         <activity android:name="com.activity.CreateOrderActivity"></activity>
         <activity android:name="com.activity.OrderMoreActivity"></activity>
         <activity android:name="com.activity.MessageActivity"></activity>
+        <activity android:name="com.activity.ScoreActivity"></activity>
     </application>
 </manifest>

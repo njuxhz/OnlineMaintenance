@@ -37,7 +37,6 @@ public class GetUser {
 		CredentialsProvider provider = new BasicCredentialsProvider();
 		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(id, passwd);
 		provider.setCredentials(AuthScope.ANY, credentials);
-		//HttpClient httpClient = HttpClientBuilder.create().setDefaultCredentialsProvider(provider).build();
 		HttpClient httpClient = new DefaultHttpClient();
 		((DefaultHttpClient)httpClient).setCredentialsProvider(provider);
 		HttpGet httpGet = new HttpGet(REST_URL);

@@ -86,9 +86,9 @@ public class UserManageActivity extends BaseActivity implements OnClickListener{
 					int position, long id) {
 				// TODO Auto-generated method stub
 				Intent intent = new Intent(UserManageActivity.this, EditUserActivity.class);
-				User user = (User) listView.getItemAtPosition(position);
+				User userr = (User) listView.getItemAtPosition(position);
 				intent.putExtra("mode", 2);
-				intent.putExtra("user", user);
+				intent.putExtra("user", userr);
 				startActivityForResult(intent, 2);
 			}});
 	}
