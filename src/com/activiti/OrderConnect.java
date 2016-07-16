@@ -49,7 +49,7 @@ public class OrderConnect{
 		provider.setCredentials(AuthScope.ANY, credentials);
 		HttpClient httpClient = new DefaultHttpClient();
 		((DefaultHttpClient)httpClient).setCredentialsProvider(provider);
-		HttpGet httpGet = new HttpGet(REST_URL + "runtime/tasks");
+		HttpGet httpGet = new HttpGet(REST_URL + "runtime/tasks?sort=createTime&order=asc");
 		HttpResponse httpResponse;
 		try {
 			httpResponse = httpClient.execute(httpGet);

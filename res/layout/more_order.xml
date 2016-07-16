@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="1" >
+	    <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="35sp" >
+            <TextView
+                android:layout_height="35sp"
+                android:text="Ondoor Info"
+                android:typeface="serif"
+                android:textSize="15sp" />
+            <EditText
+                android:id="@+id/ondoorET"
+                android:paddingLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="35sp" />
+        </TableRow>
+        
+	    <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="35sp" >
+            <TextView
+                android:layout_height="35sp"
+                android:text="Series Info"
+                android:typeface="serif"
+                android:textSize="15sp" />
+            <EditText
+                android:id="@+id/seriesET"
+                android:paddingLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="35sp" />
+        </TableRow>
+        
+	    <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="35sp" >
+            <TextView
+                android:layout_height="35sp"
+                android:text="Feedback Info"
+                android:typeface="serif"
+                android:textSize="15sp" />
+            <EditText
+                android:id="@+id/feedbackET"
+                android:paddingLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="35sp" />
+        </TableRow>
+    </TableLayout>
+	<ImageView 
+	    android:id="@+id/photo1IV"
+	    android:layout_width="match_parent"
+	    android:layout_height="85sp"
+	    android:layout_gravity="center_horizontal"
+	    android:scaleType="centerInside"/>
+	<ImageView 
+	    android:id="@+id/photo2IV"
+	    android:layout_width="match_parent"
+	    android:layout_height="85sp"
+	    android:layout_gravity="center_horizontal"
+	    android:scaleType="centerInside"/>
+	<ImageView 
+	    android:id="@+id/photo3IV"
+	    android:layout_width="match_parent"
+	    android:layout_height="85sp"
+	    android:layout_gravity="center_horizontal"
+	    android:scaleType="centerInside"/>
+	<Button
+    	android:id="@+id/moreretBT"
+    	android:layout_width="match_parent"
+    	android:layout_height="40sp"
+    	android:text="返回" />
+</LinearLayout>

@@ -14,7 +14,6 @@ import android.os.Message;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images.Media;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -44,7 +43,7 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 	private User user;
 	private Order order;
 	private EditText company, name, address, tel, state, score, engineer, saler;
-	private Button delete, ret, confirm, caller, audit, take, takecancel, complete, photo;
+	private Button delete, ret, confirm, caller, audit, take, takecancel, complete, photo, more;
 	private String oldscore, imagePath = null;
 	private Handler handler = new Handler(){
 		public void handleMessage(Message msg){
@@ -124,6 +123,8 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 		complete.setOnClickListener(this);
 		photo = (Button) findViewById(R.id.editphotoBT);
 		photo.setOnClickListener(this);
+		more = (Button) findViewById(R.id.editdetailBT);
+		more.setOnClickListener(this);
 		new Thread(new Runnable(){
 			@Override
 			public void run() {
@@ -139,18 +140,32 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 		// TODO Auto-generated method stub
 		switch(user.mode){
 		case DELIVER:
-			if(order.status != 1){
+			if(order.status == 1){
+				take.setVisibility(View.GONE);
+				takecancel.setVisibility(View.GONE);
+				complete.setVisibility(View.GONE);
+				photo.setVisibility(View.GONE);
+			}else if(order.status == 2){
+				if(order.engineerid.equals("*")){
+					take.setVisibility(View.GONE);
+					takecancel.setVisibility(View.GONE);
+					complete.setVisibility(View.GONE);
+					photo.setVisibility(View.GONE);
+				}else{
+					disableall();
+					score.setEnabled(true);
+					ret.setVisibility(View.VISIBLE);
+					confirm.setVisibility(View.VISIBLE);
+					caller.setVisibility(View.VISIBLE);
+					delete.setVisibility(View.VISIBLE);
+				}
+			}else{
 				disableall();
 				score.setEnabled(true);
 				ret.setVisibility(View.VISIBLE);
 				confirm.setVisibility(View.VISIBLE);
 				caller.setVisibility(View.VISIBLE);
-			}else{
-				delete.setVisibility(View.GONE);
-				take.setVisibility(View.GONE);
-				takecancel.setVisibility(View.GONE);
-				complete.setVisibility(View.GONE);
-				photo.setVisibility(View.GONE);
+				delete.setVisibility(View.VISIBLE);
 			}
 			break;
 		case ENGINEER:
@@ -345,6 +360,11 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 			Intent photointent = new Intent("android.intent.action.GET_CONTENT");
 			photointent.setType("image/*");
 			startActivityForResult(photointent, CHOOSE_PHOTO);
+			break;
+		case R.id.editdetailBT:
+			Intent moreintent = new Intent(EditOrderActivity.this, OrderMoreActivity.class);
+			moreintent.putExtra("order", order);
+			startActivity(moreintent);
 			break;
 		}
 	}
