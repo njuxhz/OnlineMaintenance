@@ -10,7 +10,6 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
@@ -27,7 +26,6 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
-import com.order.Order;
 import com.user.User;
 
 public class OrderConnect{
@@ -36,7 +34,7 @@ public class OrderConnect{
 	public String REST_URL;
 	
 	public String name, tel, company, address, timestamp, score, isedit, series, feedback, ondoor;
-	public String engineerid, salerid;
+	public String engineerid, salerid, photourl1, photourl2, photourl3, picindex;
 	public User user;
 	
 	public OrderConnect(User userr){
@@ -118,6 +116,14 @@ public class OrderConnect{
 					feedback = jsonObject.getString("value");
 				}else if(jsonname.equals("Ondoor")){
 					ondoor = jsonObject.getString("value");
+				}else if(jsonname.equals("Photourl1")){
+					photourl1 = jsonObject.getString("value");
+				}else if(jsonname.equals("Photourl2")){
+					photourl2 = jsonObject.getString("value");
+				}else if(jsonname.equals("Photourl3")){
+					photourl3 = jsonObject.getString("value");
+				}else if(jsonname.equals("Picindex")){
+					picindex = jsonObject.getString("value");
 				}
 			}
 		} catch (ClientProtocolException e) {
@@ -317,21 +323,30 @@ public class OrderConnect{
 		}
 	}
 
-	public void uploadimage(String imagePath, String id, String processid) {
+	public String uploadimage(String imagePath, String id, String processid) {
 		// TODO Auto-generated method stub
 		FileBody fileBody = new FileBody(new File(imagePath));
-		HttpPost post = new HttpPost(REST_URL + "runtime/tasks/" + id + "/attachments");
-		HttpClient httpclient = new DefaultHttpClient();
+		REST_URL = "http://121.43.109.179/activiti-rest/service/runtime/tasks/" + id + "/attachments";
+		CredentialsProvider provider = new BasicCredentialsProvider();
+		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(user.id, user.passwd);
+		provider.setCredentials(AuthScope.ANY, credentials);
+		HttpClient httpClient = new DefaultHttpClient();
+		((DefaultHttpClient)httpClient).setCredentialsProvider(provider);
+		HttpPost httpPost = new HttpPost(REST_URL);
 		MultipartEntity reqentity = new MultipartEntity();    
 		try {
 			reqentity.addPart("file", fileBody);
 	        reqentity.addPart("name", new StringBody(processid + imagePath));
-	        post.setEntity(reqentity);
-			HttpResponse httpResponse = httpclient.execute(post);
+	        httpPost.setEntity(reqentity);
+			HttpResponse httpResponse = httpClient.execute(httpPost);
 			HttpEntity entity = httpResponse.getEntity();
 			String response = EntityUtils.toString(entity, "utf-8");
 			if(httpResponse.getStatusLine().getStatusCode() != 201){
 				Log.d("imageuploaderror", response);
+				return null;
+			}else{
+				JSONObject jsonObjectdata = new JSONObject(response);
+				return jsonObjectdata.getString("url");
 			}
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
@@ -339,7 +354,11 @@ public class OrderConnect{
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		return null;
 	}
 
 	public void createorder(int num, String ...args) {

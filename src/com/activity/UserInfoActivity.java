@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -15,10 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.activiti.OrderConnect;
 import com.activiti.UserConnect;
-import com.activity.EditOrderActivity.myThread;
-import com.activity.LoginActivity.mythread;
 import com.activitymanager.BaseActivity;
 import com.example.onlinemaintenance.R;
 import com.user.User;
@@ -156,7 +152,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 						protected void onPostExecute(Void result) {
 							// TODO Auto-generated method stub
 							super.onPostExecute(result);
-							 Toast.makeText(getBaseContext(), "Revise Successfully!", Toast.LENGTH_LONG).show();
+							 Toast.makeText(getBaseContext(), "Update Successfully!", Toast.LENGTH_SHORT).show();
 						}
 					}.execute(mytext.getText().toString());
 				}

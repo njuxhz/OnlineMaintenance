@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.activiti.OrderConnect;
-import com.activiti.UserConnect;
 import com.activitymanager.BaseActivity;
 import com.example.onlinemaintenance.R;
 import com.user.User;
@@ -139,12 +138,15 @@ public class CreateOrderActivity extends BaseActivity implements OnClickListener
 											"Isedit", "0");
 					return null;
 				}
-				
+				@Override
+				protected void onPostExecute(Void result) {
+					// TODO Auto-generated method stub
+					super.onPostExecute(result);
+					Toast.makeText(getBaseContext(), "Create Successfully!", Toast.LENGTH_LONG).show();
+				}
 			}.execute();
-			Toast.makeText(this, "Create Successfully!", Toast.LENGTH_SHORT);
 			finish();
 			break;
 		}
 	}
-	
 }

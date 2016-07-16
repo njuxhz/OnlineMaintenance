@@ -14,11 +14,8 @@ import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.activiti.GetUser;
-import com.activiti.UserConnect;
 import com.activitymanager.BaseActivity;
 import com.example.onlinemaintenance.R;
-import com.order.Order;
-import com.order.OrderAdapter;
 import com.user.User;
 import com.user.UserAdapter;
 

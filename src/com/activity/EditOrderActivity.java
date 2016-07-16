@@ -14,13 +14,13 @@ import android.os.Message;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images.Media;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
-import com.activiti.GetOrder;
 import com.activiti.OrderConnect;
 import com.activitymanager.BaseActivity;
 import com.example.onlinemaintenance.R;
@@ -227,8 +227,6 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		Intent intent = new Intent();
-		String orderid = order.id;
-		String processid = order.processid;
 		switch(v.getId()){
 		case R.id.editretBT:
 			setResult(BACK, intent);
@@ -247,6 +245,7 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 				protected void onPostExecute(Void result) {
 					// TODO Auto-generated method stub
 					super.onPostExecute(result);
+					Toast.makeText(getBaseContext(), "Delete Successfully!", Toast.LENGTH_SHORT).show();
 					Intent intent = new Intent();
 					setResult(OK, intent);
 					finish();
@@ -280,6 +279,7 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 				protected void onPostExecute(String result) {
 					// TODO Auto-generated method stub
 					super.onPostExecute(result);
+					Toast.makeText(getBaseContext(), "Update Successfully!", Toast.LENGTH_SHORT).show();
 					Intent intent = new Intent();
 					setResult(OK, intent);
 					finish();
@@ -309,6 +309,7 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 				protected void onPostExecute(Void result) {
 					// TODO Auto-generated method stub
 					super.onPostExecute(result);
+					Toast.makeText(getBaseContext(), "Request Done Successfully!", Toast.LENGTH_SHORT).show();
 					Intent intent = new Intent();
 					setResult(OK, intent);
 					finish();
@@ -333,6 +334,7 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 				protected void onPostExecute(Void result) {
 					// TODO Auto-generated method stub
 					super.onPostExecute(result);
+					Toast.makeText(getBaseContext(), "Request Done Successfully!", Toast.LENGTH_SHORT).show();
 					Intent intent = new Intent();
 					setResult(OK, intent);
 					finish();
@@ -340,13 +342,9 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 			}.execute();
 			break;
 		case R.id.editphotoBT:
-			Intent photointent = new Intent("androi.intent.action.GET_CONTENT");
+			Intent photointent = new Intent("android.intent.action.GET_CONTENT");
 			photointent.setType("image/*");
 			startActivityForResult(photointent, CHOOSE_PHOTO);
-			if(imagePath != null){
-			//	ordercnt.uploadimage(imagePath, orderid, processid);
-				//showdialog("Your request has been submitted!", COMPLETE);
-			}
 			break;
 		}
 	}
@@ -359,6 +357,45 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 			if(resultCode == RESULT_OK){
 				if(Build.VERSION.SDK_INT >= 19){
 					handleImageOnKitKat(data);
+					new AsyncTask <String, Void, Void>(){
+						@Override
+						protected Void doInBackground(String... params) {
+							// TODO Auto-generated method stub
+							OrderConnect ordercnt = new OrderConnect(user);
+							if(params[0] != null){
+								String path = ordercnt.uploadimage(imagePath, order.id, order.processid);
+								if(path != null){
+									int nextpic = Integer.parseInt(order.picindex);
+									int updatepicindex = nextpic + 1;
+									if(updatepicindex == 4) updatepicindex = 1;
+									switch(nextpic){
+									case 1:
+										ordercnt.update(order.processid, 2, "Photourl1", path,
+																			"Picindex", "" + updatepicindex);
+										break;
+									case 2:
+										ordercnt.update(order.processid, 2, "Photourl2", path,
+																			"Picindex", "" + updatepicindex);
+										break;
+									case 3:
+										ordercnt.update(order.processid, 2, "Photourl3", path,
+																			"Picindex", "" + updatepicindex);
+										break;
+									}
+								}
+							}
+							return null;
+						}
+						@Override
+						protected void onPostExecute(Void result) {
+							// TODO Auto-generated method stub
+							super.onPostExecute(result);
+							Toast.makeText(getBaseContext(), "Upload Photo Successfully!", Toast.LENGTH_SHORT).show();
+							Intent intent = new Intent();
+							setResult(OK, intent);
+							finish();
+						}
+					}.execute(imagePath);
 				}
 			}
 		}
@@ -448,6 +485,7 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 						protected void onPostExecute(Void result) {
 							// TODO Auto-generated method stub
 							super.onPostExecute(result);
+							Toast.makeText(getBaseContext(), "Request Done Successfully!", Toast.LENGTH_SHORT).show();
 							Intent intent = new Intent();
 							setResult(OK, intent);
 							finish();

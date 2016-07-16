@@ -2,8 +2,6 @@ package com.order;
 
 import java.io.Serializable;
 
-import android.util.Log;
-
 public class Order implements Serializable{
 	
 	public static final int ALL = 0;
@@ -16,9 +14,11 @@ public class Order implements Serializable{
 	public String id , salerid, engineerid, score, processid;
 	public int status = 0;									//1未接		2已接		3已完成	4已审核
 	public String repairtime, series, feedback;
-	public String photourl1, photourl2, photourl3;
+	public String photourl1, photourl2, photourl3, picindex;
 	
-	public Order(String id, String processid, String name, String tel, String company, String address, String status, String score, String timestamp, String engineerid, String salerid){
+	public Order(String id, String processid, String name, String tel, String company, 
+				String address, String status, String score, String timestamp, String engineerid, 
+				String salerid, String photourl1, String photourl2, String photourl3, String picindex){
 		this.id = id;
 		this.processid = processid;
 		this.name = name;
@@ -33,6 +33,10 @@ public class Order implements Serializable{
 		else if(status.equalsIgnoreCase("CheckedOrder")) this.status = 4;
 		this.score = score;
 		this.timestamp = timestamp;
+		this.photourl1 = photourl1;
+		this.photourl2 = photourl2;
+		this.photourl3 = photourl3;
+		this.picindex = picindex;
 	}
 
 	public String getstate() {

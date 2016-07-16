@@ -7,8 +7,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
-
 import com.order.Order;
 import com.user.User;
 
@@ -39,18 +37,21 @@ public class GetOrder {
 				if(str.equalsIgnoreCase("UnAcceptedOrder") && compare.equals("AcceptedOrder")){
 					if(ordercnt.engineerid.equals("*")){
 						Order order = new Order(jsonObject.getString("id"), processInstanceId, ordercnt.name, ordercnt.tel, ordercnt.company, 
-								ordercnt.address, compare, ordercnt.score, ordercnt.timestamp, ordercnt.engineerid, ordercnt.salerid);
+												ordercnt.address, compare, ordercnt.score, ordercnt.timestamp, ordercnt.engineerid, 
+												ordercnt.salerid, ordercnt.photourl1, ordercnt.photourl2, ordercnt.photourl3, ordercnt.picindex);
 						orderList.add(order);
 					}
 				}else if(str.equalsIgnoreCase("AcceptedOrder") && compare.equals("AcceptedOrder")){
 					if(!ordercnt.engineerid.equals("*")){
 						Order order = new Order(jsonObject.getString("id"), processInstanceId, ordercnt.name, ordercnt.tel, ordercnt.company, 
-								ordercnt.address, compare, ordercnt.score, ordercnt.timestamp, ordercnt.engineerid, ordercnt.salerid);
+								ordercnt.address, compare, ordercnt.score, ordercnt.timestamp, ordercnt.engineerid, 
+								ordercnt.salerid, ordercnt.photourl1, ordercnt.photourl2, ordercnt.photourl3, ordercnt.picindex);
 						orderList.add(order);
 					}
 				}else if(str.equalsIgnoreCase("ALL") || str.equals(compare)){
 					Order order = new Order(jsonObject.getString("id"), processInstanceId, ordercnt.name, ordercnt.tel, ordercnt.company, 
-											ordercnt.address, compare, ordercnt.score, ordercnt.timestamp, ordercnt.engineerid, ordercnt.salerid);
+							ordercnt.address, compare, ordercnt.score, ordercnt.timestamp, ordercnt.engineerid, 
+							ordercnt.salerid, ordercnt.photourl1, ordercnt.photourl2, ordercnt.photourl3, ordercnt.picindex);
 					orderList.add(order);
 				}
 			}

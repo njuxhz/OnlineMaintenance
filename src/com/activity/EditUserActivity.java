@@ -9,12 +9,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
-import com.activiti.GetOrder;
 import com.activiti.UserConnect;
 import com.activitymanager.BaseActivity;
 import com.example.onlinemaintenance.R;
-import com.order.Order;
 import com.user.User;
 
 public class EditUserActivity extends BaseActivity implements OnClickListener{
@@ -130,6 +129,8 @@ public class EditUserActivity extends BaseActivity implements OnClickListener{
 				protected void onPostExecute(Void result) {
 					// TODO Auto-generated method stub
 					super.onPostExecute(result);
+					if(showmode == 1) Toast.makeText(getBaseContext(), "Create Successfully!", Toast.LENGTH_SHORT).show();
+					else Toast.makeText(getBaseContext(), "Revise Successfully!", Toast.LENGTH_SHORT).show();
 					Intent intent = new Intent();
 					setResult(OK, intent);
 					finish();
@@ -149,6 +150,7 @@ public class EditUserActivity extends BaseActivity implements OnClickListener{
 				protected void onPostExecute(Void result) {
 					// TODO Auto-generated method stub
 					super.onPostExecute(result);
+					Toast.makeText(getBaseContext(), "Delete Successfully!", Toast.LENGTH_SHORT).show();
 					Intent intent = new Intent();
 					setResult(OK, intent);
 					finish();
