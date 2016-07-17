@@ -1,5 +1,6 @@
 package com.order;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import com.example.onlinemaintenance.R;
@@ -31,20 +32,21 @@ public class OrderAdapter extends ArrayAdapter<Order>{
 			view = LayoutInflater.from(getContext()).inflate(resourceId, null);
 			viewHolder = new ViewHolder();
 			viewHolder.orderid = (TextView) view.findViewById(R.id.order_id);
-			viewHolder.orderusername = (TextView) view.findViewById(R.id.order_username);
-			viewHolder.orderusertel = (TextView) view.findViewById(R.id.order_tel);
+			viewHolder.ordertimestamp = (TextView) view.findViewById(R.id.order_time);
 			view.setTag(viewHolder);
 		}else{
 			view = convertView;
 			viewHolder = (ViewHolder) view.getTag();
 		}
 		viewHolder.orderid.setText(""+order.id);
-		viewHolder.orderusername.setText(order.name);
-		viewHolder.orderusertel.setText(order.tel);
+		SimpleDateFormat sdf= new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+		java.util.Date dt = new java.util.Date(Long.parseLong(order.timestamp));  
+		String sDateTime = sdf.format(dt);
+		viewHolder.ordertimestamp.setText(sDateTime);
 		return view;
 	}
 	
 	class ViewHolder{
-		TextView orderid, orderusername, orderusertel;
+		TextView orderid, ordertimestamp;
 	}
 }

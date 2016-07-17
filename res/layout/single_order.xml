@@ -11,14 +11,7 @@
 	    android:layout_marginLeft="10dip" />
 	
 	<TextView 
-	    android:id="@+id/order_username"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:gravity="center"
-	    android:layout_marginLeft="10dip" />
-	
-	<TextView 
-	    android:id="@+id/order_tel"
+	    android:id="@+id/order_time"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:gravity="center"

@@ -16,11 +16,4 @@
 	    android:layout_height="wrap_content"
 	    android:gravity="center"
 	    android:layout_marginLeft="10dip" />
-	
-	<TextView 
-	    android:id="@+id/user_passwd"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:gravity="center"
-	    android:layout_marginLeft="10dip" />
 </LinearLayout>

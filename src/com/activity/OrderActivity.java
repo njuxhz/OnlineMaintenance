@@ -1,6 +1,7 @@
 package com.activity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import android.content.Intent;
@@ -241,6 +242,7 @@ public class OrderActivity extends BaseActivity implements OnClickListener{
 							orderList.add(o);
 						}
 					}
+					Collections.sort(orderList);
 					orderadapter.notifyDataSetChanged();
 				}
 			}.execute();
@@ -261,6 +263,7 @@ public class OrderActivity extends BaseActivity implements OnClickListener{
 					for(Order o : result.orderList){
 						orderList.add(o);
 					}
+					Collections.sort(orderList);
 					orderadapter.notifyDataSetChanged();
 				}
 			}.execute();
@@ -283,6 +286,7 @@ public class OrderActivity extends BaseActivity implements OnClickListener{
 							orderList.add(o);
 						}
 					}
+					Collections.sort(orderList);
 					orderadapter.notifyDataSetChanged();
 				}
 			}.execute();
@@ -305,6 +309,7 @@ public class OrderActivity extends BaseActivity implements OnClickListener{
 							orderList.add(o);
 						}
 					}
+					Collections.sort(orderList);
 					orderadapter.notifyDataSetChanged();
 				}
 			}.execute();
@@ -327,6 +332,7 @@ public class OrderActivity extends BaseActivity implements OnClickListener{
 							orderList.add(o);
 						}
 					}
+					Collections.sort(orderList);
 					orderadapter.notifyDataSetChanged();
 				}
 			}.execute();

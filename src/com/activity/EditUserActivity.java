@@ -150,7 +150,7 @@ public class EditUserActivity extends BaseActivity implements OnClickListener{
 					int ok = 1;
 					UserConnect usercnt = new UserConnect();
 					if(showmode == 1){
-						if(!usercnt.isoccur(params[0])){
+						if((!usercnt.isoccur(params[0])) && (!params[0].equals(""))){
 							usercnt.create(params[0], params[1], params[2]);
 						}else{
 							ok = 0;
@@ -164,7 +164,7 @@ public class EditUserActivity extends BaseActivity implements OnClickListener{
 							}
 						}else{
 							usercnt.delete(user);
-							if(!usercnt.isoccur(params[0])){
+							if((!usercnt.isoccur(params[0])) && (!params[0].equals(""))){
 								usercnt.create(params[0], params[1], params[2]);
 							}else{
 								ok = 0;
@@ -184,7 +184,7 @@ public class EditUserActivity extends BaseActivity implements OnClickListener{
 						setResult(OK, intent);
 						finish();
 					}else{
-						Toast.makeText(getBaseContext(), "ID Has Been Used!", Toast.LENGTH_SHORT).show();
+						Toast.makeText(getBaseContext(), "Sign Up Error!", Toast.LENGTH_SHORT).show();
 					}
 				}
 			}.execute(name.getText().toString(), select, passwd.getText().toString());

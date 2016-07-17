@@ -2,7 +2,7 @@ package com.order;
 
 import java.io.Serializable;
 
-public class Order implements Serializable{
+public class Order implements Serializable, Comparable{
 	
 	public static final int ALL = 0;
 	public static final int UNACCEPTED = 1;
@@ -106,5 +106,14 @@ public class Order implements Serializable{
 		if(position.equals("1")) return 1;
 		else if(position.equals("0")) return 2;
 		return 0;
+	}
+
+	@Override
+	public int compareTo(Object another) {
+		// TODO Auto-generated method stub
+		Long long1 = Long.parseLong(timestamp);
+		Order anotherorder = (Order) another;
+		Long long2 = Long.parseLong(anotherorder.timestamp);
+		return long1.compareTo(long2);
 	}
 }

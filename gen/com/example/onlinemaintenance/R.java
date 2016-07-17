@@ -15,7 +15,7 @@ public final class R {
     }
     public static final class id {
         public static final int addressET=0x7f060002;
-        public static final int checkorderBT=0x7f06004f;
+        public static final int checkorderBT=0x7f06004d;
         public static final int companyET=0x7f060000;
         public static final int editauditBT=0x7f060013;
         public static final int editcallBT=0x7f060012;
@@ -36,7 +36,7 @@ public final class R {
         public static final int iswarehouseSP=0x7f06000c;
         public static final int list_view=0x7f060027;
         public static final int loginBT=0x7f060024;
-        public static final int logoutBT=0x7f06004e;
+        public static final int logoutBT=0x7f06004c;
         public static final int m10BT=0x7f060039;
         public static final int m11BT=0x7f06003a;
         public static final int m12BT=0x7f06003b;
@@ -52,24 +52,23 @@ public final class R {
         public static final int messageallBT=0x7f060026;
         public static final int moreretBT=0x7f06002e;
         public static final int nameET=0x7f060001;
-        public static final int nicknameT=0x7f06004c;
+        public static final int nicknameT=0x7f06004a;
         public static final int ondoorET=0x7f060028;
-        public static final int order1BT=0x7f060046;
-        public static final int order2BT=0x7f060047;
-        public static final int order3BT=0x7f060048;
-        public static final int order4BT=0x7f060049;
+        public static final int order1BT=0x7f060044;
+        public static final int order2BT=0x7f060045;
+        public static final int order3BT=0x7f060046;
+        public static final int order4BT=0x7f060047;
         public static final int order_id=0x7f06003f;
-        public static final int order_tel=0x7f060041;
-        public static final int order_username=0x7f060040;
-        public static final int orderallBT=0x7f060045;
-        public static final int ordercreateBT=0x7f060051;
-        public static final int ordermessageBT=0x7f060052;
+        public static final int order_time=0x7f060040;
+        public static final int orderallBT=0x7f060043;
+        public static final int ordercreateBT=0x7f06004f;
+        public static final int ordermessageBT=0x7f060050;
         public static final int orderretBT=0x7f060025;
         public static final int passwdET=0x7f060022;
         public static final int photo1IV=0x7f06002b;
         public static final int photo2IV=0x7f06002c;
         public static final int photo3IV=0x7f06002d;
-        public static final int revisepasswdBT=0x7f06004d;
+        public static final int revisepasswdBT=0x7f06004b;
         public static final int salerET=0x7f060006;
         public static final int scoreET=0x7f060007;
         public static final int scoreretBT=0x7f06002f;
@@ -81,24 +80,23 @@ public final class R {
         public static final int tableRow2=0x7f060021;
         public static final int tableRow3=0x7f060023;
         public static final int telET=0x7f060003;
-        public static final int tobecontinuedET=0x7f06004a;
+        public static final int tobecontinuedET=0x7f060048;
         public static final int totalscoreET=0x7f06003d;
         public static final int userET=0x7f060020;
-        public static final int user_id=0x7f060042;
+        public static final int user_id=0x7f060041;
         public static final int user_list_view=0x7f06003e;
-        public static final int user_mode=0x7f060043;
-        public static final int user_passwd=0x7f060044;
+        public static final int user_mode=0x7f060042;
         public static final int usereditconfirmBT=0x7f06001d;
         public static final int usereditdeleteBT=0x7f06001b;
         public static final int usereditnameET=0x7f060018;
         public static final int usereditpasswdET=0x7f06001a;
         public static final int usereditretBT=0x7f06001c;
-        public static final int usermanagerBT=0x7f060050;
-        public static final int usermanageretBT=0x7f060054;
-        public static final int usernewBT=0x7f060055;
-        public static final int userscoreBT=0x7f060053;
+        public static final int usermanagerBT=0x7f06004e;
+        public static final int usermanageretBT=0x7f060052;
+        public static final int usernewBT=0x7f060053;
+        public static final int userscoreBT=0x7f060051;
         public static final int usertypeSP=0x7f060019;
-        public static final int usertypeT=0x7f06004b;
+        public static final int usertypeT=0x7f060049;
         public static final int warehouseidET=0x7f06000d;
     }
     public static final class layout {

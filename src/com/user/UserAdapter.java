@@ -32,7 +32,6 @@ public class UserAdapter extends ArrayAdapter<User>{
 			viewHolder = new ViewHolder();
 			viewHolder.userid = (TextView) view.findViewById(R.id.user_id);
 			viewHolder.usermode = (TextView) view.findViewById(R.id.user_mode);
-			viewHolder.userpasswd = (TextView) view.findViewById(R.id.user_passwd);
 			view.setTag(viewHolder);
 		}else{
 			view = convertView;
@@ -40,11 +39,10 @@ public class UserAdapter extends ArrayAdapter<User>{
 		}
 		viewHolder.userid.setText(user.id);
 		viewHolder.usermode.setText(user.type());
-		viewHolder.userpasswd.setText(user.passwd);
 		return view;
 	}
 	
 	class ViewHolder{
-		TextView userid, usermode, userpasswd;
+		TextView userid, usermode;
 	}
 }
