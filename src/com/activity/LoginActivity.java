@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class LoginActivity extends BaseActivity implements OnClickListener{
 
@@ -87,6 +88,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 				Intent intent = new Intent(LoginActivity.this, UserInfoActivity.class);
 				intent.putExtra("user", result);
 				startActivity(intent);
+			}else{
+				Toast.makeText(getBaseContext(), "Login Error!", Toast.LENGTH_SHORT).show();
 			}
 		}
 	}

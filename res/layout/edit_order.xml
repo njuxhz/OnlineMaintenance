@@ -4,10 +4,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="242dp"
+        android:scrollbars="vertical" >
+
     <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="240dp"
         android:stretchColumns="1" >
+
 	    <TableRow
             android:layout_width="wrap_content"
             android:layout_height="35sp" >
@@ -135,7 +141,112 @@
                 android:layout_width="wrap_content"
                 android:layout_height="35sp" />
         </TableRow>
+        
+	    <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="35sp" >
+
+                <TextView
+                    android:layout_height="35sp"
+                    android:paddingLeft="30dp"
+                    android:text="送货服务"
+                    android:textSize="15sp"
+                    android:typeface="serif" />
+
+                <Spinner
+                    android:id="@+id/isdeliverSP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </TableRow>
+            
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="35sp" >
+
+                <TextView
+                    android:layout_height="35sp"
+                    android:paddingLeft="30dp"
+                    android:text="安装调试"
+                    android:textSize="15sp"
+                    android:typeface="serif" />
+
+                <Spinner
+                    android:id="@+id/isdebugSP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </TableRow>
+            
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="35sp" >
+
+                <TextView
+                    android:layout_height="35sp"
+                    android:paddingLeft="30dp"
+                    android:text="上门服务"
+                    android:textSize="15sp"
+                    android:typeface="serif" />
+
+                <Spinner
+                    android:id="@+id/isondoorSP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </TableRow>
+            
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="35sp" >
+
+                <TextView
+                    android:layout_height="35sp"
+                    android:paddingLeft="30dp"
+                    android:text="安装单"
+                    android:textSize="15sp"
+                    android:typeface="serif" />
+
+                <EditText
+                    android:id="@+id/installidET"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35sp"
+                    android:paddingLeft="10dp" />
+            </TableRow>
+            
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="35sp" >
+
+                <TextView
+                    android:layout_height="35sp"
+                    android:paddingLeft="30dp"
+                    android:text="库房安装"
+                    android:textSize="15sp"
+                    android:typeface="serif" />
+
+                <Spinner
+                    android:id="@+id/iswarehouseSP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </TableRow>
+            
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="35sp" >
+
+                <TextView
+                    android:layout_height="35sp"
+                    android:paddingLeft="30dp"
+                    android:text="出库单号"
+                    android:textSize="15sp"
+                    android:typeface="serif" />
+
+               <EditText
+                    android:id="@+id/warehouseidET"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35sp"
+                    android:paddingLeft="10dp" />
+            </TableRow>
     </TableLayout>
+    </ScrollView>
     <Button
     	android:id="@+id/editdetailBT"
     	android:layout_width="match_parent"

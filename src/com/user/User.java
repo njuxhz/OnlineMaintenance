@@ -40,4 +40,13 @@ public class User implements Serializable{
 		}
 		return ret;
 	}
+
+	public int spinner(int mode2) {
+		// TODO Auto-generated method stub
+		if(mode2 == DELIVER) return 1;
+		else if(mode2 == ENGINEER) return 2;
+		else if(mode2 == SALER) return 3;
+		else if(mode2 == ADMIN) return 4;
+		return 0;
+	}
 }

@@ -50,6 +50,7 @@ public class UserManageActivity extends BaseActivity implements OnClickListener{
 			protected Void doInBackground(String... arg0) {
 				// TODO Auto-generated method stub
 				GetUser getuser = new GetUser(arg0[0], arg0[1]);
+				userList.clear();
 				for(User usr : getuser.userList){
 					userList.add(usr);
 				}
@@ -60,6 +61,7 @@ public class UserManageActivity extends BaseActivity implements OnClickListener{
 				// TODO Auto-generated method stub
 				super.onPostExecute(result);
 				adapter.notifyDataSetChanged();
+				listView.setSelection(userList.size() - 1);
 			}
 		}.execute(user.id, user.passwd);
 	}
@@ -80,6 +82,7 @@ public class UserManageActivity extends BaseActivity implements OnClickListener{
 		add.setOnClickListener(this);
 		listView = (ListView) findViewById(R.id.user_list_view);
 		listView.setAdapter(adapter);
+		listView.setVerticalScrollBarEnabled(true);
 		listView.setOnItemClickListener(new OnItemClickListener(){
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
@@ -114,7 +117,7 @@ public class UserManageActivity extends BaseActivity implements OnClickListener{
 		super.onActivityResult(requestCode, resultCode, data);
 		if(resultCode == OK){
 			initUser();
-			adapter.notifyDataSetChanged();
+			//adapter.notifyDataSetChanged();
 		}
 	}
 }

@@ -17,6 +17,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -176,5 +177,46 @@ public class UserConnect {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public boolean isoccur(String nameid) {
+		// TODO Auto-generated method stub
+		REST_URL = KERMIT_REST_URL + "identity/users";
+		CredentialsProvider provider = new BasicCredentialsProvider();
+		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials("kermit", "kermit");
+		provider.setCredentials(AuthScope.ANY, credentials);
+		HttpClient httpClient = new DefaultHttpClient();
+		((DefaultHttpClient)httpClient).setCredentialsProvider(provider);
+		HttpGet httpGet = new HttpGet(REST_URL);
+		HttpResponse httpResponse;
+		try {
+			httpResponse = httpClient.execute(httpGet);
+			HttpEntity entity = httpResponse.getEntity();
+			String response = EntityUtils.toString(entity, "utf-8");
+			JSONObject jsonObjectdata = new JSONObject(response);
+			if(httpResponse.getStatusLine().getStatusCode()  == 200){
+				JSONArray jsonArray = jsonObjectdata.getJSONArray("data");
+				for(int i = 0; i < jsonArray.length(); i++){
+					JSONObject jsonObject = jsonArray.getJSONObject(i);
+					String name = jsonObject.getString("id");
+					if(name.equals(nameid)){
+						return true;
+					}
+				}
+				return false;
+			}else{
+				Log.d("userautherror", response);
+			}
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return true;
 	}
 }

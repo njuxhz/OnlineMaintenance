@@ -1,5 +1,8 @@
 package com.activity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -7,8 +10,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.activiti.UserConnect;
@@ -25,7 +31,11 @@ public class EditUserActivity extends BaseActivity implements OnClickListener{
 	
 	private User user;
 	private int showmode;
-	private EditText name, mode, passwd;
+	private EditText name, passwd;
+	private Spinner mode;
+	private List<String> list = new ArrayList<String>();
+	private ArrayAdapter<String> adapter;
+	private String select;
 	private Button ret, confirm, delete;
 	private Handler handler = new Handler(){
 		public void handleMessage(Message msg){
@@ -33,15 +43,14 @@ public class EditUserActivity extends BaseActivity implements OnClickListener{
 			case UPDATE_INFO:
 				if(showmode == 1){
 					name.setText("");
-					mode.setText("");
+					mode.setSelection(0, true);
 					passwd.setText("");
 				}else if (showmode == 2){
-					CharSequence strname, strmode, strpasswd;
+					CharSequence strname, strpasswd;
 					strname = user.id;
-					strmode = "" + user.mode;
 					strpasswd = user.passwd;
 					name.setText(strname);
-					mode.setText(strmode);
+					mode.setSelection(user.spinner(user.mode), true);
 					passwd.setText(strpasswd);
 				}
 				break;
@@ -74,7 +83,7 @@ public class EditUserActivity extends BaseActivity implements OnClickListener{
 		// TODO Auto-generated method stub
 		super.getView();
 		name = (EditText) findViewById(R.id.usereditnameET);
-		mode = (EditText) findViewById(R.id.useredittypeET);
+		mode = (Spinner) findViewById(R.id.usertypeSP);
 		passwd = (EditText) findViewById(R.id.usereditpasswdET);
 		ret = (Button) findViewById(R.id.usereditretBT);
 		ret.setOnClickListener(this);
@@ -92,6 +101,36 @@ public class EditUserActivity extends BaseActivity implements OnClickListener{
 				handler.sendMessage(message);
 			}
 		}).start();
+		
+		list.add("*");list.add("Deliver");list.add("Engineer");list.add("Saler");list.add("Admin");
+		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		mode.setAdapter(adapter);
+		mode.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				if(adapter.getItem(position).equals("Deliver")){
+					select = "1";
+				}if(adapter.getItem(position).equals("Engineer")){
+					select = "2";
+				}if(adapter.getItem(position).equals("Saler")){
+					select = "3";
+				}if(adapter.getItem(position).equals("Admin")){
+					select = "4";
+				}
+			}
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+				// TODO Auto-generated method stub
+				if(showmode == 2){
+					select = "" + user.spinner(user.mode);
+				}else{
+					select = "2";
+				}
+			}    
+        });
 	}
 
 	@Override
@@ -104,13 +143,18 @@ public class EditUserActivity extends BaseActivity implements OnClickListener{
 			finish();
 			break;
 		case R.id.usereditconfirmBT:
-			new AsyncTask <String, Void, Void>(){
+			new AsyncTask <String, Void, Integer>(){
 				@Override
-				protected Void doInBackground(String... params) {
+				protected Integer doInBackground(String... params) {
 					// TODO Auto-generated method stub
+					int ok = 1;
 					UserConnect usercnt = new UserConnect();
 					if(showmode == 1){
-						usercnt.create(params[0], params[1], params[2]);
+						if(!usercnt.isoccur(params[0])){
+							usercnt.create(params[0], params[1], params[2]);
+						}else{
+							ok = 0;
+						}
 					}else{
 						if(user.id.equals(params[0])){
 							if(usercnt.edit(user, params[1], params[2])){
@@ -120,22 +164,30 @@ public class EditUserActivity extends BaseActivity implements OnClickListener{
 							}
 						}else{
 							usercnt.delete(user);
-							usercnt.create(params[0], params[1], params[2]);
+							if(!usercnt.isoccur(params[0])){
+								usercnt.create(params[0], params[1], params[2]);
+							}else{
+								ok = 0;
+							}
 						}
 					}
-					return null;
+					return ok;
 				}
 				@Override
-				protected void onPostExecute(Void result) {
+				protected void onPostExecute(Integer result) {
 					// TODO Auto-generated method stub
 					super.onPostExecute(result);
-					if(showmode == 1) Toast.makeText(getBaseContext(), "Create Successfully!", Toast.LENGTH_SHORT).show();
-					else Toast.makeText(getBaseContext(), "Revise Successfully!", Toast.LENGTH_SHORT).show();
-					Intent intent = new Intent();
-					setResult(OK, intent);
-					finish();
+					if(result == 1){
+						if(showmode == 1) Toast.makeText(getBaseContext(), "Create Successfully!", Toast.LENGTH_SHORT).show();
+						else Toast.makeText(getBaseContext(), "Revise Successfully!", Toast.LENGTH_SHORT).show();
+						Intent intent = new Intent();
+						setResult(OK, intent);
+						finish();
+					}else{
+						Toast.makeText(getBaseContext(), "ID Has Been Used!", Toast.LENGTH_SHORT).show();
+					}
 				}
-			}.execute(name.getText().toString(), mode.getText().toString(), passwd.getText().toString());
+			}.execute(name.getText().toString(), select, passwd.getText().toString());
 			break;
 		case R.id.usereditdeleteBT:
 			new AsyncTask <Void, Void, Void>(){

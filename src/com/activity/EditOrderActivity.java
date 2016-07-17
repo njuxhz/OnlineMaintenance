@@ -1,5 +1,8 @@
 package com.activity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.AlertDialog;
 import android.content.ContentUris;
 import android.content.DialogInterface;
@@ -14,11 +17,13 @@ import android.os.Message;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images.Media;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.activiti.OrderConnect;
@@ -45,6 +50,14 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 	private Order order;
 	private EditText company, name, address, tel, state, score, engineer, saler;
 	private Button delete, ret, confirm, caller, audit, take, takecancel, complete, photo, more;
+	private EditText installid, warehouseid;
+	private Spinner isdeliver, isdebug, isondoor, iswarehouse;
+	private List<String> deliverlist = new ArrayList<String>();
+	private List<String> debuglist = new ArrayList<String>();
+	private List<String> ondoorlist = new ArrayList<String>();
+	private List<String> warehouselist = new ArrayList<String>();
+	private ArrayAdapter<String> deliveradapter, debugadapter, ondooradapter, warehouseadapter;
+	private String selectdeliver, selectdebug, selectondoor, selectwarehouse;
 	private String oldscore, imagePath = null;
 	private Handler handler = new Handler(){
 		public void handleMessage(Message msg){
@@ -70,6 +83,15 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 				engineer.setText(strengineer);
 				strsaler = order.getsaler();
 				saler.setText(strsaler);
+				isdeliver.setSelection(order.spinner(order.isdeliver), true);
+				isdebug.setSelection(order.spinner(order.isdebug), true);
+				isondoor.setSelection(order.spinner(order.isondoor), true);
+				iswarehouse.setSelection(order.spinner(order.iswarehouse), true);
+				CharSequence strinstallid, strwarehouseid;
+				strinstallid = order.installid;
+				strwarehouseid = order.warehouseid;
+				installid.setText(strinstallid);
+				warehouseid.setText(strwarehouseid);
 				permission();
 				break;
 			default: break;
@@ -126,6 +148,13 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 		photo.setOnClickListener(this);
 		more = (Button) findViewById(R.id.editdetailBT);
 		more.setOnClickListener(this);
+		installid = (EditText) findViewById(R.id.installidET);
+		warehouseid = (EditText) findViewById(R.id.warehouseidET);
+		isdeliver = (Spinner)findViewById(R.id.isdeliverSP);
+		isdebug = (Spinner)findViewById(R.id.isdebugSP);
+		isondoor = (Spinner)findViewById(R.id.isondoorSP);
+		iswarehouse = (Spinner)findViewById(R.id.iswarehouseSP);
+		setspinner();
 		new Thread(new Runnable(){
 			@Override
 			public void run() {
@@ -137,21 +166,112 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 		}).start();
 	}
 
+	private void setspinner() {
+		// TODO Auto-generated method stub
+		deliverlist.add("*");deliverlist.add("Yes");deliverlist.add("No");
+		deliveradapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, deliverlist);
+		deliveradapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		isdeliver.setAdapter(deliveradapter);
+		isdeliver.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				if(deliveradapter.getItem(position).equals("Yes")){
+					selectdeliver = "1";
+				}else selectdeliver = "0";
+			}
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+				// TODO Auto-generated method stub
+				selectdeliver = order.isdeliver;
+			}    
+        });
+		
+		debuglist.add("*");debuglist.add("Yes");debuglist.add("No");
+		debugadapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, debuglist);
+		debugadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		isdebug.setAdapter(debugadapter);
+		isdebug.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				if(debugadapter.getItem(position).equals("Yes")){
+					selectdebug = "1";
+				}else selectdebug = "0";
+			}
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+				// TODO Auto-generated method stub
+				selectdebug = order.isdeliver;
+			}    
+        });
+		
+		ondoorlist.add("*");ondoorlist.add("Yes");ondoorlist.add("No");
+		ondooradapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, ondoorlist);
+		ondooradapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		isondoor.setAdapter(ondooradapter);
+		isondoor.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				if(ondooradapter.getItem(position).equals("Yes")){
+					selectondoor = "1";
+				}else selectondoor = "0";
+			}
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+				// TODO Auto-generated method stub
+				selectondoor = order.isondoor;
+			}    
+        });
+		
+		warehouselist.add("*");warehouselist.add("Yes");warehouselist.add("No");
+		warehouseadapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, warehouselist);
+		warehouseadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		iswarehouse.setAdapter(warehouseadapter);
+		iswarehouse.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				if(warehouseadapter.getItem(position).equals("Yes")){
+					selectwarehouse = "1";
+				}else selectwarehouse = "0";
+			}
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+				// TODO Auto-generated method stub
+				selectwarehouse = order.iswarehouse;
+			}    
+        });
+	}
+	
 	private void permission() {//1未接		2已接		3已完成	4已审核
 		// TODO Auto-generated method stub
 		switch(user.mode){
 		case DELIVER:
 			if(order.status == 1){
+				state.setEnabled(false);
+				saler.setEnabled(false);
+				engineer.setEnabled(false);
 				take.setVisibility(View.GONE);
 				takecancel.setVisibility(View.GONE);
 				complete.setVisibility(View.GONE);
 				photo.setVisibility(View.GONE);
+				audit.setVisibility(View.GONE);
 			}else if(order.status == 2){
 				if(order.engineerid.equals("*")){
+					state.setEnabled(false);
+					saler.setEnabled(false);
+					engineer.setEnabled(false);
 					take.setVisibility(View.GONE);
 					takecancel.setVisibility(View.GONE);
 					complete.setVisibility(View.GONE);
 					photo.setVisibility(View.GONE);
+					audit.setVisibility(View.GONE);
 				}else{
 					disableall();
 					score.setEnabled(true);
@@ -210,6 +330,9 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 			caller.setVisibility(View.VISIBLE);
 			break;
 		}
+		if(order.status == 1){
+			more.setVisibility(View.GONE);
+		}
 	}
 
 	private void disableall() {
@@ -222,6 +345,12 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 		score.setEnabled(false);
 		saler.setEnabled(false);
 		engineer.setEnabled(false);
+		installid.setEnabled(false);
+		warehouseid.setEnabled(false);
+		isdeliver.setEnabled(false);
+		isdebug.setEnabled(false);
+		isondoor.setEnabled(false);
+		iswarehouse.setEnabled(false);
 		delete.setVisibility(View.GONE);
 		ret.setVisibility(View.GONE);
 		confirm.setVisibility(View.GONE);
@@ -282,13 +411,15 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 				protected String doInBackground(String... params) {
 					// TODO Auto-generated method stub
 					OrderConnect ordercnt = new OrderConnect(user);
-					ordercnt.update(order.processid, 7, "Company", params[0], 
+					ordercnt.update(order.processid, 13, "Company", params[0], 
 							 							"Name", params[1], 
 							 							"Address", params[2], 
 							 							"Tel", params[3], 
 							 							"Score", params[4], 
 							 							"Isedit", params[5],
-							 							"Timestamp", "" + System.currentTimeMillis());
+							 							"Timestamp", "" + System.currentTimeMillis(),
+							 							"Isdeliver", selectdeliver, "Isdebug", selectdebug, "Isondoor", selectondoor, "Iswarehouse", selectwarehouse,
+														"Installid", installid.getText().toString(), "Warehouseid", warehouseid.getText().toString());
 					return order.id;
 				}
 				@Override

@@ -15,11 +15,14 @@ public class Order implements Serializable{
 	public int status = 0;									//1未接		2已接		3已完成	4已审核
 	public String repairtime, series, feedback;
 	public String photourl1, photourl2, photourl3, picindex;
+	public String installid, warehouseid, isdeliver, isdebug, isondoor, iswarehouse;
 	
 	public Order(String id, String processid, String name, String tel, String company, 
 				String address, String status, String score, String timestamp, String engineerid, 
 				String salerid, String photourl1, String photourl2, String photourl3, String picindex,
-				String repairtime, String series, String feedback){
+				String repairtime, String series, String feedback,
+				String isdeliver, String isdebug, String isondoor, String iswarehouse,
+				String installid, String warehouseid){
 		this.id = id;
 		this.processid = processid;
 		this.name = name;
@@ -41,6 +44,12 @@ public class Order implements Serializable{
 		this.repairtime = repairtime;
 		this.series = series;
 		this.feedback = feedback;
+		this.installid = installid;
+		this.warehouseid = warehouseid;
+		this.isdeliver = isdeliver;
+		this.isdebug = isdebug;
+		this.isondoor = isondoor;
+		this.iswarehouse = iswarehouse;
 	}
 
 	public String getstate() {
@@ -90,5 +99,12 @@ public class Order implements Serializable{
 	public void setsalerid(String saler_id) {
 		// TODO Auto-generated method stub
 		salerid = saler_id;
+	}
+
+	public int spinner(String position) {
+		// TODO Auto-generated method stub
+		if(position.equals("1")) return 1;
+		else if(position.equals("0")) return 2;
+		return 0;
 	}
 }

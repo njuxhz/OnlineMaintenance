@@ -42,11 +42,10 @@
                 android:text="类型"
                 android:typeface="serif"
                 android:textSize="15sp" />
-            <EditText
-                android:id="@+id/useredittypeET"
-                android:paddingLeft="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <Spinner
+                    android:id="@+id/usertypeSP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
         </TableRow>
         
 	    <TableRow

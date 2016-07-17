@@ -39,7 +39,7 @@ public class UserAdapter extends ArrayAdapter<User>{
 			viewHolder = (ViewHolder) view.getTag();
 		}
 		viewHolder.userid.setText(user.id);
-		viewHolder.usermode.setText("" + user.mode);
+		viewHolder.usermode.setText(user.type());
 		viewHolder.userpasswd.setText(user.passwd);
 		return view;
 	}

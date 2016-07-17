@@ -43,6 +43,7 @@ public class OrderConnect{
 	
 	public String name, tel, company, address, timestamp, score, isedit, series, feedback, ondoor;
 	public String engineerid, salerid, photourl1, photourl2, photourl3, picindex;
+	public String isdeliver, isdebug, isondoor, iswarehouse, installid, warehouseid;
 	public User user;
 	
 	public OrderConnect(User userr){
@@ -136,6 +137,18 @@ public class OrderConnect{
 					photourl3 = jsonObject.getString("value");
 				}else if(jsonname.equals("Picindex")){
 					picindex = jsonObject.getString("value");
+				}else if(jsonname.equals("Isdeliver")){
+					isdeliver = jsonObject.getString("value");
+				}else if(jsonname.equals("Isdebug")){
+					isdebug = jsonObject.getString("value");
+				}else if(jsonname.equals("Isondoor")){
+					isondoor = jsonObject.getString("value");
+				}else if(jsonname.equals("Iswarehouse")){
+					iswarehouse = jsonObject.getString("value");
+				}else if(jsonname.equals("Installid")){
+					installid = jsonObject.getString("value");
+				}else if(jsonname.equals("Warehouseid")){
+					warehouseid = jsonObject.getString("value");
 				}
 			}
 		} catch (ClientProtocolException e) {
@@ -398,7 +411,7 @@ public class OrderConnect{
 			paramtime.put("value", "" + System.currentTimeMillis());
 			parama.put(paramtime);
 			param.put("variables", parama);
-			param.put("processDefinitionId", "process:3:3657");
+			param.put("processDefinitionId", "process:1:3742");
 			StringEntity se = new StringEntity(param.toString());
 			se.setContentEncoding("UTF-8");
 			se.setContentType("application/json");
