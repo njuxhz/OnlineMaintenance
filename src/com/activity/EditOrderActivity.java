@@ -26,6 +26,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.activiti.GetUser;
 import com.activiti.OrderConnect;
 import com.activitymanager.BaseActivity;
 import com.example.onlinemaintenance.R;
@@ -48,7 +49,8 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 	
 	private User user;
 	private Order order;
-	private EditText company, name, address, tel, state, score, engineer, saler;
+	private GetUser getuser;
+	private EditText company, name, address, tel, state, score;
 	private Button delete, ret, confirm, caller, audit, take, takecancel, complete, photo, more;
 	private EditText installid, warehouseid;
 	private Spinner isdeliver, isdebug, isondoor, iswarehouse;
@@ -58,12 +60,17 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 	private List<String> warehouselist = new ArrayList<String>();
 	private ArrayAdapter<String> deliveradapter, debugadapter, ondooradapter, warehouseadapter;
 	private String selectdeliver, selectdebug, selectondoor, selectwarehouse;
+	private Spinner engineer, saler;
+	private List<String> engineerlist = new ArrayList<String>();
+	private List<String> salerlist = new ArrayList<String>();
+	private ArrayAdapter<String> engineeradapter, saleradapter;
+	private String selectengineer, selectsaler;
 	private String oldscore, imagePath = null;
 	private Handler handler = new Handler(){
 		public void handleMessage(Message msg){
 			switch(msg.what){
 			case UPDATE_INFO:
-				CharSequence strcompany, strname, straddress, strtel, strstate, strscore, strengineer, strsaler;
+				CharSequence strcompany, strname, straddress, strtel, strstate, strscore;
 				strcompany = order.company;
 				strname = order.name;
 				straddress = order.address;
@@ -79,10 +86,28 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 				String bufstate = order.getstate();
 				strstate = bufstate;
 				state.setText(strstate);
-				strengineer = order.getengineer();
-				engineer.setText(strengineer);
-				strsaler = order.getsaler();
-				saler.setText(strsaler);
+				if(order.engineerid == "*") engineer.setSelection(0, true);
+				else{
+					int position = 0;
+					for(String str : engineerlist){
+						if(str.equals(order.engineerid)){
+							engineer.setSelection(position, true);
+							break;
+						}
+						position++;
+					}
+				}
+				if(order.salerid == "*") saler.setSelection(0, true);
+				else{
+					int position = 0;
+					for(String str : salerlist){
+						if(str.equals(order.salerid)){
+							saler.setSelection(position, true);
+							break;
+						}
+						position++;
+					}
+				}
 				isdeliver.setSelection(order.spinner(order.isdeliver), true);
 				isdebug.setSelection(order.spinner(order.isdebug), true);
 				isondoor.setSelection(order.spinner(order.isondoor), true);
@@ -126,8 +151,8 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 		tel = (EditText) findViewById(R.id.telET);
 		state = (EditText) findViewById(R.id.stateET);
 		score = (EditText) findViewById(R.id.scoreET);
-		saler = (EditText) findViewById(R.id.salerET);
-		engineer = (EditText) findViewById(R.id.engineerET);
+		engineer = (Spinner)findViewById(R.id.engineerSP);
+		saler = (Spinner)findViewById(R.id.salerSP);
 		delete = (Button) findViewById(R.id.editdeleteBT);
 		delete.setOnClickListener(this);
 		ret = (Button) findViewById(R.id.editretBT);
@@ -155,15 +180,6 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 		isondoor = (Spinner)findViewById(R.id.isondoorSP);
 		iswarehouse = (Spinner)findViewById(R.id.iswarehouseSP);
 		setspinner();
-		new Thread(new Runnable(){
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				Message message = new Message();
-				message.what = UPDATE_INFO;
-				handler.sendMessage(message);
-			}
-		}).start();
 	}
 
 	private void setspinner() {
@@ -247,6 +263,80 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 				selectwarehouse = order.iswarehouse;
 			}    
         });
+		
+		engineerlist.clear(); salerlist.clear();
+		engineeradapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, engineerlist);
+		saleradapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, salerlist);
+		
+		new AsyncTask <Void, Void, Void>(){
+			@Override
+			protected Void doInBackground(Void... params) {
+				// TODO Auto-generated method stub
+				getuser = new GetUser("kermit", "kermit");
+				return null;
+			}
+			@Override
+			protected void onPostExecute(Void result) {
+				// TODO Auto-generated method stub
+				super.onPostExecute(result);
+				engineerlist.add("*");
+				for(User userr : getuser.userList){
+					if(userr.mode == ENGINEER){
+						engineerlist.add(userr.id);
+					}
+				}
+				engineeradapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+				engineer.setAdapter(engineeradapter);
+				engineer.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
+					@Override
+					public void onItemSelected(AdapterView<?> parent, View view,
+							int position, long id) {
+						// TODO Auto-generated method stub
+						selectengineer = engineeradapter.getItem(position);
+					}
+					@Override
+					public void onNothingSelected(AdapterView<?> parent) {
+						// TODO Auto-generated method stub
+						selectengineer = "*";
+					}    
+		        });
+				
+				salerlist.add("*");
+				for(User userr : getuser.userList){
+					if(userr.mode == SALER){
+						salerlist.add(userr.id);
+					}
+				}
+				saleradapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+				saler.setAdapter(saleradapter);
+				saler.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
+					@Override
+					public void onItemSelected(AdapterView<?> parent, View view,
+							int position, long id) {
+						// TODO Auto-generated method stub
+						selectsaler = saleradapter.getItem(position);
+					}
+					@Override
+					public void onNothingSelected(AdapterView<?> parent) {
+						// TODO Auto-generated method stub
+						selectsaler = "*";
+					}    
+		        });
+				
+				engineeradapter.notifyDataSetChanged();
+				saleradapter.notifyDataSetChanged();
+				
+				new Thread(new Runnable(){
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						Message message = new Message();
+						message.what = UPDATE_INFO;
+						handler.sendMessage(message);
+					}
+				}).start();
+			}
+		}.execute();
 	}
 	
 	private void permission() {//1未接		2已接		3已完成	4已审核
@@ -255,8 +345,6 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 		case DELIVER:
 			if(order.status == 1){
 				state.setEnabled(false);
-				saler.setEnabled(false);
-				engineer.setEnabled(false);
 				take.setVisibility(View.GONE);
 				takecancel.setVisibility(View.GONE);
 				complete.setVisibility(View.GONE);
@@ -265,8 +353,6 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 			}else if(order.status == 2){
 				if(order.engineerid.equals("*")){
 					state.setEnabled(false);
-					saler.setEnabled(false);
-					engineer.setEnabled(false);
 					take.setVisibility(View.GONE);
 					takecancel.setVisibility(View.GONE);
 					complete.setVisibility(View.GONE);
@@ -411,7 +497,8 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 				protected String doInBackground(String... params) {
 					// TODO Auto-generated method stub
 					OrderConnect ordercnt = new OrderConnect(user);
-					ordercnt.update(order.processid, 13, "Company", params[0], 
+					if((!selectengineer.equals("*")) && (!selectsaler.equals("*"))){
+						ordercnt.update(order.processid, 16, "Company", params[0], 
 							 							"Name", params[1], 
 							 							"Address", params[2], 
 							 							"Tel", params[3], 
@@ -419,19 +506,30 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 							 							"Isedit", params[5],
 							 							"Timestamp", "" + System.currentTimeMillis(),
 							 							"Isdeliver", selectdeliver, "Isdebug", selectdebug, "Isondoor", selectondoor, "Iswarehouse", selectwarehouse,
-														"Installid", installid.getText().toString(), "Warehouseid", warehouseid.getText().toString());
-					return order.id;
+														"Installid", installid.getText().toString(), "Warehouseid", warehouseid.getText().toString(),
+														"Engineerid", params[6],
+														"Salerid", params[7],
+														"Isaccepted", "0");
+						return order.id;
+					}else return "-1";
+					
 				}
 				@Override
 				protected void onPostExecute(String result) {
 					// TODO Auto-generated method stub
 					super.onPostExecute(result);
-					Toast.makeText(getBaseContext(), "Update Successfully!", Toast.LENGTH_SHORT).show();
-					Intent intent = new Intent();
-					setResult(OK, intent);
-					finish();
+					if(!result.equals("-1")){
+						Toast.makeText(getBaseContext(), "Update Successfully!", Toast.LENGTH_SHORT).show();
+						Intent intent = new Intent();
+						setResult(OK, intent);
+						finish();
+					}else{
+						Toast.makeText(getBaseContext(), "Update Error!", Toast.LENGTH_SHORT).show();
+					}
 				}
-			}.execute(company.getText().toString(), name.getText().toString(), address.getText().toString(), tel.getText().toString(), score.getText().toString(), isedi);
+			}.execute(company.getText().toString(), name.getText().toString(), 
+					address.getText().toString(), tel.getText().toString(), score.getText().toString(), isedi,
+					selectengineer, selectsaler);
 			break;
 		case R.id.editcallBT:
 			Intent intentcall = new Intent();
@@ -448,8 +546,7 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 				protected Void doInBackground(Void... params) {
 					// TODO Auto-generated method stub
 					OrderConnect ordercnt = new OrderConnect(user);
-					ordercnt.update(order.processid, 2, "Salerid", user.id,
-														"Timestamp", "" + System.currentTimeMillis());
+					ordercnt.update(order.processid, 1, "Timestamp", "" + System.currentTimeMillis());
 					ordercnt.completetask(order.id);
 					return null;
 				}
@@ -474,7 +571,8 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 					// TODO Auto-generated method stub
 					OrderConnect ordercnt = new OrderConnect(user);
 					ordercnt.claimtask(order.id, 0);
-					ordercnt.update(order.processid, 2, "Engineerid", "*",
+					ordercnt.update(order.processid, 3, "Ondoor", "*",
+														"Isaccepted", "0",
 														"Timestamp", "" + System.currentTimeMillis());
 					return null;
 				}
@@ -620,21 +718,15 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 							OrderConnect ordercnt = new OrderConnect(user);
 							if(mode == 1){
 								ordercnt.update(order.processid, 3, "Ondoor", a,
-																	"Engineerid", user.id,
+																	"Isaccepted", "1",
 																	"Timestamp", "" + System.currentTimeMillis());
 							}else{
-								ordercnt.update(order.processid, 3, "Series", a,
+								ordercnt.update(order.processid, 4, "Series", a,
 																	"Feedback", b,
+																	"Isaccepted", "1",
 																	"Timestamp", "" + System.currentTimeMillis());
 							}
 							if(mode == 1){
-								if(ordercnt.isunaccepted(order.id)){
-									ordercnt.completetask(order.id);
-									String newid = ordercnt.findnewid(order.processid);
-									ordercnt.claimtask(newid, 1);
-								}else{
-									ordercnt.claimtask(order.id, 1);
-								}
 							}else{
 								ordercnt.completetask(order.id);
 							}

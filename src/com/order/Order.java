@@ -16,13 +16,14 @@ public class Order implements Serializable, Comparable{
 	public String repairtime, series, feedback;
 	public String photourl1, photourl2, photourl3, picindex;
 	public String installid, warehouseid, isdeliver, isdebug, isondoor, iswarehouse;
+	public String isaccepted;
 	
 	public Order(String id, String processid, String name, String tel, String company, 
 				String address, String status, String score, String timestamp, String engineerid, 
 				String salerid, String photourl1, String photourl2, String photourl3, String picindex,
 				String repairtime, String series, String feedback,
 				String isdeliver, String isdebug, String isondoor, String iswarehouse,
-				String installid, String warehouseid){
+				String installid, String warehouseid, String isaccepted){
 		this.id = id;
 		this.processid = processid;
 		this.name = name;
@@ -31,10 +32,6 @@ public class Order implements Serializable, Comparable{
 		this.address = address;
 		this.engineerid = engineerid;
 		this.salerid = salerid;
-		if(status.equalsIgnoreCase("UnAcceptedOrder")) this.status = 1;
-		else if(status.equalsIgnoreCase("AcceptedOrder")) this.status = 2;
-		else if(status.equalsIgnoreCase("CompletedOrder")) this.status = 3;
-		else if(status.equalsIgnoreCase("CheckedOrder")) this.status = 4;
 		this.score = score;
 		this.timestamp = timestamp;
 		this.photourl1 = photourl1;
@@ -50,6 +47,14 @@ public class Order implements Serializable, Comparable{
 		this.isdebug = isdebug;
 		this.isondoor = isondoor;
 		this.iswarehouse = iswarehouse;
+		this.isaccepted = isaccepted;
+		if(status.equalsIgnoreCase("UnAcceptedOrder")){
+			if(isaccepted.equals("0")){
+				this.status = 1;
+			}
+			else this.status = 2;
+		}else if(status.equalsIgnoreCase("CompletedOrder")) this.status = 3;
+		else if(status.equalsIgnoreCase("CheckedOrder")) this.status = 4;
 	}
 
 	public String getstate() {
@@ -70,24 +75,6 @@ public class Order implements Serializable, Comparable{
 			break;
 		default: ret = ""; break;
 		}
-		return ret;
-	}
-
-	public String getengineer() {
-		// TODO Auto-generated method stub
-		String ret = null;
-		if(!engineerid.equals("*")){
-			ret = "工程师" + engineerid;
-		}else ret = "*";
-		return ret;
-	}
-	
-	public String getsaler() {
-		// TODO Auto-generated method stub
-		String ret = null;
-		if(!salerid.equals("*")){
-			ret = "销售员" + salerid;
-		}else ret = "*";
 		return ret;
 	}
 

@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -17,6 +18,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.activiti.GetUser;
 import com.activiti.OrderConnect;
 import com.activitymanager.BaseActivity;
 import com.example.onlinemaintenance.R;
@@ -25,9 +27,14 @@ import com.user.User;
 public class CreateOrderActivity extends BaseActivity implements OnClickListener{
 
 	private static final int UPDATE_INFO = 1;
+	public static final int DELIVER = 1;
+	public static final int ENGINEER = 2;
+	public static final int SALER = 3;
+	public static final int ADMIN = 4;
 	
 	private User user;
-	private EditText company, name, address, tel, state, score, engineer, saler;
+	private GetUser getuser;
+	private EditText company, name, address, tel, state, score;
 	private Button ret, complete;
 	private Spinner isdeliver, isdebug, isondoor, iswarehouse;
 	private List<String> deliverlist = new ArrayList<String>();
@@ -36,18 +43,21 @@ public class CreateOrderActivity extends BaseActivity implements OnClickListener
 	private List<String> warehouselist = new ArrayList<String>();
 	private ArrayAdapter<String> deliveradapter, debugadapter, ondooradapter, warehouseadapter;
 	private String selectdeliver, selectdebug, selectondoor, selectwarehouse;
+	private Spinner engineer, saler;
+	private List<String> engineerlist = new ArrayList<String>();
+	private List<String> salerlist = new ArrayList<String>();
+	private ArrayAdapter<String> engineeradapter, saleradapter;
+	private String selectengineer, selectsaler;
 	private EditText installid, warehouseid;
 	private Handler handler = new Handler(){
 		public void handleMessage(Message msg){
 			switch(msg.what){
 			case UPDATE_INFO:
-				CharSequence strstate, strengineer, strsaler, strinstallid, strwarehouseid;
+				CharSequence strstate, strinstallid, strwarehouseid;
 				strstate = "Î´½Ó";
 				state.setText(strstate);
-				strengineer = "*";
-				engineer.setText(strengineer);
-				strsaler = "*";
-				saler.setText(strsaler);
+				engineer.setSelection(0, true);
+				saler.setSelection(0, true);
 				strinstallid = strwarehouseid = "*";
 				installid.setText(strinstallid);
 				warehouseid.setText(strwarehouseid);
@@ -83,15 +93,13 @@ public class CreateOrderActivity extends BaseActivity implements OnClickListener
 		tel = (EditText) findViewById(R.id.telET);
 		state = (EditText) findViewById(R.id.stateET);
 		score = (EditText) findViewById(R.id.scoreET);
-		saler = (EditText) findViewById(R.id.salerET);
-		engineer = (EditText) findViewById(R.id.engineerET);
+		engineer = (Spinner)findViewById(R.id.engineerSP);
+		saler = (Spinner)findViewById(R.id.salerSP);
 		ret = (Button) findViewById(R.id.editretBT);
 		ret.setOnClickListener(this);
 		complete = (Button) findViewById(R.id.editcompleteBT);
 		complete.setOnClickListener(this);
 		state.setEnabled(false);
-		engineer.setEnabled(false);
-		saler.setEnabled(false);
 		isdeliver = (Spinner)findViewById(R.id.isdeliverSP);
 		isdebug = (Spinner)findViewById(R.id.isdebugSP);
 		isondoor = (Spinner)findViewById(R.id.isondoorSP);
@@ -99,15 +107,6 @@ public class CreateOrderActivity extends BaseActivity implements OnClickListener
 		installid = (EditText) findViewById(R.id.installidET);
 		warehouseid = (EditText) findViewById(R.id.warehouseidET);
 		setspinner();
-		new Thread(new Runnable(){
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				Message message = new Message();
-				message.what = UPDATE_INFO;
-				handler.sendMessage(message);
-			}
-		}).start();
 	}
 
 	private void setspinner() {
@@ -191,6 +190,82 @@ public class CreateOrderActivity extends BaseActivity implements OnClickListener
 				selectwarehouse = "*";
 			}    
         });
+		
+		engineerlist.clear(); salerlist.clear();
+		engineeradapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, engineerlist);
+		saleradapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, salerlist);
+		
+		new AsyncTask <Void, Void, Void>(){
+			@Override
+			protected Void doInBackground(Void... params) {
+				// TODO Auto-generated method stub
+				getuser = new GetUser("kermit", "kermit");
+				return null;
+			}
+			@Override
+			protected void onPostExecute(Void result) {
+				// TODO Auto-generated method stub
+				super.onPostExecute(result);
+				engineerlist.add("*");
+				for(User userr : getuser.userList){
+					Log.d("username", userr.id);
+					Log.d("mode", "" + userr.mode);
+					if(userr.mode == ENGINEER){
+						engineerlist.add(userr.id);
+					}
+				}
+				engineeradapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+				engineer.setAdapter(engineeradapter);
+				engineer.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
+					@Override
+					public void onItemSelected(AdapterView<?> parent, View view,
+							int position, long id) {
+						// TODO Auto-generated method stub
+						selectengineer = engineeradapter.getItem(position);
+					}
+					@Override
+					public void onNothingSelected(AdapterView<?> parent) {
+						// TODO Auto-generated method stub
+						selectengineer = "*";
+					}    
+		        });
+				
+				salerlist.add("*");
+				for(User userr : getuser.userList){
+					if(userr.mode == SALER){
+						salerlist.add(userr.id);
+					}
+				}
+				saleradapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+				saler.setAdapter(saleradapter);
+				saler.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
+					@Override
+					public void onItemSelected(AdapterView<?> parent, View view,
+							int position, long id) {
+						// TODO Auto-generated method stub
+						selectsaler = saleradapter.getItem(position);
+					}
+					@Override
+					public void onNothingSelected(AdapterView<?> parent) {
+						// TODO Auto-generated method stub
+						selectsaler = "*";
+					}    
+		        });
+				
+				engineeradapter.notifyDataSetChanged();
+				saleradapter.notifyDataSetChanged();
+				
+				new Thread(new Runnable(){
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						Message message = new Message();
+						message.what = UPDATE_INFO;
+						handler.sendMessage(message);
+					}
+				}).start();
+			}
+		}.execute();
 	}
 
 	@Override
@@ -205,19 +280,21 @@ public class CreateOrderActivity extends BaseActivity implements OnClickListener
 					&& (!name.getText().toString().equals("")) 
 					&& (!address.getText().toString().equals("")) 
 					&& (!tel.getText().toString().equals("")) 
-					&& (!score.getText().toString().equals(""))){
+					&& (!score.getText().toString().equals(""))
+					&& (!selectengineer.equals("*"))
+					&& (!selectsaler.equals("*"))){
 				new AsyncTask <Void, Void, Void>(){
 					@Override
 					protected Void doInBackground(Void... params) {
 						// TODO Auto-generated method stub
 						OrderConnect ordercnt = new OrderConnect(user);
-						ordercnt.createorder(22, "Name", name.getText().toString(), 
+						ordercnt.createorder(23, "Name", name.getText().toString(), 
 												"Company", company.getText().toString(), 
 												"Tel", tel.getText().toString(),
 												"Address", address.getText().toString(), 
 												"Score", score.getText().toString(),
-												"Engineerid", "*",
-												"Salerid", "*",
+												"Engineerid", selectengineer,
+												"Salerid", selectsaler,
 												"Ondoor", "*",
 												"Series", "*",
 												"Feedback", "*",
@@ -225,6 +302,7 @@ public class CreateOrderActivity extends BaseActivity implements OnClickListener
 												"Picindex", "1",
 												"Isdel", "0",
 												"Isedit", "0",
+												"Isaccepted", "0",
 												"Isdeliver", selectdeliver, "Isdebug", selectdebug, "Isondoor", selectondoor, "Iswarehouse", selectwarehouse,
 												"Installid", installid.getText().toString(), "Warehouseid", warehouseid.getText().toString());
 						return null;

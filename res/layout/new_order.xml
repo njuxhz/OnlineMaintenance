@@ -115,11 +115,10 @@
                     android:textSize="15sp"
                     android:typeface="serif" />
 
-                <EditText
-                    android:id="@+id/engineerET"
+                <Spinner
+                    android:id="@+id/engineerSP"
                     android:layout_width="wrap_content"
-                    android:layout_height="35sp"
-                    android:paddingLeft="10dp" />
+                    android:layout_height="wrap_content" />
             </TableRow>
 
             <TableRow
@@ -133,11 +132,10 @@
                     android:textSize="15sp"
                     android:typeface="serif" />
 
-                <EditText
-                    android:id="@+id/salerET"
+                <Spinner
+                    android:id="@+id/salerSP"
                     android:layout_width="wrap_content"
-                    android:layout_height="35sp"
-                    android:paddingLeft="10dp" />
+                    android:layout_height="wrap_content" />
             </TableRow>
 
             <TableRow

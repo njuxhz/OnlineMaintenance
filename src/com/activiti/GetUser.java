@@ -58,7 +58,7 @@ public class GetUser {
 					userList.add(newuser);
 				}
 			}else{
-				Log.d("userautherror", response);
+				Log.d("getusererror", response);
 			}
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block

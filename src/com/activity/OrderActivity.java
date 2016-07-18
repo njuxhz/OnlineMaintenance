@@ -238,7 +238,7 @@ public class OrderActivity extends BaseActivity implements OnClickListener{
 					// TODO Auto-generated method stub
 					super.onPostExecute(result);
 					for(Order o : result.orderList){
-						if((o.engineerid.equals(userr.id)) || (o.salerid.equals(userr.id) || (o.status == UNACCEPTED))){
+						if((o.engineerid.equals(userr.id)) || (o.salerid.equals(userr.id))){
 							orderList.add(o);
 						}
 					}
@@ -261,7 +261,11 @@ public class OrderActivity extends BaseActivity implements OnClickListener{
 					// TODO Auto-generated method stub
 					super.onPostExecute(result);
 					for(Order o : result.orderList){
-						orderList.add(o);
+						if(o.isaccepted.equals("0")){
+							if((o.engineerid.equals(userr.id)) || (o.salerid.equals(userr.id))){
+								orderList.add(o);
+							}
+						}
 					}
 					Collections.sort(orderList);
 					orderadapter.notifyDataSetChanged();
@@ -274,7 +278,7 @@ public class OrderActivity extends BaseActivity implements OnClickListener{
 				protected GetOrder doInBackground(Void... params) {
 					// TODO Auto-generated method stub
 					GetOrder getorder = new GetOrder(user);
-					getorder.setmachstate("AcceptedOrder");
+					getorder.setmachstate("UnAcceptedOrder");
 					return getorder;
 				}
 				@Override
@@ -282,8 +286,10 @@ public class OrderActivity extends BaseActivity implements OnClickListener{
 					// TODO Auto-generated method stub
 					super.onPostExecute(result);
 					for(Order o : result.orderList){
-						if(o.engineerid.equals(userr.id)){
-							orderList.add(o);
+						if(o.isaccepted.equals("1")){
+							if((o.engineerid.equals(userr.id)) || (o.salerid.equals(userr.id))){
+								orderList.add(o);
+							}
 						}
 					}
 					Collections.sort(orderList);
@@ -305,7 +311,7 @@ public class OrderActivity extends BaseActivity implements OnClickListener{
 					// TODO Auto-generated method stub
 					super.onPostExecute(result);
 					for(Order o : result.orderList){
-						if(o.engineerid.equals(userr.id)){
+						if((o.engineerid.equals(userr.id)) || (o.salerid.equals(userr.id))){
 							orderList.add(o);
 						}
 					}
@@ -328,7 +334,7 @@ public class OrderActivity extends BaseActivity implements OnClickListener{
 					// TODO Auto-generated method stub
 					super.onPostExecute(result);
 					for(Order o : result.orderList){
-						if(o.salerid.equals(userr.id)){
+						if((o.engineerid.equals(userr.id)) || (o.salerid.equals(userr.id))){
 							orderList.add(o);
 						}
 					}

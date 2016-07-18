@@ -27,7 +27,7 @@ public final class R {
         public static final int editretBT=0x7f060010;
         public static final int edittakeBT=0x7f060014;
         public static final int edittakecancelBT=0x7f060015;
-        public static final int engineerET=0x7f060005;
+        public static final int engineerSP=0x7f060005;
         public static final int feedbackET=0x7f06002a;
         public static final int installidET=0x7f06000b;
         public static final int isdebugSP=0x7f060009;
@@ -69,7 +69,7 @@ public final class R {
         public static final int photo2IV=0x7f06002c;
         public static final int photo3IV=0x7f06002d;
         public static final int revisepasswdBT=0x7f06004b;
-        public static final int salerET=0x7f060006;
+        public static final int salerSP=0x7f060006;
         public static final int scoreET=0x7f060007;
         public static final int scoreretBT=0x7f06002f;
         public static final int selectmonthET=0x7f06003c;

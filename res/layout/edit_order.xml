@@ -103,11 +103,10 @@
                 android:text="工程师"
                 android:typeface="serif"
                 android:textSize="15sp" />
-            <EditText
-                android:id="@+id/engineerET"
-                android:paddingLeft="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="35sp" />
+            <Spinner
+                    android:id="@+id/engineerSP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
         </TableRow>
         
 	    <TableRow
@@ -119,11 +118,10 @@
                 android:text="销售员"
                 android:typeface="serif"
                 android:textSize="15sp" />
-            <EditText
-                android:id="@+id/salerET"
-                android:paddingLeft="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="35sp" />
+            <Spinner
+                    android:id="@+id/salerSP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
         </TableRow>
         
 	    <TableRow

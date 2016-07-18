@@ -44,6 +44,7 @@ public class OrderConnect{
 	public String name, tel, company, address, timestamp, score, isedit, series, feedback, ondoor;
 	public String engineerid, salerid, photourl1, photourl2, photourl3, picindex;
 	public String isdeliver, isdebug, isondoor, iswarehouse, installid, warehouseid;
+	public String isaccepted;
 	public User user;
 	
 	public OrderConnect(User userr){
@@ -149,6 +150,8 @@ public class OrderConnect{
 					installid = jsonObject.getString("value");
 				}else if(jsonname.equals("Warehouseid")){
 					warehouseid = jsonObject.getString("value");
+				}else if(jsonname.equals("Isaccepted")){
+					isaccepted = jsonObject.getString("value");
 				}
 			}
 		} catch (ClientProtocolException e) {
@@ -411,7 +414,7 @@ public class OrderConnect{
 			paramtime.put("value", "" + System.currentTimeMillis());
 			parama.put(paramtime);
 			param.put("variables", parama);
-			param.put("processDefinitionId", "process:1:3742");
+			param.put("processDefinitionId", "process:1:3766");
 			StringEntity se = new StringEntity(param.toString());
 			se.setContentEncoding("UTF-8");
 			se.setContentType("application/json");
@@ -421,40 +424,9 @@ public class OrderConnect{
 			String response = EntityUtils.toString(entity, "utf-8");
 			if(httpResponse.getStatusLine().getStatusCode()  != 200){
 				Log.d("createordererror", response);
-			}
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	public boolean isunaccepted(String id) {
-		// TODO Auto-generated method stub
-		REST_URL = "http://121.43.109.179/activiti-rest/service/";
-		CredentialsProvider provider = new BasicCredentialsProvider();
-		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(user.id, user.passwd);
-		provider.setCredentials(AuthScope.ANY, credentials);
-		HttpClient httpClient = new DefaultHttpClient();
-		((DefaultHttpClient)httpClient).setCredentialsProvider(provider);
-		HttpGet httpGet = new HttpGet(REST_URL + "runtime/tasks/" + id);
-		HttpResponse httpResponse;
-		try {
-			httpResponse = httpClient.execute(httpGet);
-			HttpEntity entity = httpResponse.getEntity();
-			String response = EntityUtils.toString(entity, "utf-8");
-			JSONObject jsonObjectdata = new JSONObject(response);
-			if(httpResponse.getStatusLine().getStatusCode()  == 200){
-				if(jsonObjectdata.get("name").equals("UnAcceptedOrder")){
-					return true;
-				}else return false;
 			}else{
-				Log.d("isunacceptederror", response);
+				//JSONObject jsonObjectdata = new JSONObject(response);
+				//return jsonObjectdata.getString("id");
 			}
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
@@ -466,7 +438,7 @@ public class OrderConnect{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return false;
+		//return null;
 	}
 
 	public Bitmap getfile(String url) {
