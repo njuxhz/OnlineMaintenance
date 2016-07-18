@@ -690,11 +690,11 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 			this.mode = mod;
 			AlertDialog.Builder dialog = new AlertDialog.Builder(EditOrderActivity.this);
 			if(this.mode == 1){
-				Toast.makeText(getBaseContext(), "Please Input Ondoor Time!", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getBaseContext(), "Please Input Ondoor Time!", Toast.LENGTH_LONG).show();
 				dialog.setTitle("Please Input Ondoor Time!");
 			}
 			else{
-				Toast.makeText(getBaseContext(), "Input Series and Comments, seperate them by '&'!", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getBaseContext(), "Input Series and Comments, seperate them by '&'!", Toast.LENGTH_LONG).show();
 				dialog.setTitle("Input Series and Comments, seperate them by '&'!");
 			}
 			final EditText mytext = new EditText(EditOrderActivity.this);
@@ -703,50 +703,59 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					// TODO Auto-generated method stub
+					boolean ok = true;
 					if(mode == 1){
 						a = mytext.getText().toString();
 					}else{
 						String total = mytext.getText().toString();
-						String[] sourceStrArray = total.split("&");
-						a = sourceStrArray[0];
-						b = sourceStrArray[1];
+						int loc = total.indexOf("&");
+						if((loc == -1) || (loc == 0) || (loc == (total.length() - 1))){
+							ok = false;
+							Toast.makeText(getBaseContext(), "Please Read Requirement Carefully!", Toast.LENGTH_SHORT).show();
+						}else{
+							String[] sourceStrArray = total.split("&");
+							a = sourceStrArray[0];
+							b = sourceStrArray[1];
+						}
 					}
-					new AsyncTask <Void, Void, Void>(){
-						@Override
-						protected Void doInBackground(Void... arg0) {
-							// TODO Auto-generated method stub
-							OrderConnect ordercnt = new OrderConnect(user);
-							if(mode == 1){
-								ordercnt.update(order.processid, 3, "Ondoor", a,
-																	"Isaccepted", "1",
-																	"Timestamp", "" + System.currentTimeMillis());
-							}else{
-								ordercnt.update(order.processid, 4, "Series", a,
-																	"Feedback", b,
-																	"Isaccepted", "1",
-																	"Timestamp", "" + System.currentTimeMillis());
+					if(ok){
+						new AsyncTask <Void, Void, Void>(){
+							@Override
+							protected Void doInBackground(Void... arg0) {
+								// TODO Auto-generated method stub
+								OrderConnect ordercnt = new OrderConnect(user);
+								if(mode == 1){
+									ordercnt.update(order.processid, 3, "Ondoor", a,
+																		"Isaccepted", "1",
+																		"Timestamp", "" + System.currentTimeMillis());
+								}else{
+									ordercnt.update(order.processid, 4, "Series", a,
+																		"Feedback", b,
+																		"Isaccepted", "1",
+																		"Timestamp", "" + System.currentTimeMillis());
+								}
+								if(mode == 1){
+								}else{
+									ordercnt.completetask(order.id);
+								}
+								return null;
 							}
-							if(mode == 1){
-							}else{
-								ordercnt.completetask(order.id);
+							@Override
+							protected void onPostExecute(Void result) {
+								// TODO Auto-generated method stub
+								super.onPostExecute(result);
+								Toast.makeText(getBaseContext(), "Request Done Successfully!", Toast.LENGTH_SHORT).show();
+								Intent intent = new Intent();
+								setResult(OK, intent);
+								finish();
 							}
-							return null;
-						}
-						@Override
-						protected void onPostExecute(Void result) {
-							// TODO Auto-generated method stub
-							super.onPostExecute(result);
-							Toast.makeText(getBaseContext(), "Request Done Successfully!", Toast.LENGTH_SHORT).show();
-							Intent intent = new Intent();
-							setResult(OK, intent);
-							finish();
-						}
-						@Override
-						protected void onPreExecute() {
-							// TODO Auto-generated method stub
-							super.onPreExecute();
-						}
-					}.execute();
+							@Override
+							protected void onPreExecute() {
+								// TODO Auto-generated method stub
+								super.onPreExecute();
+							}
+						}.execute();
+					}
 				}
 			});
 			dialog.show();
