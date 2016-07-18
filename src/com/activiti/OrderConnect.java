@@ -316,41 +316,6 @@ public class OrderConnect{
 		return null;
 	}
 
-	public void claimtask(String id, int mode) {
-		// TODO Auto-generated method stub
-		CredentialsProvider provider = new BasicCredentialsProvider();
-		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(user.id, user.passwd);
-		provider.setCredentials(AuthScope.ANY, credentials);
-		HttpClient httpClient = new DefaultHttpClient();
-		((DefaultHttpClient)httpClient).setCredentialsProvider(provider);
-		JSONObject param = new JSONObject();
-		try {
-			param.put("action", "claim");
-			if(mode == 1) param.put("assignee", user.id);
-			else param.put("assignee", null);
-			StringEntity se = new StringEntity(param.toString());
-			HttpPost post = new HttpPost("http://121.43.109.179/activiti-rest/service/runtime/tasks/" + id);
-			se.setContentEncoding("UTF-8");
-			se.setContentType("application/json");
-			post.setEntity(se);
-			HttpResponse httpResponse = httpClient.execute(post);
-			System.out.println(httpResponse.getStatusLine().getStatusCode());
-			HttpEntity entity = httpResponse.getEntity();
-			String response = EntityUtils.toString(entity, "utf-8");
-			//parseJSONWithGSON(response);
-			System.out.println(response);
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
 	public String uploadimage(String imagePath, String id, String processid) {
 		// TODO Auto-generated method stub
 		FileBody fileBody = new FileBody(new File(imagePath));

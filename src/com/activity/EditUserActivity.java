@@ -50,7 +50,7 @@ public class EditUserActivity extends BaseActivity implements OnClickListener{
 					strname = user.id;
 					strpasswd = user.passwd;
 					name.setText(strname);
-					mode.setSelection(user.spinner(user.mode), true);
+					mode.setSelection(user.spinner(user.mode) - 1, true);
 					passwd.setText(strpasswd);
 				}
 				break;
@@ -102,7 +102,7 @@ public class EditUserActivity extends BaseActivity implements OnClickListener{
 			}
 		}).start();
 		
-		list.add("*");list.add("Deliver");list.add("Engineer");list.add("Saler");list.add("Admin");
+		list.add("Deliver");list.add("Engineer");list.add("Saler");list.add("Admin");
 		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		mode.setAdapter(adapter);

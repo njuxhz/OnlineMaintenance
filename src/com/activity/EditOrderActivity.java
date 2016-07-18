@@ -570,7 +570,7 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 				protected Void doInBackground(Void... params) {
 					// TODO Auto-generated method stub
 					OrderConnect ordercnt = new OrderConnect(user);
-					ordercnt.claimtask(order.id, 0);
+					//ordercnt.claimtask(order.id, 0);
 					ordercnt.update(order.processid, 3, "Ondoor", "*",
 														"Isaccepted", "0",
 														"Timestamp", "" + System.currentTimeMillis());
