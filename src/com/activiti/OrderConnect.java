@@ -55,15 +55,14 @@ public class OrderConnect{
 		// TODO Auto-generated constructor stub
 	}
 
-	public JSONObject gettask() {
-		// TODO Auto-generated method stub
+	public JSONObject getonepage(int startnum){
 		REST_URL = "http://121.43.109.179/activiti-rest/service/";
 		CredentialsProvider provider = new BasicCredentialsProvider();
 		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(user.id, user.passwd);
 		provider.setCredentials(AuthScope.ANY, credentials);
 		HttpClient httpClient = new DefaultHttpClient();
 		((DefaultHttpClient)httpClient).setCredentialsProvider(provider);
-		HttpGet httpGet = new HttpGet(REST_URL + "runtime/tasks?sort=createTime&order=asc");
+		HttpGet httpGet = new HttpGet(REST_URL + "runtime/tasks?sort=createTime&order=asc&start=" + startnum);
 		HttpResponse httpResponse;
 		try {
 			httpResponse = httpClient.execute(httpGet);
@@ -73,7 +72,7 @@ public class OrderConnect{
 			if(httpResponse.getStatusLine().getStatusCode()  == 200){
 				return jsonObject;
 			}else{
-				Log.d("gettaskerror", response);
+				//Log.d("gettaskerror", response);
 			}
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
@@ -86,6 +85,36 @@ public class OrderConnect{
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public JSONObject gettask() {
+		// TODO Auto-generated method stub
+		int currentnum = 0, pagenum = 0, totalnum = 0;
+		JSONArray retarray = new JSONArray();
+		do{
+			JSONObject pagedata = getonepage(currentnum);
+			try {
+				pagenum = pagedata.getInt("size");
+				totalnum = pagedata.getInt("total");
+				JSONArray bufarray = pagedata.getJSONArray("data");
+				for(int i = 0; i < pagenum; i++){
+					JSONObject jsonObject = bufarray.getJSONObject(i);
+					retarray.put(jsonObject);
+				}
+				currentnum = currentnum + pagenum;
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}while((totalnum > 0) && ((currentnum + 1) <= totalnum));
+		JSONObject retobject = new JSONObject();
+		try {
+			retobject.put("data", retarray);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return retobject;
 	}
 
 	public void getattri(String processInstanceId) {
