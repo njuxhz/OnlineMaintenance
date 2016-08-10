@@ -33,7 +33,7 @@ public class GetUser {
 	public GetUser(String id, String passwd) {
 		// TODO Auto-generated constructor stub
 		userList = new ArrayList<User>();
-		REST_URL = KERMIT_REST_URL + "identity/users";
+		REST_URL = KERMIT_REST_URL + "identity/users?size=100";
 		CredentialsProvider provider = new BasicCredentialsProvider();
 		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(id, passwd);
 		provider.setCredentials(AuthScope.ANY, credentials);
