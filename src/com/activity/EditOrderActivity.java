@@ -516,11 +516,10 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 						if(params[5].equals("1")){
 							ordercnt.update(order.processid, 2,
 		 							"Score", params[4], 
-		 							"Isedit", params[5]);
-							return order.id;
+		 							"Isedit", params[5]);	
 						}
+						return order.id;
 					}
-					return "-1";
 				}
 				@Override
 				protected void onPostExecute(String result) {
