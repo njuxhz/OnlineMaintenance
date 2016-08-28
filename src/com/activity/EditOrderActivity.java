@@ -339,7 +339,7 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 		}.execute();
 	}
 	
-	private void permission() {//1未接		2已接		3已完成	4已审核
+	private void permission() {//1脦麓陆脫		2脪脩陆脫		3脪脩脥锚鲁脡	4脪脩脡贸潞脣
 		// TODO Auto-generated method stub
 		switch(user.mode){
 		case DELIVER:
@@ -498,7 +498,7 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 					// TODO Auto-generated method stub
 					OrderConnect ordercnt = new OrderConnect(user);
 					if((!selectengineer.equals("*")) && (!selectsaler.equals("*"))){
-						ordercnt.update(order.processid, 16, "Company", params[0], 
+						ordercnt.update(order.processid, 14, "Company", params[0], 
 							 							"Name", params[1], 
 							 							"Address", params[2], 
 							 							"Tel", params[3], 
@@ -508,8 +508,7 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 							 							"Isdeliver", selectdeliver, "Isdebug", selectdebug, "Isondoor", selectondoor, "Iswarehouse", selectwarehouse,
 														"Installid", installid.getText().toString(), "Warehouseid", warehouseid.getText().toString(),
 														"Engineerid", params[6],
-														"Salerid", params[7],
-														"Isaccepted", "0");
+														"Salerid", params[7]);
 						return order.id;
 					}else return "-1";
 					
