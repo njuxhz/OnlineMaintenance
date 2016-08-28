@@ -339,7 +339,7 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 		}.execute();
 	}
 	
-	private void permission() {//1Î´½Ó		2ÒÑ½Ó		3ÒÑÍê³É	4ÒÑÉóºË
+	private void permission() {//1未接		2已接		3已完成	4已审核
 		// TODO Auto-generated method stub
 		switch(user.mode){
 		case DELIVER:
@@ -497,21 +497,30 @@ public class EditOrderActivity extends BaseActivity implements OnClickListener{
 				protected String doInBackground(String... params) {
 					// TODO Auto-generated method stub
 					OrderConnect ordercnt = new OrderConnect(user);
-					if((!selectengineer.equals("*")) && (!selectsaler.equals("*"))){
-						ordercnt.update(order.processid, 14, "Company", params[0], 
-							 							"Name", params[1], 
-							 							"Address", params[2], 
-							 							"Tel", params[3], 
-							 							"Score", params[4], 
-							 							"Isedit", params[5],
-							 							"Timestamp", "" + System.currentTimeMillis(),
-							 							"Isdeliver", selectdeliver, "Isdebug", selectdebug, "Isondoor", selectondoor, "Iswarehouse", selectwarehouse,
-														"Installid", installid.getText().toString(), "Warehouseid", warehouseid.getText().toString(),
-														"Engineerid", params[6],
-														"Salerid", params[7]);
-						return order.id;
-					}else return "-1";
-					
+					if((order.status == 1) && (order.isaccepted.equals("0"))){
+						if((!selectengineer.equals("*")) && (!selectsaler.equals("*"))){
+							ordercnt.update(order.processid, 14, "Company", params[0], 
+								 							"Name", params[1], 
+								 							"Address", params[2], 
+								 							"Tel", params[3], 
+								 							"Score", params[4], 
+								 							"Isedit", params[5],
+								 							"Timestamp", "" + System.currentTimeMillis(),
+								 							"Isdeliver", selectdeliver, "Isdebug", selectdebug, "Isondoor", selectondoor, "Iswarehouse", selectwarehouse,
+															"Installid", installid.getText().toString(), "Warehouseid", warehouseid.getText().toString(),
+															"Engineerid", params[6],
+															"Salerid", params[7]);
+							return order.id;
+						}else return "-1";
+					}else{
+						if(params[5].equals("1")){
+							ordercnt.update(order.processid, 2,
+		 							"Score", params[4], 
+		 							"Isedit", params[5]);
+							return order.id;
+						}
+					}
+					return "-1";
 				}
 				@Override
 				protected void onPostExecute(String result) {
